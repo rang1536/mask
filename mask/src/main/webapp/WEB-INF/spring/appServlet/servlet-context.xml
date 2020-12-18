@@ -31,9 +31,13 @@
 	<mvc:annotation-driven />
 
 	<mvc:resources location="/resources/" mapping="/resources/**" />
+	<!-- <mvc:resources location="/js/" mapping="/resources/mask1/js/**"/>-->
+	<mvc:resources location="/resources/mask1/images/" mapping="/images/**"/> 
+	<mvc:resources location="/resources/mask1/css/" mapping="/css/**"/>
+
+	
 	
 	<bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" />
-	<mvc:resources location="/robots.txt" mapping="/robots.txt" order="0"/>
 
 	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver"
 		p:order="0" />
