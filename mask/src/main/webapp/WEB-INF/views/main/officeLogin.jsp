@@ -127,9 +127,9 @@
 	var loginChk = sessionStorage.getItem('loginChk');
 	
 	$(document).ready(function(){
-		if(loginChk == 'login'){
+		/* if(loginChk == 'login'){
 			location.href = 'business';
-		}
+		} */
 		
 		/* 저장된 로그인 아이디 패스워드 체크  */
 		if(loginId != null && loginId != ''){
