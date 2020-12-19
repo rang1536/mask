@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="office">
+
+	<select id="dupIdCheck" parameterType="String" resultType="int">
+		SELECT COUNT(*) CNT
+		  FROM MEMBER
+		 WHERE ID = #{id}
+	</select>
+	
+	<select id="registerMember" parameterType="kr.or.mask.domain.User" resultType="int">
+		INSERT
+		  INTO MEMBER
+		       ( ID , PASS , NAME , PHONE
+		       , ZIPCODE , ADDR1 , ADDR2 , POINT
+		       , DELIVERY_ZIPCODE , DELIVERY_ADDR1 , DELIVERY_ADDR2
+		       , RECOMMENDER , SPONSOR , AGENT, GRADE
+		       , REGDATE , REGID
+		       )
+		VALUES ( LOWER(#{id}) , #{pass} , #{name} , #{phone}
+		       , #{zipcode} , #{addr1} , #{addr2} , #{point}
+		       , #{deliveryZipcode} , #{deliveryAddr1} , #{deliveryAddr2}
+		       , #{recommender} , #{sponsor} , #{agent} , #{grade}
+		       , NOW() , #{regid}
+		       )
+	</select>
+</mapper>

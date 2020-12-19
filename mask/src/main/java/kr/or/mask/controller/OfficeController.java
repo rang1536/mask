@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class OfficeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(OfficeController.class);
-	
 	
 	@RequestMapping(value = "/business", method = RequestMethod.GET)
 	public String business(Locale locale, Model model) {
@@ -76,4 +76,8 @@ public class OfficeController {
 		return "/office/registerMember";
 	}
 
+
+
+
+	
 }
