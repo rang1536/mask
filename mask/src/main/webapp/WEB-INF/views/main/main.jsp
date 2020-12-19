@@ -36,7 +36,7 @@
 				기능성 마스크 Joker Speacial Edition을  소개합니다			
 			
 			<ul class="actions">
-				<li><a href="product" class="button alt">제품&사업소개</a></li>
+				<li><a href="introProduct" class="button alt">제품&사업소개</a></li>
 			</ul>
 		</div>
 	</section>

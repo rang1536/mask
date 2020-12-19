@@ -17,7 +17,7 @@ public class MaskController {
 	@RequestMapping(value="/introCompany",  method = RequestMethod.GET)
 	public String introCompanyCtrl(){
 		//System.out.println(order);
-		return "company";
+		return "main/company";
 	}
 	
 	//사업소개
@@ -31,21 +31,21 @@ public class MaskController {
 	@RequestMapping(value="/notice",  method = RequestMethod.GET)
 	public String noticeCtrl(){
 		//System.out.println(order);
-		return "notice";
+		return "main/notice";
 	}
 	
 	//마이오피스 - 로그인페이지 연결
 	@RequestMapping(value="/officeLogin",  method = RequestMethod.GET)
 	public String officeLoginCtrl(){
 		//System.out.println(order);
-		return "officeLogin";
+		return "main/officeLogin";
 	}
 	
 	//쇼핑몰
 	@RequestMapping(value="/shop",  method = RequestMethod.GET)
 	public String shopCtrl(){
 		//System.out.println(order);
-		return "shop";
+		return "main/shop";
 	}
 	
 	
