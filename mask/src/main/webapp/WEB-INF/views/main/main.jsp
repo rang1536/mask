@@ -1,144 +1,191 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<c:import url="../module/mTop.jsp"></c:import> 
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+	
 </head>
-<c:import url="../module/MainTop.jsp"></c:import>
-<body class="homepage">
-
-	<!-- Header -->
-		<div id="header">
-			<div id="nav-wrapper"> 
-				<!-- Nav -->
-				<nav id="nav">
-					<ul>
-						<li class="active"><a href="index.html">Homepage</a></li>
-						<li><a href="left-sidebar.html">Left Sidebar</a></li>
-						<li><a href="right-sidebar.html">Right Sidebar</a></li>
-						<li><a href="no-sidebar.html">No Sidebar</a></li>
-					</ul>
-				</nav>
-			</div>
-			<div class="container"> 
-				
-				<!-- Logo -->
-				<div id="logo">
-					<h1><a href="#">Linear</a></h1>
-					<span class="tag">By TEMPLATED</span>
-				</div>
-			</div>
+	
+<body>
+<!-- Banner -->
+	<section id="banner">
+		<div class="inner">
+			<h1>SE01 <span><br />
+			Clear Sky Joker Antibacterial Mask</span></h1>
+			<ul class="actions">
+				<li><a href="#" class="button alt">상품보기</a></li>
+			</ul>
 		</div>
+	</section>
+	
+<!-- One -->
 
-	<!-- Featured -->
-		<div id="featured">
-			<div class="container">
-				<header>
-					<h2>Welcome to Linear</h2>
-				</header>
-				<p>This is <strong>Linear</strong>, a responsive HTML5 site template freebie by <a href="http://templated.co">TEMPLATED</a>. Released for free under the <a href="http://templated.co/license">Creative Commons Attribution</a> license, so use it for whatever (personal or commercial) &ndash; just give us credit! Check out more of our stuff at <a href="http://templated.co">our site</a> or follow us on <a href="http://twitter.com/templatedco">Twitter</a>.</p>
-				<hr />
-				<div class="row">
-					<section class="4u">
-						<span class="pennant"><span class="fa fa-briefcase"></span></span>
-						<h3>Maecenas luctus lectus</h3>
-						<p>Curabitur sit amet nulla. Nam in massa. Sed vel tellus. Curabitur sem urna, consequat vel, suscipit in, mattis placerat, nulla. Sed ac leo.</p>
-						<a href="#" class="button button-style1">Read More</a>
-					</section>
-					<section class="4u">
-						<span class="pennant"><span class="fa fa-lock"></span></span>
-						<h3>Maecenas luctus lectus</h3>
-						<p>Donec ornare neque ac sem. Mauris aliquet. Aliquam sem leo, vulputate sed, convallis at, ultricies quis, justo. Donec magna.</p>
-						<a href="#" class="button button-style1">Read More</a>
-					</section>
-					<section class="4u">
-						<span class="pennant"><span class="fa fa-globe"></span></span>
-						<h3>Maecenas luctus lectus</h3>
-						<p>Curabitur sit amet nulla. Nam in massa. Sed vel tellus. Curabitur sem urna, consequat vel, suscipit in, mattis placerat, nulla. Sed ac leo.</p>
-						<a href="#" class="button button-style1">Read More</a>
-					</section>
-
-				</div>
-			</div>
-		</div>
-
-	<!-- Main -->
-		<div id="main">
-			<div id="content" class="container">
-
-				<div class="row">
-					<section class="6u">
-						<a href="#" class="image full"><img src="resources/mask1/images/pic01.jpg" alt=""></a>
-						<header>
-							<h2>Mauris vulputate dolor</h2>
-						</header>
-						<p>In posuere eleifend odio. Quisque semper augue mattis wisi. Maecenas ligula. Pellentesque viverra vulputate enim. Aliquam erat volutpat. Donec leo, vivamus fermentum nibh in augue praesent a lacus at urna congue rutrum.</p>
-					</section>				
-					<section class="6u">
-						<a href="#" class="image full"><img src="resources/mask1/images/pic02.jpg" alt=""></a>
-						<header>
-							<h2>Mauris vulputate dolor</h2>
-						</header>
-						<p>In posuere eleifend odio. Quisque semper augue mattis wisi. Maecenas ligula. Pellentesque viverra vulputate enim. Aliquam erat volutpat. Donec leo, vivamus fermentum nibh in augue praesent a lacus at urna congue rutrum.</p>
-					</section>				
-				</div>
-
-				<div class="row">
-					<section class="6u">
-						<a href="#" class="image full"><img src="resources/mask1/images/pic03.jpg" alt=""></a>
-						<header>
-							<h2>Mauris vulputate dolor</h2>
-						</header>
-						<p>In posuere eleifend odio. Quisque semper augue mattis wisi. Maecenas ligula. Pellentesque viverra vulputate enim. Aliquam erat volutpat. Donec leo, vivamus fermentum nibh in augue praesent a lacus at urna congue rutrum.</p>
-					</section>				
-					<section class="6u">
-						<a href="#" class="image full"><img src="resources/mask1/images/pic04.jpg" alt=""></a>
-						<header>
-							<h2>Mauris vulputate dolor</h2>
-						</header>
-						<p>In posuere eleifend odio. Quisque semper augue mattis wisi. Maecenas ligula. Pellentesque viverra vulputate enim. Aliquam erat volutpat. Donec leo, vivamus fermentum nibh in augue praesent a lacus at urna congue rutrum.</p>
-					</section>				
-				</div>
+	<section id="one">
+		<div class="inner">
+			<header>
+				<h2>에스이제로원 - 기능성 항균마스크</h2>
+			</header>
+			<p>
+				<span class="image left"><img src="images/mask/product.PNG" alt="" /></span>
+				<font style="font-weight:bold;">청정스카이 항균마스크. 항균 99.9% 기능성마스크. 조커스패셜 에디션.</font>
+				<br/>
+				코로나(covid-19)로 마스크 착용시간이 길어짐에 따라 마스크는 더 이상 선택이 아닌 필수가 되어버렸습니다. FITI 국제공인시험인증(식약청 등록업체)된 항균 99.9%
+				기능성 마스크 Joker Speacial Edition을  소개합니다			
 			
-			</div>
+			<ul class="actions">
+				<li><a href="product" class="button alt">제품&사업소개</a></li>
+			</ul>
 		</div>
+	</section>
 
-	<!-- Tweet -->
-		<div id="tweet">
-			<div class="container">
-				<section>
-					<blockquote>&ldquo;In posuere eleifend odio. Quisque semper augue mattis wisi. Maecenas ligula. Pellentesque viverra vulputate enim. Aliquam erat volutpat.&rdquo;</blockquote>
-				</section>
-			</div>
-		</div>
-
-	<!-- Footer -->
-		<div id="footer">
-			<div class="container">
-				<section>
+<!-- Two -->
+	<section id="two">
+		<div class="inner">
+			<article>
+				<div class="content">
 					<header>
-						<h2>Get in touch</h2>
-						<span class="byline">Integer sit amet pede vel arcu aliquet pretium</span>
+						<h3>공지사항</h3>
 					</header>
-					<ul class="contact">
-						<li><a href="#" class="fa fa-twitter"><span>Twitter</span></a></li>
-						<li class="active"><a href="#" class="fa fa-facebook"><span>Facebook</span></a></li>
-						<li><a href="#" class="fa fa-dribbble"><span>Pinterest</span></a></li>
-						<li><a href="#" class="fa fa-tumblr"><span>Google+</span></a></li>
+					<!-- 
+					<div class="image fit">
+						<img src="images/pic01.jpg" alt="" />
+					</div>
+					<p>Cumsan mollis eros. Pellentesque a diam sit amet mi magna ullamcorper vehicula. Integer adipiscin sem. Nullam quis massa sit amet lorem ipsum feugiat tempus.</p>
+				 	-->
+				 	<table>
+				 		<tr>
+				 			<td>[공지] se01 기능성마스크 출시</td>
+				 			<td>2020-12-08</td>
+				 		</tr>
+				 		<tr>
+				 			<td>[공지] se01 기능성마스크 출시</td>
+				 			<td>2020-12-08</td>
+				 		</tr>
+				 		<tr>
+				 			<td>[공지] se01 기능성마스크 출시</td>
+				 			<td>2020-12-08</td>
+				 		</tr>
+				 		<tr>
+				 			<td>[공지] se01 기능성마스크 출시</td>
+				 			<td>2020-12-08</td>
+				 		</tr>
+				 		<tr>
+				 			<td>[공지] se01 기능성마스크 출시</td>
+				 			<td>2020-12-08</td>
+				 		</tr>
+				 	</table>
+				</div>
+			</article>
+			<article class="alt">
+				<div class="content">
+					<header>
+						<h3>se01 회원가입현황</h3>
+					</header>
+					<table style="background-color:#ffffff;border:1px solid #ffffff;">
+						<tr id="1">
+							<td>윤재*</td>
+							<td>rang****</td>
+							<td>2020-12-08</td>
+						</tr>
+						<tr id="2">
+							<td>윤재*</td>
+							<td>rang****</td>
+							<td>2020-12-08</td>
+						</tr>
+						<tr id="3">
+							<td>윤재*</td>
+							<td>rang****</td>
+							<td>2020-12-08</td>
+						</tr>
+						<tr id="4">
+							<td>윤재*</td>
+							<td>rang****</td>
+							<td>2020-12-08</td>
+						</tr>
+						<tr id="5">
+							<td>윤재*</td>
+							<td>rang****</td>
+							<td>2020-12-08</td>
+						</tr>
+						<tr id="6">
+							<td>윤재*</td>
+							<td>rang****</td>
+							<td>2020-12-08</td>
+						</tr>
+					</table>
+				 	
+				</div>
+			</article>
+		</div>
+	</section>
+
+<!-- Three -->
+	<section id="three">
+		<div class="inner">
+			<article>
+				<div class="content">
+					<span class="icon fa-laptop"></span>
+					<header>
+						<!-- <h3>SE01 공지사항</h3> -->
+						<h3>
+							<!-- <span class="icon fa-laptop"></span> -->
+							<span style="font-size:20px;color:#000000;font-weight:bold;">
+								마이오피스
+							</span>
+						</h3>
+					</header>
+					<p>Morbi interdum mollis sapien. Sed ac risus. Phasellus lacinia, magna lorem ullamcorper laoreet, lectus arcu.</p>
+					<ul class="actions">
+						<li><a href="#" class="button alt">더보기+</a></li>
 					</ul>
-				</section>
-			</div>
+				</div>
+			</article>
+			<article>
+				<div class="content">
+					<span class="icon fa-diamond"></span>
+					<header>
+						<h3>
+							<span style="font-size:20px;color:#000000;font-weight:bold;">
+								고객센터
+							</span>
+						</h3>
+					</header>
+					<!-- <p></p> -->
+					<table style="border:1px solid #ddd;">
+						<tr>
+							
+						</tr>
+					</table>
+					
+					
+					<ul class="actions">
+						<li><a href="#" class="button alt">고객센터 바로가기+</a></li>
+					</ul>
+				</div>
+			</article>
+			<article>
+			<div class="content">
+					<span class="icon fa-laptop"></span>
+					<header>
+						<h3>
+							<span style="font-size:20px;color:#000000;font-weight:bold;">
+								쇼핑몰
+							</span>
+						</h3>
+					</header>
+					<p>Suspendisse mauris. Fusce accumsan mollis eros. Pellentesque a diam sit amet mi ullamcorper vehicula.</p>
+					<ul class="actions">
+						<li><a href="#" class="button alt">쇼핑몰 바로가기+</a></li>
+					</ul>
+				</div>
+			</article>
 		</div>
-
-	<!-- Copyright -->
-		<div id="copyright">
-			<div class="container">
-				Design: <a href="http://templated.co">TEMPLATED</a> Images: <a href="http://unsplash.com">Unsplash</a> (<a href="http://unsplash.com/cc0">CC0</a>)
-			</div>
-		</div>
-
-	</body>
+	</section>
+			
+	<c:import url="../module/mFoot.jsp"></c:import>
+	
+</body>
 </html>
