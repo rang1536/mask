@@ -80,7 +80,7 @@
                                     <div class="col-sm-7 col-xs-12">
                                         <div class="checkbox-fade fade-in-primary">
                                             <label>
-                                                <input type="checkbox" id="authSaveChk" value="">
+                                                <input type="checkbox" id="authSaveChk" checked>
                                                 <span class="cr"><i class="cr-icon icofont icofont-ui-check txt-primary"></i></span>
                                                 <span class="text-inverse">ID/PASSWORD 저장하기</span>
                                             </label>
@@ -124,8 +124,13 @@
 <script>
 	var loginId = localStorage.getItem('loginId');
 	var loginPass = localStorage.getItem('loginPass');
+	var loginChk = sessionStorage.getItem('loginChk');
 	
 	$(document).ready(function(){
+		if(loginChk == 'login'){
+			location.href = 'business';
+		}
+		
 		/* 저장된 로그인 아이디 패스워드 체크  */
 		if(loginId != null && loginId != ''){
 			$('#id').val(loginId);
@@ -154,23 +159,25 @@
 			return;
 		}
 		
-		
-		
 		$.ajax({
 			url : 'login',
 			data : {'id':id, 'pass':pass},
 			dataType : 'json',
 			type : 'post',
-			success : function(result){
-				if(result == 'succ'){
+			success : function(data){
+				if(data.result == 'succ'){
 					alert(id+' 님 반갑습니다.');
 					
-					if($('#authSaveChk').is(':Checked'){
+					if($('#authSaveChk').is(':Checked')){
 						localStorage.setItem('loginId',id);
 						localStorage.setItem('loginPass',pass);
 					}
 					
-					location.href = 'bussiness';
+					sessionStorage.setItem('loginId',id);
+					sessionStorage.setItem('loginPass',pass);
+					sessionStorage.setItem('loginChk','login');
+					
+					location.href = 'business';
 				}else{
 					alert('로그인에 실패하였습니다. 아이디와 비밀번호를 다시 확인해주세요');
 					return;

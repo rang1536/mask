@@ -4,5 +4,12 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mask">
 
+<select id="login" parameterType="Map" resultType="kr.or.mask.domain.User">
+	SELECT *
+	  FROM MEMBER
+	 WHERE ID = #{id}
+	   AND PASS = #{pass} 
+</select>
+
 
 </mapper>
