@@ -23,46 +23,56 @@
                     		<div class="card-block">
 	                            <div class="form-group row">
 	                                <div class="col-sm-6">
-	                                    <input type="text" class="form-control form-control-success" placeholder="사용자 ID : " disabled="disabled">
+	                                    <input type="text" class="form-control" disabled="disabled" id="id" value="사용자 ID : ${user.id }">
 	                                </div>
 	                                <div class="col-sm-6">
-	                                    <input type="text" class="form-control form-control-success" placeholder="가입일 : " disabled="disabled">
+	                                    <input type="text" class="form-control" disabled="disabled" value="가입일 : ${user.regdate }">
 	                                </div>
 	                            </div>
 	                            <div class="form-group row">
 	                                <div class="col-sm-6">
-	                                    <input type="text" class="form-control form-control-success" placeholder="추천인 ID : " disabled="disabled">
+	                                    <input type="text" class="form-control" disabled="disabled" value="추천인 ID : ${user.recommender }">
 	                                </div>
 	                                <div class="col-sm-6">
-	                                    <input type="text" class="form-control form-control-success" placeholder="가입센터 : " disabled="disabled">
+	                                    <input type="text" class="form-control" disabled="disabled" value="가입센터 : ${user.sponsor }">
 	                                </div>
 	                            </div>
 	                        </div>
 	                    </div>
                     </div>
                     <!-- 회원중요정보 end -->
-
+					<form id="memberForm" onSubmit="return false;">
                     <!-- 회원기타정보 start -->
                     <div class="card">
                         <div class="card-header">
                             <h4>회원기타정보</h4>
                     		<div class="card-block">
 	                            <div class="form-group row">
-		                            <button type="button" class="btn btn-primary" id="primary-popover-content" onclick="searchAddr()">우편번호검색</button>
+	                                <div class="col-sm-5">
+	                                    <input type="text" class="form-control" id="name" name="name" value="${user.name}">
+	                                </div>
+	                                <div class="col-sm-5">
+	                                    <input type="text" class="form-control" id="phone" name="phone" value="${user.phone}">
+	                                </div>
+	                            </div>
+	                            <div class="form-group row">
+	                            	<div class="col-sm-6">
+		                            	<button type="button" class="btn btn-primary" id="primary-popover-content" onclick="searchAddr()">우편번호검색</button>
+		                            </div>
 	                            </div>
 	                            <div class="form-group row">
 	                                <div class="col-sm-6">
-	                                    <input type="text" class="form-control" placeholder="우편번호" id="zipcode" readonly="readonly">
+	                                    <input type="text" class="form-control" placeholder="우편번호" id="zipcode" readonly="readonly" name="zipcode" value="${user.zipcode}">
 	                                </div>
 	                            </div>
 	                            <div class="form-group row">
 	                                <div class="col-sm-10">
-	                                    <input type="text" class="form-control" placeholder="우편번호상주소" id="addr1" readonly="readonly">
+	                                    <input type="text" class="form-control" placeholder="우편번호상주소" id="addr1" readonly="readonly" name="addr1" value="${user.addr1}">
 	                                </div>
 	                            </div>
 	                            <div class="form-group row">
 	                                <div class="col-sm-10">
-	                                    <input type="text" class="form-control" placeholder="주소세부내용" id="addr2">
+	                                    <input type="text" class="form-control" placeholder="주소세부내용" id="addr2" name="addr2" value="${user.addr2}">
 	                                </div>
 	                            </div>
 	                        </div>
@@ -77,12 +87,12 @@
                     		<div class="card-block">
 	                            <div class="form-group row">
 	                                <div class="col-sm-6">
-	                                    <input type="password" class="form-control" placeholder="기존비밀번호" id="oriPass">
+	                                    <input type="password" class="form-control" placeholder="기존비밀번호" id="oriPass" name="oriPass">
 	                                </div>
 	                            </div>
 	                            <div class="form-group row">
 	                                <div class="col-sm-10">
-	                                    <input type="password" class="form-control" placeholder="변경비밀번호" id="newPass">
+	                                    <input type="password" class="form-control" placeholder="변경비밀번호" id="newPass" name="pass">
 	                                </div>
 	                            </div>
 	                            <div class="form-group has-danger row" id="conPassDiv">
@@ -94,19 +104,20 @@
 	                            <div class="form-group row">
 	                                <div class="col-sm-10">
 										<input type="checkbox" id="confirmCheck">
-										<label id="confirmCheck"><font color="red">개인정보보관에 대한 책임은 본인에게 있습니다.</font></label>
+										<label for="confirmCheck"><font color="red">개인정보보관에 대한 책임은 본인에게 있습니다.</font></label>
 	                                </div>
 	                            </div>
 	                            <div class="form-group row">
 		                            <div class="col-sm-10" style="text-align:center;">
-		                            	<button class="btn btn-primary btn-square">수정</button>
-		                            	<button class="btn btn-primary btn-square">취소</button>
+		                            	<button class="btn btn-primary btn-square" id="btnModify">수정</button>
+		                            	<button class="btn btn-primary btn-square" id="btnCancel">취소</button>
 	                            	</div>
 	                            </div>
 	                        </div>
 	                    </div>
                     </div>
                     <!-- 비밀번호변경 end -->
+                    </form>
                 </div>
             </div>
         </div>
@@ -136,6 +147,46 @@
 			$("#conPass").addClass("form-control form-control-success");
 			$("#conMsg").text("");
 		}
+	});
+	
+	$("#btnModify").click(function(){
+
+		if($("#oriPass").val() == ""){
+			alert("비밀번호를 입력 해주세요.");
+			$("#oriPass").focus();
+			return false;
+		}
+		if($("#newPass").val() == ""){
+			alert("변경할 비밀번호를 입력 해주세요.");
+			$("#newPass").focus();
+			return false;
+		}
+		if($("#newPass").val() != $("#conPass").val()){
+			alert("비밀번호를 확인 해주세요.");
+			$("#conPass").focus();
+			return false;
+		}
+
+		if(!$("input:checkbox[id='confirmCheck']").is(":checked")){
+			alert("개인정보보관약관에 동의해주세요.");
+			return false;			
+		}
+		
+		var params = $('#memberForm').serialize(); //폼값세팅.
+		$.ajax({
+			url : 'updMem',
+			data : params,
+			dataType : 'json',
+			type : 'post',
+			success:function(data){
+				alert(data.message);
+				if(data.result == 'success'){
+					$("#oriPass").val("");
+					$("#newPass").val("");
+					$("#conPass").val("");
+				}
+			}
+		})
 	});
 
 	

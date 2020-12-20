@@ -20,6 +20,7 @@ public class User {
 	private String regid;
 	private String moddate;
 	private String modid;
+	private String oriPass;
 
 	public String getId() {
 		return id;
@@ -173,13 +174,22 @@ public class User {
 		this.modid = modid;
 	}
 
+	public String getOriPass() {
+		return oriPass;
+	}
+
+	public void setOriPass(String oriPass) {
+		this.oriPass = oriPass;
+	}
+
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", pass=" + pass + ", name=" + name + ", phone=" + phone + ", zipcode=" + zipcode
 				+ ", addr1=" + addr1 + ", addr2=" + addr2 + ", point=" + point + ", grade=" + grade
 				+ ", deliveryZipcode=" + deliveryZipcode + ", deliveryAddr1=" + deliveryAddr1 + ", deliveryAddr2="
 				+ deliveryAddr2 + ", recommender=" + recommender + ", sponsor=" + sponsor + ", agent=" + agent
-				+ ", regdate=" + regdate + ", regid=" + regid + ", moddate=" + moddate + ", modid=" + modid + "]";
+				+ ", regdate=" + regdate + ", regid=" + regid + ", moddate=" + moddate + ", modid=" + modid
+				+ ", oriPass=" + oriPass + "]";
 	}
 	
 }

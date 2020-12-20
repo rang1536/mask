@@ -167,7 +167,7 @@
                             <li class="user-profile header-notification">
                                 <a href="#!">
                                     <!-- <img src="resources/mask2/images/avatar-4.jpg" class="img-radius" alt="User-Profile-Image"> -->
-                                    <span>John Doe</span>
+                                    <span id="userId"></span>
                                     <i class="ti-angle-down"></i>
                                 </a>
                                 <ul class="show-notification profile-notification">
@@ -210,9 +210,8 @@
                         <div class="pcoded-inner-navbar main-menu">
                             <div class="">
                                 <div class="main-menu-header">
-                                    <div class="user-details">
-                                        <span>홍길동님 환영합니다.</span>
-                                    </div>
+                                    <div class="user-details" id="userName"></div>님 환영합니다.
+                                    
                                 </div>
 <!-- 
                                 <div class="main-menu-content">
@@ -329,7 +328,13 @@
 				$("#menu3").addClass("active");
 			}else if(path.indexOf("regiMem") != -1){
 				$("#menu4").addClass("active");
+			}else if(path.indexOf("rePurchase") != -1){
+				$("#menu5").addClass("active");
 			}
+			
+			$("#userId").text(localStorage.getItem('loginId'));
+			$("#userName").text(localStorage.getItem('loginId'));
+			
 		});
 		
 		function selectMenu(menu){
@@ -342,7 +347,7 @@
 			}else if(menu == 4){
 				location.href = "regiMem";
 			}else if(menu == 5){
-				
+				location.href = "rePurchase";
 			}else if(menu == 6){
 				
 			}else if(menu == 7){
@@ -370,6 +375,8 @@
 	         nav.removeClass('active');
 	     }
 	 });
+	    
+	    
 	</script>
 </body>
 </html>
