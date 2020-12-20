@@ -10,7 +10,40 @@
 		 WHERE ID = #{id}
 	</select>
 	
-	<select id="registerMember" parameterType="kr.or.mask.domain.User" resultType="int">
+	<select id="getPass" parameterType="kr.or.mask.domain.User" resultType="int">
+		SELECT COUNT(*) CNT
+		  FROM MEMBER
+		 WHERE ID = #{id}
+		   AND PASS = #{oriPass}
+	</select>
+	
+	<select id="getUser" parameterType="String" resultType="kr.or.mask.domain.User">
+		SELECT ID , NAME , PHONE
+		     , ZIPCODE , ADDR1 , ADDR2 , POINT
+		     , DELIVERY_ZIPCODE , DELIVERY_ADDR1 , DELIVERY_ADDR2
+		     , RECOMMENDER , SPONSOR , AGENT, GRADE
+		     , DATE_FORMAT(REGDATE,'%Y-%m-%d %H:%i:%s') AS REGDATE , REGID
+		  FROM MEMBER
+		 WHERE ID = #{id}
+	</select>
+	
+	<select id="selectMember" parameterType="String" resultType="kr.or.mask.domain.User">
+		SELECT ID , NAME 
+		     , DATE_FORMAT(REGDATE,'%Y-%m-%d') AS REGDATE
+		  FROM MEMBER
+		 WHERE ID LIKE CONCAT('%', LOWER(#{searchWord}), '%')
+		    OR NAME LIKE CONCAT('%', LOWER(#{searchWord}), '%')
+	</select>
+	
+	<select id="selectAgent" parameterType="String" resultType="kr.or.mask.domain.Agent">
+		SELECT CODE , NAME 
+		     , DATE_FORMAT(REGDATE,'%Y-%m-%d') AS REGDATE
+		  FROM AGENT
+		 WHERE CODE LIKE CONCAT('%', LOWER(#{searchWord}), '%')
+		    OR NAME LIKE CONCAT('%', LOWER(#{searchWord}), '%')
+	</select>
+	
+	<insert id="registerMember" parameterType="kr.or.mask.domain.User">
 		INSERT
 		  INTO MEMBER
 		       ( ID , PASS , NAME , PHONE
@@ -20,10 +53,43 @@
 		       , REGDATE , REGID
 		       )
 		VALUES ( LOWER(#{id}) , #{pass} , #{name} , #{phone}
-		       , #{zipcode} , #{addr1} , #{addr2} , #{point}
+		       , #{zipcode} , #{addr1} , #{addr2} , 0
 		       , #{deliveryZipcode} , #{deliveryAddr1} , #{deliveryAddr2}
 		       , #{recommender} , #{sponsor} , #{agent} , #{grade}
 		       , NOW() , #{regid}
 		       )
-	</select>
+	</insert>
+	
+	<insert id="insertPointHistory" parameterType="kr.or.mask.domain.PointHistory">
+		INSERT
+		  INTO POINT_HISTORY
+		       ( ID , MESSAGE , POINT
+		       , TYPE , REGDATE
+		       )
+		VALUES ( #{id} , #{message} , #{point}
+		       , #{type} , NOW()
+		       )
+	</insert>
+	
+	<update id="updateMember" parameterType="kr.or.mask.domain.User">
+		UPDATE MEMBER
+		   SET NAME = #{name}
+		     , PHONE = #{phone}
+		     , PASS = #{pass}
+		     , ZIPCODE = #{zipcode}
+		     , ADDR1 = #{addr1}
+		     , ADDR2 = #{addr2}
+		     , MODID = #{modid}
+		     , MODDATE = NOW()
+		 WHERE ID = #{id}
+	</update>
+	
+	<update id="updatePoint" parameterType="kr.or.mask.domain.User">
+		UPDATE MEMBER
+		   SET POINT = POINT + #{point}
+		     , MODID = #{id}
+		     , MODDATE = NOW()
+		 WHERE ID = #{id}
+	</update>
+	
 </mapper>

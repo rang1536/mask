@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ page session="false" %>
 <html>
 <head>
@@ -51,10 +52,11 @@
 	                            </div>
 	                            <div class="form-group row">
 	                                <div class="col-sm-5">
-	                                    <input type="text" class="form-control form-control-success" placeholder="가입센터 : " id="agent" readonly="readonly" name="agent">
+	                                    <input type="text" class="form-control form-control-success" placeholder="가입센터 : " id="agent" readonly="readonly">
+	                                    <input type="hidden" id="agentCode" name="agent">
 	                                </div>
 	                                <div class="col-sm-4">
-		                                <button class="btn btn-primary btn-outline-primary"><i class="icofont icofont-user-alt-3"></i>SEARCH</button>
+		                                <button class="btn btn-primary btn-outline-primary" id="searchAgent"><i class="icofont icofont-user-alt-3"></i>SEARCH</button>
 		                            </div>
 	                            </div>
 	                            <div class="form-group row">
@@ -62,7 +64,7 @@
 	                                    <input type="text" class="form-control form-control-success" placeholder="추천인ID : " id="recommender" readonly="readonly" name="recommender">
 	                                </div>
 	                                <div class="col-sm-4">
-		                                <button class="btn btn-primary btn-outline-primary"><i class="icofont icofont-user-alt-3"></i>SEARCH</button>
+		                                <button class="btn btn-primary btn-outline-primary" id="searchRecommender"><i class="icofont icofont-user-alt-3"></i>SEARCH</button>
 		                            </div>
 		                            <div class="col-sm-10">
 	                                	<div class="text-danger" style="v-align:top;">가입이후에는 변경할 수 없습니다.</div>
@@ -73,7 +75,7 @@
 	                                    <input type="text" class="form-control form-control-success" placeholder="후원인ID : " id="sponsor" readonly="readonly" name="sponsor">
 	                                </div>
 	                                <div class="col-sm-5">
-		                                <button class="btn btn-primary btn-outline-primary"><i class="icofont icofont-user-alt-3"></i>SEARCH</button>
+		                                <button class="btn btn-primary btn-outline-primary" id="searchSponsor"><i class="icofont icofont-user-alt-3"></i>SEARCH</button>
 		                            </div>
 		                            <div class="col-sm-10">
 	                                	<div class="text-danger" style="v-align:top;">가입이후에는 변경할 수 없습니다.</div>
@@ -145,10 +147,11 @@
                                                </div>
                                            </div>
                                            <div class="card-block">
-                                               <p>사용가능포인트 : <code>100,000</code></p>
-                                               <p>결재포인트 : <code>70,000</code></p>
-                                               <p>----------------------------</p>
-                                               <p>잔여포인트 : <code>30,000</code></p>
+												<input type="hidden" id="point" name="point" value="${point }"/>
+												<p>사용가능포인트 : <code><fmt:formatNumber value="${point }" pattern="#,###" /></code></p>
+												<p>결재포인트 : <code>70,000</code></p>
+												<p>-----------------------------------------</p>
+												<p>잔여포인트 : <code><fmt:formatNumber value="${point-70000 }" pattern="#,###" /></code></p>
                                            </div>
                                        </div>
                                        <!-- Line Tooltip card end -->
@@ -190,6 +193,7 @@
         </div>
         <!-- Main-body end -->
 <script>
+	
 	var dupCheck = false;
 	function searchAddr(n){
 		new daum.Postcode({
@@ -261,6 +265,10 @@
 			$("#newPass").focus();
 			return;
 		}
+		if($("#point").val() < 70000){
+			alert("보유하신 포인트가 70,000아래입니다.\n충전 후 이용해 주십시요.");
+			return;			
+		}
 		
 		var params = $('#memberForm').serialize(); //폼값세팅.
 		$.ajax({
@@ -271,7 +279,7 @@
 			success:function(data){
 				alert(data.message);
 				if(data.result == 'success'){
-				}else{
+					window.location.reload(true);
 				}
 			}
 		})
@@ -279,6 +287,11 @@
 	});
 	
 	$("#dupCheckBtn").click(function(){
+		if($("#id").val() == ""){
+			alert("아이디를 입력 해주세요.");
+			$("#id").focus();
+			return;
+		}
 		$.ajax({
 			url : 'dupIdCheck',
 			data : {'id' : $("#id").val()},
@@ -295,7 +308,23 @@
 		})
 	});
 	
+	//이벤트 업로드 팝업이벤트
+	$("#searchRecommender").click(function(){
+		$('#recommenderPop').modal();
+	});
+	
+	$("#searchSponsor").click(function(){
+		$('#sponsorPop').modal();
+	});
+	
+	$("#searchAgent").click(function(){
+		$('#agentPop').modal();
+	});
+	
 </script>
 <c:import url="./frameSet/footer.jsp"></c:import>
+<c:import url="./popup/recommender.jsp"></c:import>
+<c:import url="./popup/sponsor.jsp"></c:import>
+<c:import url="./popup/agent.jsp"></c:import>
 </body>
 </html>
