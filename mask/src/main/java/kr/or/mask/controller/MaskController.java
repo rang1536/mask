@@ -3,8 +3,10 @@ package kr.or.mask.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.or.mask.service.MaskService;
 
@@ -29,8 +31,10 @@ public class MaskController {
 	
 	//공지사항
 	@RequestMapping(value="/notice",  method = RequestMethod.GET)
-	public String noticeCtrl(){
-		//System.out.println(order);
+	public String noticeCtrl(Model model
+			,@RequestParam(value="nowPageNum", defaultValue="1")int nowPageNum){
+		model.addAttribute("totalCnt", mServ.getNoticeCntServ());
+		model.addAttribute("list", mServ.getNoticeListServ(nowPageNum));
 		return "main/notice";
 	}
 	

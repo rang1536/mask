@@ -137,7 +137,7 @@
 							</span>
 						</h3>
 					</header>
-					<p>Morbi interdum mollis sapien. Sed ac risus. Phasellus lacinia, magna lorem ullamcorper laoreet, lectus arcu.</p>
+					<p>SE01과 함께 성장하시는 고객님들을 위한 맞춤성장 관리시스템</p>
 					<ul class="actions">
 						<li><a href="#" class="button alt">더보기+</a></li>
 					</ul>

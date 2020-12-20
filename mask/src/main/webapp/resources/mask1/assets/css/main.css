@@ -3572,11 +3572,12 @@
 				}
 
 		}
+		
 
 /* Main */
-
+	
 	#main {
-		padding: 4em 0 2em 0;
+		padding: 4em 0 2em 0; 
 	}
 
 	#one {
@@ -3742,11 +3743,13 @@
 
 /* Footer */
 
-	#footer {
+	#footer {		
 		background-color: #000000;
 		color: #f2a3a5;
-		padding: 4em 0 2em 0;
-		background: #e5474b;
+		/* padding: 4em 0 2em 0; */
+		padding: 0 0 1em 0;
+		/* background: #e5474b; */
+		
 	}
 
 		#footer input, #footer select, #footer textarea {

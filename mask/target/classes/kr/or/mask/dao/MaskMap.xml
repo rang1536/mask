@@ -4,11 +4,26 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mask">
 
+<!-- login -->
 <select id="login" parameterType="Map" resultType="kr.or.mask.domain.User">
 	SELECT *
 	  FROM MEMBER
 	 WHERE ID = #{id}
 	   AND PASS = #{pass} 
+</select>
+
+<!-- 일반공지 조회 -->
+<select id="getNoticeList" parameterType="int" resultType="kr.or.mask.domain.Notice">
+	SELECT *
+	  FROM NOTICE
+	 LIMIT #{startRow}, 10
+</select>
+
+<!-- 공지 총 카운트 조회 -->
+<select id="getNoticeCnt" resultType="int">
+	SELECT COUNT(*)
+	  FROM NOTICE
+	 WHERE TYPE = 1
 </select>
 
 
