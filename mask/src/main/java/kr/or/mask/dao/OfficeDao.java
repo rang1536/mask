@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import kr.or.mask.domain.Agent;
+import kr.or.mask.domain.Goods;
 import kr.or.mask.domain.PointHistory;
 import kr.or.mask.domain.User;
 
@@ -36,7 +37,12 @@ public class OfficeDao {
 		return sql.insert("office.registerMember", user);
 	}
 	
-	//회원가입
+	//상품등록
+	public int registerGoods(Goods goods){
+		return sql.insert("office.registerGoods", goods);
+	}
+		
+	//포인트이력등록
 	public int insertPointHistory(PointHistory ph){
 		return sql.insert("office.insertPointHistory", ph);
 	}
@@ -60,4 +66,20 @@ public class OfficeDao {
 	public List<Agent> selectAgent(String searchWord){
 		return sql.selectList("office.selectAgent", searchWord);
 	}
+	
+	//상품리스트
+	public List<Goods> selectGoods(Goods goods){
+		return sql.selectList("office.selectGoods", goods);
+	}
+	
+	//포인트내역
+	public List<PointHistory> selectPointHistory(PointHistory pointHistory){
+		return sql.selectList("office.selectPointHistory", pointHistory);
+	}
+	
+	//포인트수정
+	public int registerPoint(PointHistory pointHistory){
+		return sql.insert("office.registerPoint", pointHistory);
+	}
+	
 }

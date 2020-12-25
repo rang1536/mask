@@ -34,6 +34,39 @@
 		 WHERE ID LIKE CONCAT('%', LOWER(#{searchWord}), '%')
 		    OR NAME LIKE CONCAT('%', LOWER(#{searchWord}), '%')
 	</select>
+
+	<select id="selectGoods" parameterType="kr.or.mask.domain.Goods" resultType="kr.or.mask.domain.Goods">
+		SELECT GOODS_CODE
+		     , GOODS_NAME
+		     , NEW_PRICE
+		     , RE_PRICE
+		     , CUSTOMER_PRICE
+		     , NEW_PRICE_YN
+		     , DATE_FORMAT(REGDATE,'%Y-%m-%d %H:%i:%s') REGDATE
+		     , REGID
+		  FROM GOODS
+		<if test = "newPriceYn != null">
+		 WHERE NEW_PRICE_YN = #{newPriceYn}
+		 </if>
+	</select>
+	
+	<select id="selectPointHistory" parameterType="kr.or.mask.domain.PointHistory" resultType="kr.or.mask.domain.PointHistory">
+		SELECT ID
+		     , CASE WHEN TYPE = '01' THEN CONCAT('+',POINT)
+		       ELSE CONCAT('-',POINT)
+		       END POINT
+		     , MESSAGE
+		     , FROM_ID
+		     , TO_ID
+		     , DATE_FORMAT(REGDATE,'%Y-%m-%d %H:%i:%s') REGDATE
+		  FROM POINT_HISTORY
+		 WHERE 1 = 1
+		<if test="searchFromDate != null">
+		   AND REGDATE BETWEEN #{searchFromDate} AND #{searchToDate} 
+		</if>
+		 ORDER BY REGDATE DESC
+		 LIMIT #{beginIdx} , #{searchRows}
+	</select>
 	
 	<select id="selectAgent" parameterType="String" resultType="kr.or.mask.domain.Agent">
 		SELECT CODE , NAME 
@@ -58,6 +91,12 @@
 		       , #{recommender} , #{sponsor} , #{agent} , #{grade}
 		       , NOW() , #{regid}
 		       )
+	</insert>
+		
+	<insert id="registerGoods" parameterType="kr.or.mask.domain.Goods">
+		INSERT
+		  INTO GOODS (GOODS_CODE, GOODS_NAME, NEW_PRICE, RE_PRICE, CUSTOMER_PRICE, NEW_PRICE_YN, REGDATE, REGID)
+		VALUES (#{goodsCode}, #{goodsName}, #{newPrice}, #{rePrice}, #{customerPrice}, #{newPriceYn}, NOW(), #{regid})
 	</insert>
 	
 	<insert id="insertPointHistory" parameterType="kr.or.mask.domain.PointHistory">
@@ -91,5 +130,11 @@
 		     , MODDATE = NOW()
 		 WHERE ID = #{id}
 	</update>
-	
+
+	<insert id="registerPoint" parameterType="kr.or.mask.domain.PointHistory">
+		INSERT
+		  INTO POINT_HISTORY
+		       (ID, TYPE, POINT, MESSAGE, FROM_ID, TO_ID, REGDATE)
+		VALUES (#{id}, #{type}, #{point}, #{message}, #{fromId}, #{toId}, NOW())
+	</insert>
 </mapper>

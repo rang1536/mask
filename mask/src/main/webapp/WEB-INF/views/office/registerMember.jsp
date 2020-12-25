@@ -122,7 +122,7 @@
 	                                </div>
 	                            </div>
 	                            <div class="form-group row">
-									<div class="col-xl-4">
+									<div class="col-xl-5">
                                        <!-- Line Tooltip card start -->
                                        <div class="card">
                                            <div class="card-header">
@@ -132,12 +132,16 @@
                                                </div>
                                            </div>
                                            <div class="card-block">
-                                               <input type="radio" id="goods" checked="checked"> <label for="goods">항균 마스크 20EA</label>
+											   <c:forEach var="list" items="${list }" varStatus="status">
+											   		<div class="col-sm-10">
+														<input type="radio" name="goods" id="goods${status.index }" value="${list.newPrice }" onclick="chgGoods('${list.newPrice }')"> <label for="goods">${list.goodsName}</label>
+													</div>
+											   </c:forEach>
                                            </div>
                                        </div>
                                        <!-- Line Tooltip card end -->
                                     </div>
-									<div class="col-xl-4">
+									<div class="col-xl-5">
                                        <!-- Line Tooltip card start -->
                                        <div class="card">
                                            <div class="card-header">
@@ -149,9 +153,9 @@
                                            <div class="card-block">
 												<input type="hidden" id="point" name="point" value="${point }"/>
 												<p>사용가능포인트 : <code><fmt:formatNumber value="${point }" pattern="#,###" /></code></p>
-												<p>결재포인트 : <code>70,000</code></p>
+												<p>결재포인트 : <code><span id="buyPoint"></span></code></p>
 												<p>-----------------------------------------</p>
-												<p>잔여포인트 : <code><fmt:formatNumber value="${point-70000 }" pattern="#,###" /></code></p>
+												<p>잔여포인트 : <code><span id="resultPoint"></span></code></p>
                                            </div>
                                        </div>
                                        <!-- Line Tooltip card end -->
@@ -194,6 +198,26 @@
         <!-- Main-body end -->
 <script>
 	
+	$(document).ready(function(){
+
+	});
+	
+	window.onload = function(){
+		$("#goods0").prop("checked", true);
+		$("#buyPoint").text(displayComma($("#goods0").val()));
+		var point = "${point}";
+		var resultPoint = point-$("#buyPoint").text().replace(/,/gi, "");
+		$("#resultPoint").text(displayComma(resultPoint));
+	}
+	
+	function chgGoods(n){
+		$("#buyPoint").text(displayComma(n));
+		var point = "${point}";
+		var resultPoint = point-n;
+		$("#resultPoint").text(displayComma(resultPoint));
+
+	}
+	
 	var dupCheck = false;
 	function searchAddr(n){
 		new daum.Postcode({
@@ -225,11 +249,19 @@
 		}
 	});
 
+
+	
+	
 	$("#cancelBtn").click(function(){
 		history.back(-1);
 	});
 	
 	$("#joinBtn").click(function(){
+		
+		if($("#resultPoint").text().replace(/,/gi, "") < 0){
+			alert("보유하신 포인트가 구매하시려는 상품보다 적습니다.\n충전 후 이용해 주십시요.");
+			return;			
+		}
 		if($("#id").val() == ""){
 			alert("아이디를 입력 해주세요.");
 			$("#id").focus();
@@ -265,11 +297,7 @@
 			$("#newPass").focus();
 			return;
 		}
-		if($("#point").val() < 70000){
-			alert("보유하신 포인트가 70,000아래입니다.\n충전 후 이용해 주십시요.");
-			return;			
-		}
-		
+
 		var params = $('#memberForm').serialize(); //폼값세팅.
 		$.ajax({
 			url : 'register',

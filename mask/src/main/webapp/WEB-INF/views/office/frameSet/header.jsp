@@ -22,6 +22,8 @@
 	<link rel="stylesheet" type="text/css" href="resources/mask2/css/style.css">
 	<link rel="stylesheet" type="text/css" href="resources/mask2/css/jquery.mCustomScrollbar.css">
 
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" />
+
 	<!-- Required Jquery -->
 	<script type="text/javascript" src="resources/mask2/js/jquery/jquery.min.js"></script>
 	
@@ -44,6 +46,7 @@
 	<script src="resources/mask2/js/pcoded.min.js"></script>
 	<script src="resources/mask2/js/demo-12.js"></script>
 	<script src="resources/mask2/js/jquery.mCustomScrollbar.concat.min.js"></script>
+
 </head>
 <body>
     <!-- Pre-loader start -->
@@ -211,7 +214,6 @@
                             <div class="">
                                 <div class="main-menu-header">
                                     <div class="user-details" id="userName"></div>님 환영합니다.
-                                    
                                 </div>
 <!-- 
                                 <div class="main-menu-content">
@@ -310,6 +312,13 @@
                                         <span class="pcoded-mcaret"></span>
                                     </a>
                                 </li>
+                                <li class=" " id="menu12">
+                                    <a href="#" onClick="selectMenu(12)">
+                                        <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">상품관리</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </nav>
@@ -330,10 +339,25 @@
 				$("#menu4").addClass("active");
 			}else if(path.indexOf("rePurchase") != -1){
 				$("#menu5").addClass("active");
+			}else if(path.indexOf("customer") != -1){
+				$("#menu6").addClass("active");
+			}else if(path.indexOf("pointHistory") != -1){
+				$("#menu8").addClass("active");
+			}else if(path.indexOf("pointExchange") != -1){
+				$("#menu9").addClass("active");
+			}else if(path.indexOf("pointCharge") != -1){
+				$("#menu10").addClass("active");
+			
+			}else if(path.indexOf("goods") != -1){
+				$("#menu12").addClass("active");
 			}
 			
 			$("#userId").text(localStorage.getItem('loginId'));
 			$("#userName").text(localStorage.getItem('loginId'));
+			
+			if(localStorage.getItem('loginId') == null){
+				location.href = "/mask";
+			}
 			
 		});
 		
@@ -349,18 +373,33 @@
 			}else if(menu == 5){
 				location.href = "rePurchase";
 			}else if(menu == 6){
-				
+				location.href = "customer";
 			}else if(menu == 7){
 				
 			}else if(menu == 8){
-				
+				location.href = "pointHistory";				
 			}else if(menu == 9){
-				
+				location.href = "pointExchange";
 			}else if(menu == 10){
-				
+				location.href = "pointCharge";
 			}else if(menu == 11){
 							
+			}else if(menu == 12){
+				location.href = "goods";
 			}
+		}
+		
+		function displayComma(n){
+			return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		}
+		
+		function getFormatDate(date, gubun){
+		    var year = date.getFullYear();
+		    var month = (1 + date.getMonth());
+		    month = month >= 10 ? month : '0' + month;
+		    var day = date.getDate();
+		    day = day >= 10 ? day : '0' + day;
+		    return  year + gubun + month + gubun + day;
 		}
 	</script>
 

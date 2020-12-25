@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import kr.or.mask.dao.OfficeDao;
 import kr.or.mask.domain.Agent;
+import kr.or.mask.domain.Goods;
 import kr.or.mask.domain.PointHistory;
 import kr.or.mask.domain.User;
 
@@ -35,6 +36,11 @@ public class OfficeService {
 		return officeDao.registerMember(user);
 	}
 
+	//상품등록
+	public int registerGoods(Goods goods){
+		return officeDao.registerGoods(goods);
+	}
+	
 	//포인트 이력 등록
 	public int insertPointHistory(PointHistory ph){
 		return officeDao.insertPointHistory(ph);
@@ -55,9 +61,23 @@ public class OfficeService {
 		return officeDao.selectMember(searchWord);
 	}
 	
-	//유저수정
+	//대리점목록
 	public List<Agent> selectAgent(String searchWord){
 		return officeDao.selectAgent(searchWord);
 	}
 
+	//상품목록
+	public List<Goods> selectGoods(Goods goods){
+		return officeDao.selectGoods(goods);
+	}
+	
+	//포인트내역
+	public List<PointHistory> selectPointHistory(PointHistory pointHistory){
+		return officeDao.selectPointHistory(pointHistory);
+	}
+	
+	//포인트출금신청
+	public int registerPoint(PointHistory pointHistory){
+		return officeDao.registerPoint(pointHistory);
+	}
 }
