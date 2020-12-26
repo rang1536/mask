@@ -26,5 +26,50 @@
 	 WHERE TYPE = 1
 </select>
 
+<!-- =========================================================================================== -->
+<!-- 조직도  -->
+	<!-- 공통 -->
+		<!-- 내정보 조회 -->
+		<select id="getMyInfo" parameterType="String" resultType="kr.or.mask.domain.User">
+			SELECT ID, PASS, NAME, PHONE, ZIPCODE, ADDR1, ADDR2, POINT
+				   , DELIVERY_ZIPCODE, DELIVERY_ADDR1, DELIVERY_ADDR2
+				   , RECOMMENDER, SPONSOR, AGENT, GRADE
+				   , REGDATE, REGID, MODDATE, MODID
+			  FROM MEMBER
+			 WHERE ID= #{id}
+		</select>
+		
+		<!-- 센터조회 -->
+		<select id="getUpAgentNm" parameterType="String" resultType="kr.or.mask.domain.Agent">
+			SELECT CODE, NAME, REGDATE, REGID, MODDATE, MODID
+			  FROM AGENT
+			 WHERE CODE = #{agent}
+		</select>
+	
+		
+<!-- 후원조직도 조회 -->
+		
+	<!-- 하위 후원인 조회 -->
+	<select id="getUnderTreeSponsor" parameterType="String" resultType="kr.or.mask.domain.User">
+		SELECT ID, PASS, NAME, PHONE, ZIPCODE, ADDR1, ADDR2, POINT
+			   , DELIVERY_ZIPCODE, DELIVERY_ADDR1, DELIVERY_ADDR2
+			   , RECOMMENDER, SPONSOR, AGENT, GRADE
+			   , REGDATE, REGID, MODDATE, MODID
+		  FROM MEMBER
+		 WHERE SPONSOR = #{id} 
+	</select>
 
+
+<!-- 추천조직도 조회 -->
+	
+	<!-- 하위 추천인 조회 -->
+	<select id="getUnderTreeRecommender" parameterType="String" resultType="kr.or.mask.domain.User" >
+		SELECT ID, PASS, NAME, PHONE, ZIPCODE, ADDR1, ADDR2, POINT
+			   , DELIVERY_ZIPCODE, DELIVERY_ADDR1, DELIVERY_ADDR2
+			   , RECOMMENDER, SPONSOR, AGENT, GRADE
+			   , REGDATE, REGID, MODDATE, MODID
+		  FROM MEMBER
+		 WHERE RECOMMENDER = #{id}
+	</select>
+	
 </mapper>

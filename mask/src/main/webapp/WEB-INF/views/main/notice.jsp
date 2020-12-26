@@ -56,7 +56,7 @@
 						</div>
 					</c:if> 
 					
-					<c:if test="${list.size() eq 0 or list eq null}">
+					<c:if test="${list.size() < 5}">
 						<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 					</c:if> 
 				</div>	

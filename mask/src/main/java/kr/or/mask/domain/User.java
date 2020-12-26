@@ -1,5 +1,7 @@
 package kr.or.mask.domain;
 
+import java.util.List;
+
 public class User {
 	private String id;
 	private String pass;
@@ -21,6 +23,25 @@ public class User {
 	private String moddate;
 	private String modid;
 	private String oriPass;
+	private List<User> userList;
+	private String agentNm;
+	
+
+	public String getAgentNm() {
+		return agentNm;
+	}
+
+	public void setAgentNm(String agentNm) {
+		this.agentNm = agentNm;
+	}
+
+	public List<User> getUserList() {
+		return userList;
+	}
+
+	public void setUserList(List<User> userList) {
+		this.userList = userList;
+	}
 
 	public String getId() {
 		return id;
@@ -189,7 +210,9 @@ public class User {
 				+ ", deliveryZipcode=" + deliveryZipcode + ", deliveryAddr1=" + deliveryAddr1 + ", deliveryAddr2="
 				+ deliveryAddr2 + ", recommender=" + recommender + ", sponsor=" + sponsor + ", agent=" + agent
 				+ ", regdate=" + regdate + ", regid=" + regid + ", moddate=" + moddate + ", modid=" + modid
-				+ ", oriPass=" + oriPass + "]";
+				+ ", oriPass=" + oriPass + ", userList=" + userList + ", agentNm=" + agentNm + "]";
 	}
+
+	
 	
 }

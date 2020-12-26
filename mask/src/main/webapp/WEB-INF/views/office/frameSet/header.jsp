@@ -351,7 +351,7 @@
 			}else if(menu == 6){
 				
 			}else if(menu == 7){
-				
+				location.href = 'workChart';
 			}else if(menu == 8){
 				
 			}else if(menu == 9){

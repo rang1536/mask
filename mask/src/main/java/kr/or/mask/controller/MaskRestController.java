@@ -32,4 +32,26 @@ public class MaskRestController {
 		return result;
 	}
 	
+	
+	//후원조직도
+	@RequestMapping(value="/getSponsorTree",  method = RequestMethod.POST)
+	public Map<String, Object> getSponsorTreeCtrl(String id, int maxLoop){
+		//System.out.println("id : "+id+", pass : "+pass);
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("user", mServ.getSponsorTree(id, maxLoop));
+		
+		return result;
+	}
+	
+	//추천조직도
+	@RequestMapping(value="/getRecommenderTree",  method = RequestMethod.POST)
+	public Map<String, Object> getRecommenderTreeCtrl(String id, int maxLoop){
+		//System.out.println("id : "+id+", pass : "+pass);
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("user", mServ.getRecommenderTree(id, maxLoop));
+		
+		return result;
+	}
+	
+	
 }
