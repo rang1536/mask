@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import kr.or.mask.domain.Agent;
+import kr.or.mask.domain.Goods;
 import kr.or.mask.domain.PointHistory;
 import kr.or.mask.domain.User;
 import kr.or.mask.service.OfficeService;
@@ -77,6 +78,23 @@ public class OfficeRestController {
 		return map;
 	}
 	
+	@RequestMapping(value="/registerGoods", method= {RequestMethod.POST,RequestMethod.GET})
+	public Map<String, Object> registerGoods(@ModelAttribute(value="id") String id , Goods goods){
+		goods.setRegid(id);
+		Map<String, Object> map = new HashMap<String, Object>();
+		int cnt = officeService.registerGoods(goods);
+		
+		if(cnt==1){
+			map.put("result", "success");
+			map.put("message", "등록되었습니다.");
+		}else {
+			map.put("result", "error");
+			map.put("message", "등록에 실패하였습니다.");
+		}
+
+		return map;
+	}
+	
 	@RequestMapping(value="/updMem", method= {RequestMethod.POST})
 	public Map<String, Object> updateMember(@ModelAttribute(value="id") String id , User user){
 		user.setModid(id);
@@ -120,4 +138,40 @@ public class OfficeRestController {
 		map.put("list", list);
 		return map;
 	}
+	
+	@RequestMapping(value="/selectHistory", method= {RequestMethod.POST})
+	public Map<String, Object> selectHistory(PointHistory pointHistory){
+
+		if(pointHistory.getSearchToDate() != null){
+			pointHistory.setSearchToDate(Integer.parseInt(pointHistory.getSearchToDate())+1+"");
+		}
+		
+		List<PointHistory> list = officeService.selectPointHistory(pointHistory);
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("list", list);
+		return map;
+	}
+	
+	@RequestMapping(value="/exchange", method= {RequestMethod.POST,RequestMethod.GET})
+	public Map<String, Object> exchange(@ModelAttribute(value="id") String id , PointHistory pointHistory){
+		Map<String, Object> map = new HashMap<String, Object>();
+		pointHistory.setType("02");
+		pointHistory.setMessage("출금신청");
+		pointHistory.setId(id);
+		pointHistory.setFromId(id);
+		pointHistory.setToId("admin");
+		int cnt = officeService.registerPoint(pointHistory);
+		
+		if(cnt==1){
+			map.put("result", "success");
+			map.put("message", "출금신청이 정상처리되었습니다.");
+		}else {
+			map.put("result", "error");
+			map.put("message", "출금신청 등록에 실패하였습니다.");
+		}
+
+		return map;
+	}
+	
 }

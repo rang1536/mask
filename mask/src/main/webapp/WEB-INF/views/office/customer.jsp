@@ -21,7 +21,7 @@
                     <!-- 필수항목 start -->
                     <div class="card">
                         <div class="card-header">
-                            <h4>재구매</h4>
+                            <h4>소비자구매</h4>
                     		<div class="card-block">
 	                        	<div class="form-group row">
 									<div class="col-xl-5">
@@ -36,8 +36,8 @@
                                            <div class="card-block">
                                            	<c:forEach var="list" items="${list }" varStatus="status">
 											   		<div class="col-sm-10">
-														<input type="radio" name="goods" id="goods${status.index }" value="${list.rePrice }" onclick="chgGoods('${list.rePrice }')">
-														<label for="goods">${list.goodsName} (<fmt:formatNumber value="${list.rePrice }" pattern="#,###" />)</label>
+														<input type="radio" name="goods" id="goods${status.index }" value="${list.customerPrice }" onclick="chgGoods('${list.customerPrice }')">
+														<label for="goods">${list.goodsName} (<fmt:formatNumber value="${list.customerPrice }" pattern="#,###" />)</label>
 													</div>
 											</c:forEach>
                                            </div>
