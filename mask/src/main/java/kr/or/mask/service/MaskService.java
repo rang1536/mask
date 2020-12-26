@@ -199,4 +199,26 @@ public class MaskService {
 		return user;
 	}
 	
+	//후원조직도2
+	public List<User> getSponsorList(String id, int maxLoop){
+		List<User> sponList = new ArrayList<User>();
+		
+		//1. 최상위 내정보 세팅
+		User user = getMyInfoServ(id);
+		user.setAgentNm(getUpAgentNmServ(user.getAgent()));
+		user.setTreeLevel(1);
+		
+		sponList.add(user);
+		
+		//2. 후원인조회 
+		List<User> underList = getUnderTreeRecommenderServ(id);
+		
+		for(int i=0; i<underList.size(); i++ ) {
+			
+		}
+		
+		
+		return sponList;
+	}
+	
 }
