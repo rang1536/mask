@@ -25,7 +25,16 @@ public class User {
 	private String oriPass;
 	private List<User> userList;
 	private String agentNm;
+	private int treeLevel;
+
 	
+	public int getTreeLevel() {
+		return treeLevel;
+	}
+
+	public void setTreeLevel(int treeLevel) {
+		this.treeLevel = treeLevel;
+	}
 
 	public String getAgentNm() {
 		return agentNm;
@@ -210,7 +219,8 @@ public class User {
 				+ ", deliveryZipcode=" + deliveryZipcode + ", deliveryAddr1=" + deliveryAddr1 + ", deliveryAddr2="
 				+ deliveryAddr2 + ", recommender=" + recommender + ", sponsor=" + sponsor + ", agent=" + agent
 				+ ", regdate=" + regdate + ", regid=" + regid + ", moddate=" + moddate + ", modid=" + modid
-				+ ", oriPass=" + oriPass + ", userList=" + userList + ", agentNm=" + agentNm + "]";
+				+ ", oriPass=" + oriPass + ", userList=" + userList + ", agentNm=" + agentNm + ", treeLevel="
+				+ treeLevel + "]";
 	}
 
 	

@@ -65,10 +65,18 @@ public class MaskController {
 	}
 	
 	//조직도
-	@RequestMapping(value="/zoomTest",  method = RequestMethod.GET)
-	public String zoomTestCtrl(){
-		//System.out.println(order);
-		return "office/frameSet/sponsorChart";
+	@RequestMapping(value="/sponChart",  method = {RequestMethod.GET, RequestMethod.POST})
+	public String sponChartCtrl(String baseIdSponsor, int sponsorMaxLoop, Model model){
+		//System.out.println(baseIdSponsor+", "+ sponsorMaxLoop);
+		model.addAttribute("sponList", mServ.getSponsorTree(baseIdSponsor, sponsorMaxLoop));
+		return "viewtest/tcr";
 	}
 	
+	//조직도
+	@RequestMapping(value="/recommChart",  method = {RequestMethod.GET, RequestMethod.POST})
+	public String recommChartCtrl(String baseIdSponsor, int sponsorMaxLoop, Model model){
+		//System.out.println(baseIdSponsor+", "+ sponsorMaxLoop);
+		model.addAttribute("recommList", mServ.getRecommenderTree(baseIdSponsor, sponsorMaxLoop));
+		return "viewtest/tcr";
+	}
 }

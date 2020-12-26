@@ -9,7 +9,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
 	<!-- Favicon icon -->
-	<link rel="icon" href="resources/mask2/images/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="resources/mask2/imagesfavicon.icog" type="image/x-icon">
 	<!-- Google font-->
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
 	<!-- Required Fremwork -->
@@ -102,8 +102,8 @@
                         <a class="mobile-search morphsearch-search" href="#">
                             <i class="ti-search"></i>
                         </a>
-                        <a href="index.html">
-                            <img class="img-fluid" src="resources/mask2/images/logo.png" alt="Theme-Logo" />
+                        <a href="#">
+                            <img class="img-fluid" src="resources/logo2.PNG" alt="Theme-Logo" />
                         </a>
                         <a class="mobile-options">
                             <i class="ti-more"></i>

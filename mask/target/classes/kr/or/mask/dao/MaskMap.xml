@@ -57,6 +57,7 @@
 			   , REGDATE, REGID, MODDATE, MODID
 		  FROM MEMBER
 		 WHERE SPONSOR = #{id} 
+		 ORDER BY REGDATE
 	</select>
 
 

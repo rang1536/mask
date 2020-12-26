@@ -6,7 +6,9 @@
 	<title>SE01</title>
 	<style>
 		.chartBox{
-			width:100%;border:1px solid #ddd;height:500px;
+			width:100%;
+			/* border:1px solid #ddd; */
+			height:500px;
 		}
 	</style>
 	
@@ -66,29 +68,33 @@
 					<div class="tab-content card-block">
 						<div class="tab-pane active" id="home7" role="tabpanel">
 							<p class="m-0">
-								<input type="number" id="sponsorMaxLoop" name="sponsorMaxLoop" min="0" placeholder="검색레벨"/>
-								<input type="email" id="baseIdSponsor" name="baseIdSponsor" placeholder="기준 ID" value=""/>
-								<button type="button" id="sponsorSearchBtn">조회</button>
+								<form name="sponForm" id="sponForm" method="post">
+									<input type="number" id="sponsorMaxLoop" name="sponsorMaxLoop" min="0" placeholder="검색레벨"/>
+									<input type="email" id="baseIdSponsor" name="baseIdSponsor" placeholder="기준 ID" value=""/>
+									<button type="button" id="sponsorSearchBtn">조회</button>
+								</form>
 							</p>
 							<br/>
 							
 							<!-- 1.후원조직도 -->
 							<div class="chartBox">
-								<iframe src="zoomTest"></iframe> 
+								<iframe src="" name="sponFrame" id="sponFrame" width="100%" height="100%";></iframe> 
 								
-							</div>
+							</div> 
 						</div>
 						<div class="tab-pane" id="profile7" role="tabpanel">
 							<p class="m-0">
-								<input type="number" id="recommenderMaxLoop" name="sponsorMaxLoop" min="0" placeholder="검색레벨"/>
-								<input type="email" id="baseIdRecommender" name="baseIdSponsor" placeholder="기준 ID" value=""/>
-								<button type="button" id="recommenderSearchBtn">조회</button>
+								<form name="recommForm" id="recommForm" method="post">
+									<input type="number" id="recommenderMaxLoop" name="recommenderMaxLoop" min="0" placeholder="검색레벨"/>
+									<input type="email" id="baseIdRecommender" name="baseIdRecommender" placeholder="기준 ID" value=""/>
+									<button type="button" id="recommenderSearchBtn">조회</button>
+								</form>
 							</p>
 							<br/>
 							
 							<!-- 2. 추천조직도 -->
 							<div class="chartBox">
-							
+								<iframe src="" name="recommFrame" id="recommFrame" width="100%" height="100%"></iframe> 
 							</div>
 						</div>
 						
@@ -108,7 +114,6 @@
 </div>
 </div>
 
-
 <script>
 
 	// 후원조직도 조회
@@ -117,7 +122,7 @@
 		var id = $('#baseIdSponsor').val();
 		
 		if(maxLoop == null || maxLoop == ''){
-			maxLoop = 0;
+			$('#sponsorMaxLoop').val(0);
 		}
 		
 		if(id == null || id == ''){
@@ -126,27 +131,36 @@
 			return;
 		}
 		
-		$.ajax({
-			url : 'getSponsorTree',
-			data : {'id':id, 'maxLoop':maxLoop},
-			dataType : 'json',
-			type : 'post',
-			success : function(data){
-				var html = '';
-				
-			}
+		$('#sponForm').attr('action','sponChart');
+		$('#sponForm').attr('target','sponFrame');
+		$('#sponForm').attr('method','post');
+		$('#sponForm').submit();
 		
-		})
 	})
 	
-	// 후원조직도 조회
+	// 추천조직도 조회
 	$('#recommenderSearchBtn').click(function(){
+		var maxLoop = $('#recommenderMaxLoop').val();
+		var id = $('#baseIdRecommender').val();
 		
+		if(maxLoop == null || maxLoop == ''){
+			$('#recommenderMaxLoop').val(0);
+		}
+		
+		if(id == null || id == ''){
+			alert('기준 ID를 입력하세요');
+			$('#baseIdRecommender').focus();
+			return;
+		}
+		
+		$('#recommForm').attr('action','recommChart');
+		$('#recommForm').attr('target','recommFrame');
+		$('#recommForm').attr('method','post');
+		$('#recommForm').submit();
 	})
 </script>
                                         
 
 </body>
-<c:import url="./frameSet/sponsorChart.jsp"></c:import>
-<c:import url="./frameSet/footer.jsp"></c:import>
+ <c:import url="./frameSet/zoom.jsp"></c:import> 
 </html>

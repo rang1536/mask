@@ -59,7 +59,7 @@
                     <div class="login-card card-block auth-body mr-auto ml-auto">
                         <form class="md-float-material">
                             <div class="text-center">
-                                <img src="resources/mask2/images/auth/logo-dark.png" alt="logo.png">
+                                <!-- <img src="resources/logo2.PNG" alt="logo.png"> -->
                             </div>
                             <div class="auth-box">
                                 <div class="row m-b-20">
@@ -99,10 +99,12 @@
                                 <div class="row">
                                     <div class="col-md-10">
                                         <p class="text-inverse text-left m-b-0">마이오피스 메뉴는 로그인 후 사용가능합니다</p>
-                                        <p class="text-inverse text-left"><b>SE01</b></p>
+                                        <p class="text-inverse text-left">
+                                        	<font style="font-weight:bold;color:#030066">SE</font><font style="font-weight:bold;color:#FFE400;">01</font>
+                                        </p>
                                     </div>
                                     <div class="col-md-2">
-                                        <img src="resources/mask2/images/auth/Logo-small-bottom.png" alt="small-logo.png">
+                                        <!-- <img src="resources/logo2.PNG" alt="small-logo.png"> -->
                                     </div>
                                 </div>
 
