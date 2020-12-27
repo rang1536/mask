@@ -22,6 +22,14 @@
                             <h4>회원중요정보</h4><span style="text-align:right;color:red;padding-right:20px">변경불가 항목입니다.</span>
                     		<div class="card-block">
 	                            <div class="form-group row">
+	                                <div class="col-sm-5">
+	                                    <input type="text" class="form-control form-control-success" placeholder="사용자 ID : " id="searchId" name="searchId">
+	                                </div>
+	                                <div class="col-sm-4">
+	                                	<button class="btn btn-warning btn-outline-warning" id="btnSearch"><i class="icofont icofont-warning-alt"></i>SEARCH</button>
+	                                </div>
+	                            </div>
+	                            <div class="form-group row">
 	                                <div class="col-sm-6">
 	                                    <input type="text" class="form-control" disabled="disabled" id="id" value="사용자 ID : ${user.id }">
 	                                </div>
@@ -189,6 +197,30 @@
 		})
 	});
 
+	$("#btnSearch").click(function(){
+
+		if($("#searchId").val() == ""){
+			alert("검색 아이디(이름)을 입력 해주세요.");
+			$("#searchId").focus();
+			return false;
+		}
+		
+		var params = {'id' : $("#searchId").val()}
+		$.ajax({
+			url : 'searchMem',
+			data : params,
+			dataType : 'json',
+			type : 'post',
+			success:function(data){
+				alert(data.message);
+				if(data.result == 'success'){
+					$("#oriPass").val("");
+					$("#newPass").val("");
+					$("#conPass").val("");
+				}
+			}
+		})
+	});
 	
 </script>
 <c:import url="./frameSet/footer.jsp"></c:import>
