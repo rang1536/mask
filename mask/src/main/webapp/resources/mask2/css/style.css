@@ -1190,6 +1190,13 @@ a.bg-danger:hover {
     flex: 0 0 16.666667%;
     max-width: 16.666667%; }
 
+  .col-sm-2.5 {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 20%;
+    -ms-flex: 0 0 20%;
+    flex: 0 0 20%;
+    max-width: 20%; }
+    
   .col-sm-3 {
     -webkit-box-flex: 0;
     -webkit-flex: 0 0 25%;
@@ -1269,6 +1276,9 @@ a.bg-danger:hover {
   .pull-sm-2 {
     right: 16.666667%; }
 
+  .pull-sm-2.5 {
+    right: 20%; }
+    
   .pull-sm-3 {
     right: 25%; }
 
@@ -1307,6 +1317,9 @@ a.bg-danger:hover {
 
   .push-sm-2 {
     left: 16.666667%; }
+
+  .push-sm-2.5 {
+    left: 20%; }
 
   .push-sm-3 {
     left: 25%; }
@@ -1347,6 +1360,9 @@ a.bg-danger:hover {
   .offset-sm-2 {
     margin-left: 16.666667%; }
 
+  .offset-sm-2.5 {
+    margin-left: 20%; }
+    
   .offset-sm-3 {
     margin-left: 25%; }
 
@@ -4080,7 +4096,7 @@ table tbody .border-bottom-info td {
     .header-navbar .navbar-wrapper .navbar-logo .mobile-menu {
       position: absolute;
       right: 22px;
-      border: 1px solid #000000;/*윤재호*/
+      border: 1px solid #000000;/*�쑄�옱�샇*/
       border-radius: 50%;
       padding: 5px 9px;
       top: 24px; }
@@ -6079,7 +6095,7 @@ body[themebg-pattern="pattern9"] {
   border-bottom: 1px solid #444c67;
   border-top: 1px solid #444c67; }
 .pcoded .pcoded-header .navbar-logo[logo-theme="theme1"] {
-  background-color: #ffffff; } /*윤재호*/
+  background-color: #ffffff; } /*�쑄�옱�샇*/
 .pcoded .pcoded-header .navbar-logo[logo-theme="theme2"] {
   background-color: #ef5350; }
 .pcoded .pcoded-header .navbar-logo[logo-theme="theme3"] {
@@ -6513,7 +6529,7 @@ body[themebg-pattern="pattern9"] {
   .pcoded .pcoded-header[header-theme="theme1"] a {
     color: #303548; }
   .pcoded .pcoded-header[header-theme="theme1"] .navbar-logo a {
-    color: #000000; } /*윤재호*/
+    color: #000000; } /*�쑄�옱�샇*/
 .pcoded .pcoded-header[header-theme="theme2"] {
   background: #ef5350; }
   .pcoded .pcoded-header[header-theme="theme2"] a {

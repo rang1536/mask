@@ -23,6 +23,7 @@ public class User {
 	private String moddate;
 	private String modid;
 	private String oriPass;
+	private String expiredate;
 	
 	private String goodsCode;
 	private String goodsName;
@@ -31,6 +32,7 @@ public class User {
 	private List<User> userList;
 	private String agentNm;
 	private int treeLevel;
+	
 	public String getId() {
 		return id;
 	}
@@ -151,6 +153,12 @@ public class User {
 	public void setOriPass(String oriPass) {
 		this.oriPass = oriPass;
 	}
+	public String getExpiredate() {
+		return expiredate;
+	}
+	public void setExpiredate(String expiredate) {
+		this.expiredate = expiredate;
+	}
 	public String getGoodsCode() {
 		return goodsCode;
 	}
@@ -187,7 +195,7 @@ public class User {
 	public void setTreeLevel(int treeLevel) {
 		this.treeLevel = treeLevel;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", pass=" + pass + ", name=" + name + ", phone=" + phone + ", zipcode=" + zipcode
@@ -195,8 +203,9 @@ public class User {
 				+ ", deliveryZipcode=" + deliveryZipcode + ", deliveryAddr1=" + deliveryAddr1 + ", deliveryAddr2="
 				+ deliveryAddr2 + ", recommender=" + recommender + ", sponsor=" + sponsor + ", agent=" + agent
 				+ ", regdate=" + regdate + ", regid=" + regid + ", moddate=" + moddate + ", modid=" + modid
-				+ ", oriPass=" + oriPass + ", goodsCode=" + goodsCode + ", goodsName=" + goodsName + ", buyPoint="
-				+ buyPoint + ", userList=" + userList + ", agentNm=" + agentNm + ", treeLevel=" + treeLevel + "]";
+				+ ", oriPass=" + oriPass + ", expiredate=" + expiredate + ", goodsCode=" + goodsCode + ", goodsName="
+				+ goodsName + ", buyPoint=" + buyPoint + ", userList=" + userList + ", agentNm=" + agentNm
+				+ ", treeLevel=" + treeLevel + "]";
 	}
-
+	
 }

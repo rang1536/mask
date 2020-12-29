@@ -17,6 +17,7 @@ import kr.or.mask.domain.Charge;
 import kr.or.mask.domain.Exchanges;
 import kr.or.mask.domain.Goods;
 import kr.or.mask.domain.Inquiry;
+import kr.or.mask.domain.Notice;
 import kr.or.mask.domain.PointHistory;
 import kr.or.mask.domain.Purchase;
 import kr.or.mask.domain.User;
@@ -33,6 +34,16 @@ public class OfficeDao {
 	//유저정보
 	public User getUser(String id){
 		return sql.selectOne("office.getUser", id);
+	}
+
+	//후원인목록
+	public List<User> selectSponList(String id){
+		return sql.selectList("office.selectSponList", id);
+	}
+	
+	//후원인목록
+	public List<Purchase> searchPurchase(Purchase purchase){
+		return sql.selectList("office.searchPurchase", purchase);
 	}
 	
 	//아이디 중복 체크
@@ -460,6 +471,13 @@ public class OfficeDao {
 	//구매내역 업데이트
 	public int uploadPurchase(Purchase purchase){
 		return sql.update("office.uploadPurchase", purchase);
+	}
+	
+	
+	//구매내역
+	public List<Notice> selectNoticeList(){
+		String type = "2";
+		return sql.selectList("office.selectNoticeList", type);
 	}
 	
 }

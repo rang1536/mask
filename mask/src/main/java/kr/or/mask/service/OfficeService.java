@@ -14,6 +14,7 @@ import kr.or.mask.domain.Charge;
 import kr.or.mask.domain.Exchanges;
 import kr.or.mask.domain.Goods;
 import kr.or.mask.domain.Inquiry;
+import kr.or.mask.domain.Notice;
 import kr.or.mask.domain.PointHistory;
 import kr.or.mask.domain.Purchase;
 import kr.or.mask.domain.User;
@@ -29,6 +30,11 @@ public class OfficeService {
 	//유저조회
 	public User getUser(String userId){
 		return officeDao.getUser(userId);
+	}
+
+	//유저조회
+	public List<User> selectSponList(String id){
+		return officeDao.selectSponList(id);
 	}
 	
 	//중복아이디조회
@@ -78,6 +84,11 @@ public class OfficeService {
 	//유저검색
 	public List<User> selectMember(String searchWord){
 		return officeDao.selectMember(searchWord);
+	}
+	
+	//유저검색
+	public List<Purchase> searchPurchase(Purchase purchase){
+		return officeDao.searchPurchase(purchase);
 	}
 	
 	//대리점목록
@@ -186,14 +197,18 @@ public class OfficeService {
 			if(result == 1) {
 				System.out.println("excel insert Success~!!");
 				map.put("result", "success");
-				map.put("result", "등록되었습니다.");
+				map.put("message", "등록되었습니다.");
 			}else {
 				map.put("result", "error");
-				map.put("result", "등록에 실패하였습니다.");				
+				map.put("message", "등록에 실패하였습니다.");				
 			}
 		}
 		return map;
 	}
 	
+	//공지사항 목록
+	public List<Notice> selectNoticeList(){
+		return officeDao.selectNoticeList();
+	}
 	
 }

@@ -1,6 +1,7 @@
+=\=\=\=\=\=\=
+<<<<<<<=HEAD
+>>>>>>>=branch 'master' of https\://github.com/rang1536/mask.git
 eclipse.preferences.version=1
-<<<<<<< HEAD
 encoding//src/main/webapp/WEB-INF/views/module/mFoot.jsp=UTF-8
-=======
 encoding//src/main/webapp/WEB-INF/views/office/frameSet/header.jsp=UTF-8
->>>>>>> branch 'master' of https://github.com/rang1536/mask.git
+encoding//src/main/webapp/resources/mask2/css/style.css=UTF-8

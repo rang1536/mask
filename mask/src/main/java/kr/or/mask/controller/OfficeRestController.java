@@ -328,7 +328,7 @@ public class OfficeRestController {
 		return map;
 	}
 	
-	@RequestMapping(value="/uploadPurchase", method = RequestMethod.POST)
+	@RequestMapping(value="/uploadPurchase", method= {RequestMethod.POST,RequestMethod.GET})
     public Map<String, Object> uploadPurchase(@ModelAttribute(value="id") String id , MultipartHttpServletRequest request){
 
         MultipartFile excelFile = request.getFile("uploadExcel");
@@ -336,7 +336,12 @@ public class OfficeRestController {
             throw new RuntimeException("엑셀파일을 선택해 주세요");
         }
  
-        File destFile = new File("D:\\"+excelFile.getOriginalFilename());
+        String root_path = request.getSession().getServletContext().getRealPath("/");  
+
+        String attach_path = "resources/";
+        String filename = excelFile.getOriginalFilename();
+        
+        File destFile = new File(root_path+attach_path+filename);
         try {
         	excelFile.transferTo(destFile);
         } catch (Exception e) {
@@ -345,8 +350,65 @@ public class OfficeRestController {
         }
         
         Map<String, Object> map = officeService.uploadPurchase(id, destFile);
-        
+
         return map;
     }
+	
+	
+	@RequestMapping(value="/searchPurchase", method= {RequestMethod.POST})
+	public Map<String, Object> searchPurchase(@ModelAttribute(value="id")String id , Purchase purchase){
+
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		String today = sdf.format(date);
+		
+		String grade = "SE01MASK";
+		String admin = officeService.selectAdmin(grade);
+
+		if(purchase.getSearchToDate() != null){
+			purchase.setSearchToDate(Integer.parseInt(purchase.getSearchToDate())+1+"");
+		}else {
+			purchase.setSearchFromDate(today);
+			purchase.setSearchToDate((Integer.parseInt(today)+1)+"");
+		}
+		
+		if(id.equals(admin)) {
+			purchase.setRegid(null);
+		}else {
+			purchase.setRegid(id);
+		}
+
+		List<Purchase> list = officeService.searchPurchase(purchase);
+		System.out.println(purchase.toString());
+		Map<String, Object> map = new HashMap<String, Object>();
+		if(purchase.getStatus().equals("00")){
+			map.put("payedCnt", officeService.getDeliveryTypeCnt(purchase));
+			purchase.setStatus("03");
+			map.put("completedCnt", officeService.getDeliveryTypeCnt(purchase));
+			purchase.setStatus("01");
+			map.put("readyCnt", officeService.getDeliveryTypeCnt(purchase));
+			purchase.setStatus("02");
+			map.put("ingCnt", officeService.getDeliveryTypeCnt(purchase));
+		}else {
+			if(purchase.getStatus().equals("01")) {
+				map.put("payedCnt", officeService.getDeliveryTypeCnt(purchase));
+				map.put("completedCnt", 0);
+				map.put("readyCnt", officeService.getDeliveryTypeCnt(purchase));
+				map.put("ingCnt", 0);
+			}else if(purchase.getStatus().equals("02")) {
+				map.put("payedCnt", officeService.getDeliveryTypeCnt(purchase));
+				map.put("completedCnt", 0);
+				map.put("readyCnt", 0);
+				map.put("ingCnt", officeService.getDeliveryTypeCnt(purchase));
+			}else if(purchase.getStatus().equals("03")) {
+				map.put("payedCnt", officeService.getDeliveryTypeCnt(purchase));
+				map.put("completedCnt", officeService.getDeliveryTypeCnt(purchase));
+				map.put("readyCnt", 0);
+				map.put("ingCnt", 0);
+			}
+		}
+		map.put("list", list);
+		return map;
+	}
 	
 }

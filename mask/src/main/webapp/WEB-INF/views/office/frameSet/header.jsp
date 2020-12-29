@@ -348,6 +348,8 @@
 				$("#menu5").addClass("active");
 			}else if(path.indexOf("customer") != -1){
 				$("#menu6").addClass("active");
+			}else if(path.indexOf("workChart") != -1){
+				$("#menu7").addClass("active");
 			}else if(path.indexOf("pointHistory") != -1){
 				$("#menu8").addClass("active");
 			}else if(path.indexOf("pointExchange") != -1){

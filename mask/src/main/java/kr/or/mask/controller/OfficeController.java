@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import kr.or.mask.domain.Charge;
 import kr.or.mask.domain.Goods;
 import kr.or.mask.domain.Inquiry;
+import kr.or.mask.domain.Notice;
 import kr.or.mask.domain.PointHistory;
 import kr.or.mask.domain.Purchase;
 import kr.or.mask.domain.User;
@@ -39,10 +40,22 @@ public class OfficeController {
 	
 	
 	@RequestMapping(value = "/business", method = RequestMethod.GET)
-	public String business(Model model) {
-		logger.info("business START");
+	public String business(@ModelAttribute(value="id")String id , Model model) {
+		
+		User user = officeService.getUser(id);
+		List<Notice> noticeList = officeService.selectNoticeList();
+		List<User> sponList = officeService.selectSponList(id);
+		String aSpon = "";
+		String bSpon = "";
+		for(int i=0; i<sponList.size(); i++) {
+			if(i == 0) aSpon = sponList.get(i).getId();
+			if(i == 1) bSpon = sponList.get(i).getId();
+		}
 
-		//model.addAttribute("serverTime", formattedDate );
+		model.addAttribute("aSpon", aSpon);
+		model.addAttribute("bSpon", bSpon);
+		model.addAttribute("user", user);
+		model.addAttribute("noticeList", noticeList);
 		
 		return "/office/myBusiness";
 	}
@@ -61,13 +74,21 @@ public class OfficeController {
 	public String purchase(@ModelAttribute(value="id")String id , Model model) {
 		logger.info("purchase START");
 
-		List<Purchase> list = officeService.selectPurchaseList(id);
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		String today = sdf.format(date);
+
+		Purchase purchase = new Purchase();
+		purchase.setSearchFromDate(today);
+		purchase.setSearchToDate((Integer.parseInt(today)+1)+"");
+		purchase.setRegid(id);
+		
+		List<Purchase> list = officeService.searchPurchase(purchase);
 		
 		model.addAttribute("list", list);
 
 		Purchase pc = new Purchase();
 		pc.setRegid(id);
-		pc.setStatus("00");
 		model.addAttribute("payedCnt", officeService.getDeliveryTypeCnt(pc));
 		pc.setStatus("03");
 		model.addAttribute("completedCnt", officeService.getDeliveryTypeCnt(pc));
