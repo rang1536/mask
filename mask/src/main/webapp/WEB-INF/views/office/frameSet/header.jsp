@@ -319,6 +319,13 @@
                                         <span class="pcoded-mcaret"></span>
                                     </a>
                                 </li>
+                                <li class=" " id="menu13" style="display:none">
+                                    <a href="#" onClick="selectMenu(13)">
+                                        <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">충전신청관리</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </nav>
@@ -341,19 +348,28 @@
 				$("#menu5").addClass("active");
 			}else if(path.indexOf("customer") != -1){
 				$("#menu6").addClass("active");
+			}else if(path.indexOf("workChart") != -1){
+				$("#menu7").addClass("active");
 			}else if(path.indexOf("pointHistory") != -1){
 				$("#menu8").addClass("active");
 			}else if(path.indexOf("pointExchange") != -1){
 				$("#menu9").addClass("active");
 			}else if(path.indexOf("pointCharge") != -1){
 				$("#menu10").addClass("active");
-			
+			}else if(path.indexOf("inquiry") != -1){
+				$("#menu11").addClass("active");
 			}else if(path.indexOf("goods") != -1){
 				$("#menu12").addClass("active");
+			}else if(path.indexOf("chargeList") != -1){
+				$("#menu13").addClass("active");
 			}
 			
 			$("#userId").text(localStorage.getItem('loginId'));
 			$("#userName").text(localStorage.getItem('loginId'));
+			
+			if(localStorage.getItem('loginId') == 'se01admin'){
+				$("#menu13").show();
+			}
 			
 			if(localStorage.getItem('loginId') == null){
 				location.href = "/mask";
@@ -383,13 +399,16 @@
 			}else if(menu == 10){
 				location.href = "pointCharge";
 			}else if(menu == 11){
-							
+				location.href = "inquiry";
 			}else if(menu == 12){
 				location.href = "goods";
+			}else if(menu == 12){
+				location.href = "chargeList";
 			}
 		}
 		
 		function displayComma(n){
+			if(n == null) n = 0;
 			return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 		}
 		
@@ -401,6 +420,26 @@
 		    day = day >= 10 ? day : '0' + day;
 		    return  year + gubun + month + gubun + day;
 		}
+
+		(function poll(){
+			$.ajax({
+				url: "requestCharge",
+				success: function(data){
+					var path = $(location).attr("pathname");
+					if(path.indexOf("chargeList") != -1){
+					}else {
+						if(data.result == "ok"){
+							if(confirm(data.message)){
+								location.href = "chargeList";
+							}
+						}
+					}
+				},
+				dataType: "json",
+				complete: setTimeout(function() { poll(); }, 1000*60),
+				timeout: 1000*30,
+			});
+		})();
 	</script>
 
 	<script>
@@ -414,8 +453,6 @@
 	         nav.removeClass('active');
 	     }
 	 });
-	    
-	    
 	</script>
 </body>
 </html>

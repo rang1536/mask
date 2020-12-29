@@ -16,7 +16,7 @@
         <div class="main-body">
             <div class="page-wrapper">
                 <!-- Page-body start -->
-                <form id="memberForm" onSubmit="return false;">
+                <form id="purchaseForm" onSubmit="return false;">
                 <div class="page-body">
                     <!-- 필수항목 start -->
                     <div class="card">
@@ -36,10 +36,14 @@
                                            <div class="card-block">
                                            	<c:forEach var="list" items="${list }" varStatus="status">
 											   		<div class="col-sm-10">
-														<input type="radio" name="goods" id="goods${status.index }" value="${list.customerPrice }" onclick="chgGoods('${list.customerPrice }')">
-														<label for="goods">${list.goodsName} (<fmt:formatNumber value="${list.customerPrice }" pattern="#,###" />)</label>
+														<input type="radio" name="goods" id="goods${status.index }" value="${list.customerPrice }" onclick="chgGoods('${list.customerPrice }','${status.index }')">
+														<label for="goods${status.index }">${list.goodsName} (<fmt:formatNumber value="${list.customerPrice }" pattern="#,###" />)</label>
+														<input type="hidden" id="goodsCode${status.index }" value="${list.goodsCode }">
+														<input type="hidden" id="goodsName${status.index }" value="${list.goodsName }">
 													</div>
 											</c:forEach>
+											<input type="hidden" id="goodsCode" name="goodsCode"/>
+											<input type="hidden" id="goodsName" name="goodsName"/>
                                            </div>
                                        </div>
                                        <!-- Line Tooltip card end -->
@@ -54,12 +58,13 @@
                                                </div>
                                            </div>
                                            <div class="card-block">
-												<input type="hidden" id="point" name="point" value="${point }"/>
 												<p>사용가능포인트 : <code><fmt:formatNumber value="${point }" pattern="#,###" /></code></p>
 												<p>결재포인트 : <code><span id="buyPoint"></span></code></p>
 												<p>-----------------------------------------</p>
 												<p>잔여포인트 : <code><span id="resultPoint"></span></code></p>
                                            </div>
+                                           <input type="hidden" name="point" id="point">
+                                           <input type="hidden" name="type" value="06">
                                        </div>
                                        <!-- Line Tooltip card end -->
                                     </div>
@@ -87,15 +92,15 @@
 	                            </div>
 	                            <div class="form-group row">
 	                                <div class="col-sm-5">
-	                                    <input type="text" class="form-control" placeholder="받는분 : " id="addr22" name="deliveryAddr2">
+	                                    <input type="text" class="form-control" placeholder="받는분 : " id="receiveName" name="receiveName">
 	                                </div>
 	                                <div class="col-sm-5">
-	                                    <input type="text" class="form-control" placeholder="연락처 : " id="addr22" name="deliveryAddr2">
+	                                    <input type="text" class="form-control" placeholder="연락처 : " id="receivePhone" name="receivePhone">
 	                                </div>
 	                            </div>
 								<div class="form-group row">
 		                            <div class="col-sm-10" style="text-align:center;">
-		                            	<button class="btn btn-primary btn-square" id="joinBtn">구매</button>
+		                            	<button class="btn btn-primary btn-square" id="btnOk">구매</button>
 		                            	<button class="btn btn-primary btn-square" id="cancelBtn">취소</button>
 	                            	</div>
 	                            </div>
@@ -116,14 +121,21 @@
 		var point = "${point}";
 		var resultPoint = point-$("#buyPoint").text().replace(/,/gi, "");
 		$("#resultPoint").text(displayComma(resultPoint));
+		$("#goodsCode").val($("#goodsCode0").val());
+		$("#goodsName").val($("#goodsName0").val());
+		$("#point").val($("#goods0").val());
+
 	}
 	
-	function chgGoods(n){
+	function chgGoods(n, idx){
 		$("#buyPoint").text(displayComma(n));
 		var point = "${point}";
 		var resultPoint = point-n;
 		$("#resultPoint").text(displayComma(resultPoint));
-	
+		$("#goodsCode").val($("#goodsCode"+idx).val());
+		$("#goodsName").val($("#goodsName"+idx).val());
+		$("#point").val(n);
+
 	}
 
 	function searchAddr(n){
@@ -139,7 +151,55 @@
 			}
 		}).open();
 	}
-
+	
+	$("#btnOk").click(function(){
+		if($("#resultPoint").text().replace(/,/gi, "") < 0){
+			alert("보유하신 포인트가 구매하시려는 상품보다 적습니다.\n충전 후 이용해 주십시요.");
+			return;			
+		}
+		
+		if($("#zipcode2").val() == ""){
+			alert("배송지정보를 입력 해주세요.");
+			$("#zipcode2").focus();
+			return;
+		}
+		if($("#addr21").val() == ""){
+			alert("배송지정보를 입력 해주세요.");
+			$("#addr21").focus();
+			return;
+		}
+		if($("#addr22").val() == ""){
+			alert("배송지 상세주소를 입력 해주세요.");
+			$("#addr22").focus();
+			return;
+		}
+		
+		if($("#receiveName").val() == ""){
+			alert("받는 분 성함을 입력 해주세요.");
+			$("#receiveName").focus();
+			return;
+		}
+		if($("#receivePhone").val() == ""){
+			alert("받는 분 전화번호를 입력 해주세요.");
+			$("#receivePhone").focus();
+			return;
+		}
+		
+		var params = $('#purchaseForm').serialize(); //폼값세팅.
+		$.ajax({
+			url : 'registerPurchase',
+			data : params,
+			dataType : 'json',
+			type : 'post',
+			success:function(data){
+				alert(data.message);
+				if(data.result == 'success'){
+					window.location.reload(true);
+				}
+			}
+		})
+		
+	});
 </script>
 <c:import url="./frameSet/footer.jsp"></c:import>
 </body>

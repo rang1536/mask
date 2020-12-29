@@ -62,14 +62,14 @@
                     </div>
                     <!-- 포인트현황 end -->
                     
-                    <!-- 출금요청 start -->
-                    <div class="row">
-                    	<form id="exchForm" onSubmit="return false;">
+                    <form id="exchForm" onSubmit="return false;">
+	                    <!-- 출금요청 start -->
+	                    <div class="row">
 		                    <div class="col-sm-6">
 								<div class="card">
 			                        <div class="card-block tooltip-icon button-list">
 										<div class="col-sm-10">
-											<p>출금요청 포인트 <input type="text" class="form-control" id="point"></p>
+											<p>출금요청 포인트 <input type="text" class="form-control" id="point" name="point"></p>
 											<p>수수료(10%) <input type="text" class="form-control" id="tax" readonly="readonly"></p>
 											<p>지급 포인트 <input type="text" class="form-control" id="receivePoint" readonly="readonly"></p>
 										</div>
@@ -80,18 +80,17 @@
 			                    <div class="card">
 									<div class="card-block">
 										<div class="col-sm-10">
-											<p>계좌정보<input type="text" class="form-control" id="bank" placeholder="은행명 : "></p>
-											<p><input type="text" class="form-control" id="account" placeholder="계좌정보 : "></p>
-											<p><input type="text" class="form-control" id="owner" placeholder="예금주 : "></p>
+											<p>계좌정보<input type="text" class="form-control" id="bank" placeholder="은행명 : " name="bank"></p>
+											<p><input type="text" class="form-control" id="account" placeholder="계좌번호 : " name="account"></p>
+											<p><input type="text" class="form-control" id="owner" placeholder="예금주 : " name="owner"></p>
 											<p><input type="text" class="form-control" id="money" placeholder="입금예정액 : " readonly="readonly"></p>
 										</div>
 									</div>
 								</div>
 							</div>
-						</form>
-					</div>
-					<!-- 출금요청 end -->
-
+						</div>
+						<!-- 출금요청 end -->
+					</form>
 					<div class="row">
 					    <div class="col-sm-12">
 					        <div class="card">
@@ -99,7 +98,7 @@
 					                <div class="row">
 					                    <div class="col-lg-6 col-md-12">
 					                        <div class="form-group">
-					                            <button class="btn btn-primary btn-block">OK</button>
+					                            <button class="btn btn-primary btn-block" id="btnOk">OK</button>
 					                        </div>
 					                    </div>
 										<div class="col-lg-6 col-md-12">
@@ -141,8 +140,8 @@
 	window.onload = function(){
 	}
 
-	$("#joinBtn").click(function(){
-		
+	$("#btnOk").click(function(){
+
 		if($("#point").val() == ""){
 			alert("출금하실 포인트를 입력 해주세요.");
 			$("#point").focus();
@@ -153,7 +152,7 @@
 			$("#bank").focus();
 			return;
 		}
-		if($("#account").val() != $("#conPass").val()){
+		if($("#account").val() == ""){
 			alert("계좌번호를 입력 해주세요.");
 			$("#account").focus();
 			return;
@@ -161,6 +160,13 @@
 		if($("#owner").val() == ""){
 			alert("예금주를 입력 해주세요.");
 			$("#owner").focus();
+			return;
+		}
+		
+
+		if(Number($("#point").val().replace(/[^0-9]/g,"")) > Number("${point}")){
+			alert("출금하실 포인트가 보유하신 포인트보다 많습니다.\n보유하신 포인트를 확인 해주세요.");
+			$("#point").focus();
 			return;
 		}
 

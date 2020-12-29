@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ page session="false" %>
 <html>
 <head>
@@ -42,18 +43,12 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    	<c:forEach var="list" items="${noticeList }">
                                         <tr>
-                                            <th scope="row">2020.12.23 10시 지급완료</th>
-                                            <td style="text-align:center;">2020.12.23</td>
+                                            <td scope="row">${list.title }</td>
+                                            <td style="text-align:center;">${list.regDate }</td>
                                         </tr>
-                                        <tr>
-                                            <th scope="row">2020.12.24 10시 지급완료</th>
-                                            <td style="text-align:center;">2020.12.24</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">2020.12.25 10시 지급완료</th>
-                                            <td style="text-align:center;">2020.12.25</td>
-                                        </tr>
+                                       	</c:forEach>
                                     </tbody>
                                 </table>
                             </div>
@@ -68,7 +63,7 @@
                     		<div class="card-block">
 	                            <div class="form-group row">
 	                                <div class="col-sm-10">
-	                                    <input type="text" class="form-control" value="2020.02.04 수요일까지">
+	                                    <input type="text" class="form-control" readonly="readonly" value="${user.expiredate }">
 	                                </div>
 	                            </div>
 	                        </div>
@@ -84,11 +79,11 @@
 	                            <div class="form-group row">
 	                                <div class="col-sm-10">
 	                                	<div class="form-group row">
-                                            <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="hasPoint" value="- 보유포인트 : 100,000">
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control" id="hasPoint" value="- 보유포인트 : <fmt:formatNumber value="${user.point}" pattern="#,###" />p" readonly="readonly">
                                             </div>
-                                            <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="usePoint" value="- 사용가능 포인트 : 100,000">
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control" id="usePoint" value="- 사용가능 포인트 : <fmt:formatNumber value="${user.point}" pattern="#,###" />p" readonly="readonly">
                                             </div>
                                         </div>
 	                                </div>
@@ -130,8 +125,8 @@
                                         <tr>
                                         	<th style="text-align:center;" rowspan="2">신<br/>규</th>
                                             <th style="text-align:center;" scope="row">기준ID</th>
-                                            <td style="text-align:center;">YESICAN</td>
-                                            <td style="text-align:center;">SE01</td>
+                                            <td style="text-align:center;">${aSpon }</td>
+                                            <td style="text-align:center;">${bSpon }</td>
                                             <td style="text-align:center;"></td>
                                         </tr>
                                         <tr>
@@ -171,6 +166,7 @@
                     <!-- 영업 현황 end -->
 
                     <!-- 문의/답변 start -->
+                    <!-- 
                     <div class="card">
                         <div class="card-header">
                             <h4>문의/답변</h4>
@@ -182,6 +178,7 @@
                             </div>
                        	</div>
                     </div>
+                     -->
                     <!-- 문의/답변 end -->
                 </div>
             </div>

@@ -10,6 +10,18 @@
 		 WHERE ID = #{id}
 	</select>
 	
+	<select id="selectSponList" parameterType="String" resultType="kr.or.mask.domain.User">
+		SELECT ID
+		  FROM MEMBER
+		 WHERE SPONSOR = #{id}
+	</select>
+	
+	<select id="requestChargeCnt" resultType="int">
+		SELECT COUNT(*) CNT
+		  FROM CHARGE
+		 WHERE STATUS = #{status}
+	</select>
+	
 	<select id="getPass" parameterType="kr.or.mask.domain.User" resultType="int">
 		SELECT COUNT(*) CNT
 		  FROM MEMBER
@@ -23,6 +35,16 @@
 		     , DELIVERY_ZIPCODE , DELIVERY_ADDR1 , DELIVERY_ADDR2
 		     , RECOMMENDER , SPONSOR , AGENT, GRADE
 		     , DATE_FORMAT(REGDATE,'%Y-%m-%d %H:%i:%s') AS REGDATE , REGID
+		     , CONCAT(DATE_FORMAT(EXPIREDATE,'%Y.%m.%d '),
+                   CASE WHEN DAYOFWEEK(EXPIREDATE) = '0' THEN '일요일까지'
+                        WHEN DAYOFWEEK(EXPIREDATE) = '1' THEN '월요일까지'
+                        WHEN DAYOFWEEK(EXPIREDATE) = '2' THEN '화요일까지'
+                        WHEN DAYOFWEEK(EXPIREDATE) = '3' THEN '수요일까지'
+                        WHEN DAYOFWEEK(EXPIREDATE) = '4' THEN '목요일까지'
+                        WHEN DAYOFWEEK(EXPIREDATE) = '5' THEN '금요일까지'
+                        WHEN DAYOFWEEK(EXPIREDATE) = '6' THEN '토요일까지'
+                   END
+			   ) EXPIREDATE 
 		  FROM MEMBER
 		 WHERE ID = #{id}
 	</select>
@@ -36,6 +58,34 @@
 		     , RECOMMENDER , SPONSOR , AGENT, GRADE
 		  FROM MEMBER
 		 WHERE ID LIKE CONCAT('%', LOWER(#{searchWord}), '%')
+		    OR NAME LIKE CONCAT('%', LOWER(#{searchWord}), '%')
+	</select>
+	
+	<select id="selectAdmin" parameterType="String" resultType="String">
+		SELECT ID
+		  FROM MEMBER
+		 WHERE GRADE = #{grade}
+	</select>
+	
+	<select id="selectMaxOrderCode" parameterType="String" resultType="String">
+		SELECT MAX(CODE)+1 CODE
+		  FROM PURCHASE
+		 WHERE CODE LIKE CONCAT(#{preCode},'%')
+	</select>
+
+	<select id="selectSponsor" parameterType="String" resultType="kr.or.mask.domain.User">
+		SELECT ID , NAME 
+		     , DATE_FORMAT(REGDATE,'%Y-%m-%d') AS REGDATE
+		  FROM MEMBER
+		 WHERE ID NOT IN (
+			SELECT SPONSOR FROM (
+				SELECT SPONSOR , COUNT(*) CNT
+				  FROM MEMBER
+				 GROUP BY SPONSOR
+				) A
+			 WHERE CNT > 1
+			)
+		   AND ID LIKE CONCAT('%', LOWER(#{searchWord}), '%')
 		    OR NAME LIKE CONCAT('%', LOWER(#{searchWord}), '%')
 	</select>
 
@@ -57,7 +107,13 @@
 	<select id="selectPointHistory" parameterType="kr.or.mask.domain.PointHistory" resultType="kr.or.mask.domain.PointHistory">
 		SELECT ID
 		     , CASE WHEN TYPE = '01' THEN CONCAT('+',POINT)
-		       ELSE CONCAT('-',POINT)
+		       ELSE 
+				      CASE WHEN TYPE = '03' THEN
+						     CASE WHEN TO_ID = 'test01' THEN CONCAT('+',POINT)
+						     ELSE CONCAT('-',POINT)
+						     END
+						ELSE CONCAT('-',POINT)
+					   END
 		       END POINT
 		     , MESSAGE
 		     , FROM_ID
@@ -67,6 +123,9 @@
 		 WHERE 1 = 1
 		<if test="searchFromDate != null">
 		   AND REGDATE BETWEEN #{searchFromDate} AND #{searchToDate} 
+		</if>
+		<if test="id != null">
+		   AND (FROM_ID = #{id} OR TO_ID = #{id})
 		</if>
 		 ORDER BY REGDATE DESC
 		 LIMIT #{beginIdx} , #{searchRows}
@@ -80,6 +139,111 @@
 		    OR NAME LIKE CONCAT('%', LOWER(#{searchWord}), '%')
 	</select>
 	
+	<select id="selectChargeList" resultType="kr.or.mask.domain.Charge">
+		SELECT SEQ
+		     , ID
+		     , POINT
+		     , PHONE
+		     , CASE WHEN STATUS = '01' THEN '대기' ELSE '완료' END STATUS
+		     , DATE_FORMAT(REGDATE,'%Y-%m-%d %H:%i:%s') AS REGDATE
+		  FROM CHARGE
+		 WHERE 1 = 1
+		<if test="id != null">
+		   AND ID = #{id}
+		</if>
+		<if test="status != null">
+		   AND STATUS = #{status}
+		</if>
+		 ORDER BY REGDATE DESC
+	</select>
+	
+	<select id="selectCharge" resultType="kr.or.mask.domain.Charge">
+		SELECT ID
+		     , POINT
+		     , PHONE
+		     , STATUS
+		  FROM CHARGE
+		 WHERE SEQ = #{seq}
+	</select>
+
+	<select id="selectInquiry" parameterType="String" resultType="kr.or.mask.domain.Inquiry">
+		SELECT SEQ
+		     , CONTENTS
+		     , CASE WHEN STATUS = '01' THEN '답변대기' ELSE '답변완료' END STATUS
+		     , ANSWER
+		     , REGDATE
+		     , ANSID
+		     , ANSDATE
+		  FROM INQUIRY
+		 WHERE REGID = CASE WHEN #{id} = 'se01admin' THEN REGID ELSE #{id} END
+		 ORDER BY REGDATE DESC
+	</select>
+
+	<select id="getDeliveryTypeCnt" parameterType="String" resultType="int">
+		SELECT COUNT(*) CNT
+		  FROM PURCHASE
+		 WHERE 1 = 1
+		<if test = "searchType == 'id' and (searchValue != '' and searchValue != null)">
+		   AND REGID = #{searchValue}
+		</if>
+		<if test = "searchType == 'code' and (searchValue != '' and searchValue != null)">
+		   AND CODE LIKE CONCAT('%' , #{searchValue} , '%')
+		</if>
+		   AND REGDATE BETWEEN #{searchFromDate} AND #{searchToDate}
+		<if test = "status != 00">
+		   AND STATUS = #{status}
+		</if>
+	</select>
+
+	<select id="searchPurchase" parameterType="String" resultType="kr.or.mask.domain.Purchase">
+		SELECT CODE
+		     , GOODS_CODE
+		     , GOODS_NAME
+		     , POINT
+		     , CASE WHEN STATUS = '00' THEN '결재완료' 
+		            WHEN STATUS = '01' THEN '배송준비중'
+		            WHEN STATUS = '02' THEN '배송중'
+		       ELSE '배송완료' END STATUS
+		     , IFNULL(DELIVERY_ZIPCODE,'') DELIVERY_ZIPCODE
+		     , IFNULL(DELIVERY_ADDR1,'') DELIVERY_ADDR1
+		     , IFNULL(DELIVERY_ADDR2,'') DELIVERY_ADDR2
+		     , IFNULL(DELIVERY_COMPANY,'') DELIVERY_COMPANY
+		     , IFNULL(DELIVERY_CODE,'') DELIVERY_CODE
+		     , DATE_FORMAT(REGDATE,'%Y-%m-%d (%H:%i:%s)') REGDATE
+		     , REGID
+		     , IFNULL(RECEIVE_NAME,'') RECEIVE_NAME
+		     , IFNULL(RECEIVE_PHONE,'') RECEIVE_PHONE
+		     , CASE WHEN TYPE = '01' THEN '회원가입'
+		            WHEN TYPE = '02' THEN '재구매'
+		            ELSE '소비자구매'
+		       END TYPE
+		  FROM PURCHASE
+		 WHERE 1 = 1
+		<if test = "searchType == 'id' and (searchValue != '' and searchValue != null)">
+		   AND REGID = #{searchValue}
+		</if>
+		<if test = "searchType == 'code' and (searchValue != '' and searchValue != null)">
+		   AND CODE LIKE CONCAT('%' , #{searchValue} , '%')
+		</if>
+		   AND REGDATE BETWEEN #{searchFromDate} AND #{searchToDate}
+		<if test = "status != 00">
+		   AND STATUS = #{status}
+		</if>
+		 ORDER BY REGDATE DESC
+	</select>
+	
+	<select id="selectNoticeList" resultType="kr.or.mask.domain.Notice" parameterType="String">
+		SELECT SEQ
+		     , TITLE
+		     , REGID
+		     , REGDATE
+		     , SELCNT
+		     , CONTENTS
+		  FROM NOTICE
+		 WHERE TYPE = #{type}
+		 ORDER BY REGDATE DESC
+	</select>
+	
 	<insert id="registerMember" parameterType="kr.or.mask.domain.User">
 		INSERT
 		  INTO MEMBER
@@ -87,13 +251,13 @@
 		       , ZIPCODE , ADDR1 , ADDR2 , POINT
 		       , DELIVERY_ZIPCODE , DELIVERY_ADDR1 , DELIVERY_ADDR2
 		       , RECOMMENDER , SPONSOR , AGENT, GRADE
-		       , REGDATE , REGID
+		       , REGDATE , REGID , EXPIREDATE
 		       )
 		VALUES ( LOWER(#{id}) , #{pass} , #{name} , #{phone}
 		       , #{zipcode} , #{addr1} , #{addr2} , 0
 		       , #{deliveryZipcode} , #{deliveryAddr1} , #{deliveryAddr2}
 		       , #{recommender} , #{sponsor} , #{agent} , #{grade}
-		       , NOW() , #{regid}
+		       , NOW() , #{regid} , DATE_SUB(DATE_ADD(NOW(), INTERVAL 1 MONTH) , INTERVAL 1 DAY)
 		       )
 	</insert>
 		
@@ -127,6 +291,15 @@
 		 WHERE ID = #{id}
 	</update>
 	
+	<update id="registerAnswer" parameterType="kr.or.mask.domain.Inquiry">
+		UPDATE INQUIRY
+		   SET ANSWER = #{answer}
+		     , ANSID = #{ansid}
+		     , ANSDATE = NOW()
+		     , STATUS = #{status}
+		 WHERE SEQ = #{seq}
+	</update>
+	
 	<update id="updatePoint" parameterType="kr.or.mask.domain.User">
 		UPDATE MEMBER
 		   SET POINT = POINT + #{point}
@@ -134,6 +307,23 @@
 		     , MODDATE = NOW()
 		 WHERE ID = #{id}
 	</update>
+	
+	<update id="updateExpire" parameterType="kr.or.mask.domain.User">
+		UPDATE MEMBER
+		   SET EXPIREDATE = DATE_SUB(DATE_ADD(EXPIREDATE, INTERVAL 1 MONTH) , INTERVAL 1 DAY)
+		     , MODID = #{id}
+		     , MODDATE = NOW()
+		 WHERE ID = #{id}
+	</update>
+	
+	<update id="approveCharge" parameterType="kr.or.mask.domain.Charge">
+		UPDATE CHARGE
+		   SET STATUS = #{status}
+		     , MODID = #{id}
+		     , MODDATE = NOW()
+		 WHERE SEQ = #{seq}
+	</update>
+	
 
 	<insert id="registerPoint" parameterType="kr.or.mask.domain.PointHistory">
 		INSERT
@@ -141,4 +331,47 @@
 		       (ID, TYPE, POINT, MESSAGE, FROM_ID, TO_ID, REGDATE)
 		VALUES (#{id}, #{type}, #{point}, #{message}, #{fromId}, #{toId}, NOW())
 	</insert>
+
+	<insert id="insertPurchase" parameterType="kr.or.mask.domain.Purchase">
+		INSERT
+		  INTO PURCHASE
+		       (CODE, GOODS_CODE, GOODS_NAME, POINT, STATUS, DELIVERY_ZIPCODE, DELIVERY_ADDR1, DELIVERY_ADDR2, REGDATE, REGID, RECEIVE_NAME, RECEIVE_PHONE)
+		VALUES (#{code}, #{goodsCode}, #{goodsName}, #{point}, #{status}, #{deliveryZipcode}, #{deliveryAddr1}, #{deliveryAddr2}, NOW(), #{regid}, #{receiveName}, #{receivePhone})
+	</insert>
+
+	<insert id="insertExchanges" parameterType="kr.or.mask.domain.Exchanges">
+		INSERT
+		  INTO EXCHANGES
+		       (ID, POINT, BANK, ACCOUNT, OWNER, STATUS, REGDATE, REGID)
+		VALUES (#{id}, #{point}, #{bank}, #{account}, #{owner}, #{status}, NOW(), #{regid})
+	</insert>
+
+	<insert id="registerCharge" parameterType="kr.or.mask.domain.Charge">
+		INSERT
+		  INTO CHARGE
+		       (ID, POINT, PHONE, STATUS, REGDATE, REGID)
+		VALUES (#{id}, #{point}, #{phone}, #{status}, NOW(), #{regid})
+	</insert>
+	
+	<insert id="registerInquiry" parameterType="kr.or.mask.domain.Charge">
+		INSERT
+		  INTO INQUIRY
+		       (CONTENTS, STATUS, REGID, REGDATE)
+		VALUES (#{contents}, #{status}, #{regid}, NOW())
+	</insert>
+
+	<update id="uploadPurchase" parameterType="kr.or.mask.domain.Purchase">
+		UPDATE PURCHASE
+		   SET DELIVERY_CODE = #{deliveryCode}
+		     , DELIVERY_COMPANY = #{deliveryCompany}
+		<if test="receiveName != null and receiveName != ''">
+		     , RECEIVE_NAME = #{receiveName}
+		</if>
+		<if test="receivePhone != null and receivePhone != ''">
+		     , RECEIVE_PHONE = #{receivePhone}
+		</if>
+		     , MODID = #{modid}
+		     , MODDATE = NOW()
+		 WHERE CODE = #{code}
+	</update>
 </mapper>

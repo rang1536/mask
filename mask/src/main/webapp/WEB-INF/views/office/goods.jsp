@@ -152,32 +152,7 @@
 		
 	});
 	
-	$("#dupCheckBtn").click(function(){
-		if($("#id").val() == ""){
-			alert("아이디를 입력 해주세요.");
-			$("#id").focus();
-			return;
-		}
-		$.ajax({
-			url : 'dupIdCheck',
-			data : {'id' : $("#id").val()},
-			dataType : 'json',
-			type : 'post',
-			success:function(data){
-				alert(data.message);
-				if(data.result == "success"){
-					dupCheck = true;
-				}else {
-					dupCheck = false;
-				}
-			}
-		})
-	});
-	
 </script>
 <c:import url="./frameSet/footer.jsp"></c:import>
-<c:import url="./popup/recommender.jsp"></c:import>
-<c:import url="./popup/sponsor.jsp"></c:import>
-<c:import url="./popup/agent.jsp"></c:import>
 </body>
 </html>

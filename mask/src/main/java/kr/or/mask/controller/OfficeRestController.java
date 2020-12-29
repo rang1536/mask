@@ -1,5 +1,8 @@
 package kr.or.mask.controller;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,10 +16,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import kr.or.mask.domain.Agent;
+import kr.or.mask.domain.Charge;
+import kr.or.mask.domain.Exchanges;
 import kr.or.mask.domain.Goods;
+import kr.or.mask.domain.Inquiry;
 import kr.or.mask.domain.PointHistory;
+import kr.or.mask.domain.Purchase;
 import kr.or.mask.domain.User;
 import kr.or.mask.service.OfficeService;
 
@@ -51,23 +60,10 @@ public class OfficeRestController {
 	public Map<String, Object> registerMember(@ModelAttribute(value="id") String id , User user){
 		user.setRegid(id);
 		Map<String, Object> map = new HashMap<String, Object>();
-		int cnt = officeService.registerMember(user);
+		logger.info(user.toString());
+		int cnt = officeService.registerMember(id, user);
 		
 		if(cnt==1){
-			//포인트 이력 테이블 등록
-			PointHistory ph = new PointHistory();
-			ph.setId(id);
-			ph.setMessage("신규회원가입");
-			ph.setPoint("70000");
-			ph.setType("02");
-			officeService.insertPointHistory(ph);
-			
-			//회원가입을 진행한 유저의 포인트 차감
-			User user2 = new User();
-			user2.setPoint("-70000");
-			user2.setId(id);
-			officeService.updatePoint(user2);
-			
 			map.put("result", "success");
 			map.put("message", "등록되었습니다.");
 		}else {
@@ -83,6 +79,23 @@ public class OfficeRestController {
 		goods.setRegid(id);
 		Map<String, Object> map = new HashMap<String, Object>();
 		int cnt = officeService.registerGoods(goods);
+		
+		if(cnt==1){
+			map.put("result", "success");
+			map.put("message", "등록되었습니다.");
+		}else {
+			map.put("result", "error");
+			map.put("message", "등록에 실패하였습니다.");
+		}
+
+		return map;
+	}
+		
+	@RequestMapping(value="/registerPurchase", method= {RequestMethod.POST,RequestMethod.GET})
+	public Map<String, Object> registerPurchase(@ModelAttribute(value="id") String id , Purchase purchase){
+		purchase.setRegid(id);
+		Map<String, Object> map = new HashMap<String, Object>();
+		int cnt = officeService.registerPurchase(id, purchase);
 		
 		if(cnt==1){
 			map.put("result", "success");
@@ -136,14 +149,42 @@ public class OfficeRestController {
 		map.put("list", list);
 		return map;
 	}
+
+	@RequestMapping(value="/searchSponsor", method= {RequestMethod.POST})
+	public Map<String, Object> searchSponsor(@RequestParam(value="searchWord") String searchWord){
+
+		List<Agent> list = officeService.selectSponsor(searchWord);
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("list", list);
+		return map;
+	}
 	
 	@RequestMapping(value="/selectHistory", method= {RequestMethod.POST})
-	public Map<String, Object> selectHistory(PointHistory pointHistory){
+	public Map<String, Object> selectHistory(@ModelAttribute(value="id")String id , PointHistory pointHistory){
 
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		String today = sdf.format(date);
+		
+		String grade = "SE01MASK";
+		String admin = officeService.selectAdmin(grade);
+		
+		pointHistory.setBeginIdx(0);
+		pointHistory.setSearchRows(1000);
 		if(pointHistory.getSearchToDate() != null){
 			pointHistory.setSearchToDate(Integer.parseInt(pointHistory.getSearchToDate())+1+"");
+		}else {
+			pointHistory.setSearchFromDate(today);
+			pointHistory.setSearchToDate((Integer.parseInt(today)+1)+"");
 		}
 		
+		if(id.equals(admin)) {
+			pointHistory.setId(null);
+		}else {
+			pointHistory.setId(id);
+		}
+		logger.info(pointHistory.toString());
 		List<PointHistory> list = officeService.selectPointHistory(pointHistory);
 
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -152,14 +193,14 @@ public class OfficeRestController {
 	}
 	
 	@RequestMapping(value="/exchange", method= {RequestMethod.POST,RequestMethod.GET})
-	public Map<String, Object> exchange(@ModelAttribute(value="id") String id , PointHistory pointHistory){
+	public Map<String, Object> exchange(@ModelAttribute(value="id") String id , Exchanges exchanges){
 		Map<String, Object> map = new HashMap<String, Object>();
-		pointHistory.setType("02");
-		pointHistory.setMessage("출금신청");
-		pointHistory.setId(id);
-		pointHistory.setFromId(id);
-		pointHistory.setToId("admin");
-		int cnt = officeService.registerPoint(pointHistory);
+
+		exchanges.setId(id);
+		exchanges.setRegid(id);
+		exchanges.setPoint(exchanges.getPoint().replaceAll(",", ""));
+		logger.info(exchanges.toString());
+		int cnt = officeService.exchange(exchanges);
 		
 		if(cnt==1){
 			map.put("result", "success");
@@ -169,6 +210,202 @@ public class OfficeRestController {
 			map.put("message", "출금신청 등록에 실패하였습니다.");
 		}
 
+		return map;
+	}
+
+	@RequestMapping(value="/charge", method= {RequestMethod.POST,RequestMethod.GET})
+	public Map<String, Object> charge(@ModelAttribute(value="id") String id , Charge charge){
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		charge.setId(id);
+		charge.setRegid(id);
+		charge.setPoint(charge.getPoint().replaceAll(",", ""));
+		logger.info(charge.toString());
+		int cnt = officeService.charge(charge);
+		
+		if(cnt==1){
+			map.put("result", "success");
+			map.put("message", "충전신청이 정상처리되었습니다.");
+		}else {
+			map.put("result", "error");
+			map.put("message", "충전신청 등록에 실패하였습니다.");
+		}
+
+		return map;
+	}
+	
+	@RequestMapping(value="/trans", method= {RequestMethod.POST,RequestMethod.GET})
+	public Map<String, Object> trans(@ModelAttribute(value="id") String id , PointHistory pointHistory){
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		pointHistory.setId(id);
+		pointHistory.setFromId(id);
+		pointHistory.setPoint(pointHistory.getPoint().replaceAll(",", ""));
+		
+		int cnt = officeService.trans(pointHistory);
+
+		if(cnt==1){
+			map.put("result", "success");
+			map.put("message", "송금이 정상처리되었습니다.");
+		}else {
+			map.put("result", "error");
+			map.put("message", "송금에 실패하였습니다.");
+		}
+
+		return map;
+	}
+	
+	@RequestMapping(value="/requestCharge", method= {RequestMethod.POST,RequestMethod.GET})
+	public Map<String, Object> requestCharge(@ModelAttribute(value="id") String id){
+		Map<String, Object> map = new HashMap<String, Object>();
+		int cnt = officeService.requestChargeCnt();
+
+		String grade = "SE01MASK";
+		String admin = officeService.selectAdmin(grade);
+		
+		if(cnt > 0){
+			if(id.equals(admin)) {
+				map.put("result", "ok");
+				map.put("message", cnt+" 건의 충전신청이 있습니다\n충전신청관리 페이지로 이동하시겠습니까?");
+			}
+		}
+
+		return map;
+	}
+	
+	
+	@RequestMapping(value="/approveCharge", method= {RequestMethod.POST,RequestMethod.GET})
+	public Map<String, Object> approveCharge(@ModelAttribute(value="id") String id, Charge charge){
+		Map<String, Object> map = new HashMap<String, Object>();
+		int cnt = officeService.approveCharge(charge);
+		
+		if(cnt > 0){
+			map.put("result", "success");
+			map.put("message", "승인이 완료되었습니다.");
+		}else {
+			map.put("result", "error");
+			map.put("message", "승인하기가 실패하였습니다.");
+		}
+
+		return map;
+	}
+	
+	@RequestMapping(value="/registerInquiry", method= {RequestMethod.POST,RequestMethod.GET})
+	public Map<String, Object> registerInquiry(@ModelAttribute(value="id") String id, Inquiry inquiry){
+		Map<String, Object> map = new HashMap<String, Object>();
+		inquiry.setRegid(id);
+		inquiry.setStatus("01");
+		int cnt = officeService.registerInquiry(inquiry);
+		
+		if(cnt > 0){
+			map.put("result", "success");
+			map.put("message", "등록이 완료되었습니다.");
+		}else {
+			map.put("result", "error");
+			map.put("message", "등록에 실패하였습니다.");
+		}
+
+		return map;
+	}
+	
+	@RequestMapping(value="/registerAnser", method= {RequestMethod.POST,RequestMethod.GET})
+	public Map<String, Object> registerAnser(@ModelAttribute(value="id") String id, Inquiry inquiry){
+		Map<String, Object> map = new HashMap<String, Object>();
+		inquiry.setAnsid(id);
+		inquiry.setStatus("02");
+		int cnt = officeService.registerAnswer(inquiry);
+		
+		if(cnt > 0){
+			map.put("result", "success");
+			map.put("message", "등록이 완료되었습니다.");
+		}else {
+			map.put("result", "error");
+			map.put("message", "등록에 실패하였습니다.");
+		}
+
+		return map;
+	}
+	
+	@RequestMapping(value="/uploadPurchase", method= {RequestMethod.POST,RequestMethod.GET})
+    public Map<String, Object> uploadPurchase(@ModelAttribute(value="id") String id , MultipartHttpServletRequest request){
+
+        MultipartFile excelFile = request.getFile("uploadExcel");
+        if(excelFile==null || excelFile.isEmpty()){
+            throw new RuntimeException("엑셀파일을 선택해 주세요");
+        }
+ 
+        String root_path = request.getSession().getServletContext().getRealPath("/");  
+
+        String attach_path = "resources/";
+        String filename = excelFile.getOriginalFilename();
+        
+        File destFile = new File(root_path+attach_path+filename);
+        try {
+        	excelFile.transferTo(destFile);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(),e);
+ 
+        }
+        
+        Map<String, Object> map = officeService.uploadPurchase(id, destFile);
+
+        return map;
+    }
+	
+	
+	@RequestMapping(value="/searchPurchase", method= {RequestMethod.POST})
+	public Map<String, Object> searchPurchase(@ModelAttribute(value="id")String id , Purchase purchase){
+
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		String today = sdf.format(date);
+		
+		String grade = "SE01MASK";
+		String admin = officeService.selectAdmin(grade);
+
+		if(purchase.getSearchToDate() != null){
+			purchase.setSearchToDate(Integer.parseInt(purchase.getSearchToDate())+1+"");
+		}else {
+			purchase.setSearchFromDate(today);
+			purchase.setSearchToDate((Integer.parseInt(today)+1)+"");
+		}
+		
+		if(id.equals(admin)) {
+			purchase.setRegid(null);
+		}else {
+			purchase.setRegid(id);
+		}
+
+		List<Purchase> list = officeService.searchPurchase(purchase);
+		System.out.println(purchase.toString());
+		Map<String, Object> map = new HashMap<String, Object>();
+		if(purchase.getStatus().equals("00")){
+			map.put("payedCnt", officeService.getDeliveryTypeCnt(purchase));
+			purchase.setStatus("03");
+			map.put("completedCnt", officeService.getDeliveryTypeCnt(purchase));
+			purchase.setStatus("01");
+			map.put("readyCnt", officeService.getDeliveryTypeCnt(purchase));
+			purchase.setStatus("02");
+			map.put("ingCnt", officeService.getDeliveryTypeCnt(purchase));
+		}else {
+			if(purchase.getStatus().equals("01")) {
+				map.put("payedCnt", officeService.getDeliveryTypeCnt(purchase));
+				map.put("completedCnt", 0);
+				map.put("readyCnt", officeService.getDeliveryTypeCnt(purchase));
+				map.put("ingCnt", 0);
+			}else if(purchase.getStatus().equals("02")) {
+				map.put("payedCnt", officeService.getDeliveryTypeCnt(purchase));
+				map.put("completedCnt", 0);
+				map.put("readyCnt", 0);
+				map.put("ingCnt", officeService.getDeliveryTypeCnt(purchase));
+			}else if(purchase.getStatus().equals("03")) {
+				map.put("payedCnt", officeService.getDeliveryTypeCnt(purchase));
+				map.put("completedCnt", officeService.getDeliveryTypeCnt(purchase));
+				map.put("readyCnt", 0);
+				map.put("ingCnt", 0);
+			}
+		}
+		map.put("list", list);
 		return map;
 	}
 	

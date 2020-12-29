@@ -1,6 +1,7 @@
 package kr.or.mask.controller;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -15,8 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import kr.or.mask.domain.Charge;
 import kr.or.mask.domain.Goods;
+import kr.or.mask.domain.Inquiry;
+import kr.or.mask.domain.Notice;
 import kr.or.mask.domain.PointHistory;
+import kr.or.mask.domain.Purchase;
 import kr.or.mask.domain.User;
 import kr.or.mask.service.OfficeService;
 
@@ -35,10 +40,22 @@ public class OfficeController {
 	
 	
 	@RequestMapping(value = "/business", method = RequestMethod.GET)
-	public String business(Model model) {
-		logger.info("business START");
+	public String business(@ModelAttribute(value="id")String id , Model model) {
+		
+		User user = officeService.getUser(id);
+		List<Notice> noticeList = officeService.selectNoticeList();
+		List<User> sponList = officeService.selectSponList(id);
+		String aSpon = "";
+		String bSpon = "";
+		for(int i=0; i<sponList.size(); i++) {
+			if(i == 0) aSpon = sponList.get(i).getId();
+			if(i == 1) bSpon = sponList.get(i).getId();
+		}
 
-		//model.addAttribute("serverTime", formattedDate );
+		model.addAttribute("aSpon", aSpon);
+		model.addAttribute("bSpon", bSpon);
+		model.addAttribute("user", user);
+		model.addAttribute("noticeList", noticeList);
 		
 		return "/office/myBusiness";
 	}
@@ -54,16 +71,31 @@ public class OfficeController {
 	}
 	
 	@RequestMapping(value = "/purchase", method = RequestMethod.GET)
-	public String purchase(Locale locale, Model model) {
+	public String purchase(@ModelAttribute(value="id")String id , Model model) {
 		logger.info("purchase START");
-		
+
 		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		String today = sdf.format(date);
+
+		Purchase purchase = new Purchase();
+		purchase.setSearchFromDate(today);
+		purchase.setSearchToDate((Integer.parseInt(today)+1)+"");
+		purchase.setRegid(id);
 		
-		String formattedDate = dateFormat.format(date);
+		List<Purchase> list = officeService.searchPurchase(purchase);
 		
-		model.addAttribute("serverTime", formattedDate );
-		
+		model.addAttribute("list", list);
+
+		Purchase pc = new Purchase();
+		pc.setRegid(id);
+		model.addAttribute("payedCnt", officeService.getDeliveryTypeCnt(pc));
+		pc.setStatus("03");
+		model.addAttribute("completedCnt", officeService.getDeliveryTypeCnt(pc));
+		pc.setStatus("01");
+		model.addAttribute("readyCnt", officeService.getDeliveryTypeCnt(pc));
+		pc.setStatus("02");
+		model.addAttribute("ingCnt", officeService.getDeliveryTypeCnt(pc));
 		return "/office/purchase";
 	}
 	
@@ -127,13 +159,30 @@ public class OfficeController {
 	public String pointHistory(@ModelAttribute(value="id")String id , PointHistory pointHistory, Model model) {
 		logger.info("pointHistory START");
 
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		String today = sdf.format(date);
+		
+		String grade = "SE01MASK";
+		String admin = officeService.selectAdmin(grade);
 		User user = officeService.getUser(id);
 		pointHistory.setBeginIdx(0);
 		pointHistory.setSearchRows(1000);
 		if(pointHistory.getSearchToDate() != null){
 			pointHistory.setSearchToDate(Integer.parseInt(pointHistory.getSearchToDate())+1+"");
+		}else {
+			pointHistory.setSearchFromDate(today);
+			pointHistory.setSearchToDate((Integer.parseInt(today)+1)+"");
 		}
 
+		if(id.equals(admin)) {
+			pointHistory.setId(null);
+		}else {
+			pointHistory.setId(id);
+		}
+		
+		System.out.println(pointHistory.getId());
+		
 		List<PointHistory> pointList = officeService.selectPointHistory(pointHistory);
 		model.addAttribute("list" , pointList);
 		model.addAttribute("user", user);
@@ -149,6 +198,51 @@ public class OfficeController {
 
 		model.addAttribute("point", point);
 		return "/office/exchange";
+	}
+
+	@RequestMapping(value = "/pointCharge", method = RequestMethod.GET)
+	public String pointCharge(@ModelAttribute(value="id")String id , Model model) {
+		logger.info("pointCharge START");
+
+		User user = officeService.getUser(id);
+		String point = user.getPoint();
+
+		model.addAttribute("point", point);
+		return "/office/charge";
+	}
+	
+	@RequestMapping(value = "/chargeList", method = RequestMethod.GET)
+	public String chargeList(@ModelAttribute(value="id")String id , Model model) {
+		logger.info("chargeList START");
+		
+		String grade = "SE01MASK";
+		String admin = officeService.selectAdmin(grade);
+		
+		if(admin == null) {
+			return "/office/business";
+		}else {
+			List<Charge> list = officeService.selectChargeList();
+			model.addAttribute("list", list);
+			return "/office/chargeList";
+		}
+	}
+	
+
+	@RequestMapping(value = "/inquiry", method = RequestMethod.GET)
+	public String inquiry(@ModelAttribute(value="id")String id , Model model) {
+		logger.info("inquiry START");
+
+		String grade = "SE01MASK";
+		String admin = officeService.selectAdmin(grade);
+		boolean isAdmin = false;
+		if(id.equals(admin)) {
+			isAdmin = true;
+		}
+		List<Inquiry> list = officeService.selectInquiry(id);
+		model.addAttribute("list", list);
+		model.addAttribute("isAdmin", isAdmin);
+		return "/office/inquiry";
+
 	}
 	
 }

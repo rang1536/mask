@@ -134,9 +134,13 @@
                                            <div class="card-block">
 											   <c:forEach var="list" items="${list }" varStatus="status">
 											   		<div class="col-sm-10">
-														<input type="radio" name="goods" id="goods${status.index }" value="${list.newPrice }" onclick="chgGoods('${list.newPrice }')"> <label for="goods">${list.goodsName}</label>
+														<input type="radio" id="goods${status.index }" name="goods" value="${list.newPrice }" onclick="chgGoods('${list.newPrice }','${status.index }')"> <label for="goods${status.index }">${list.goodsName}</label>
+														<input type="hidden" id="goodsCode${status.index }" value="${list.goodsCode }">
+														<input type="hidden" id="goodsName${status.index }" value="${list.goodsName }">
 													</div>
 											   </c:forEach>
+											   <input type="hidden" id="goodsCode" name="goodsCode"/>
+											   <input type="hidden" id="goodsName" name="goodsName"/>
                                            </div>
                                        </div>
                                        <!-- Line Tooltip card end -->
@@ -156,10 +160,14 @@
 												<p>결재포인트 : <code><span id="buyPoint"></span></code></p>
 												<p>-----------------------------------------</p>
 												<p>잔여포인트 : <code><span id="resultPoint"></span></code></p>
+												<input type="hidden" name="buyPoint" id="hBuyPoint">
                                            </div>
                                        </div>
                                        <!-- Line Tooltip card end -->
                                     </div>
+	                            </div>
+	                            <div class="form-group row">
+	                            	<h3>*배송지정보</h3>
 	                            </div>
 	                            <div class="form-group row">
 	                            	<div class="col-sm-6">
@@ -208,14 +216,21 @@
 		var point = "${point}";
 		var resultPoint = point-$("#buyPoint").text().replace(/,/gi, "");
 		$("#resultPoint").text(displayComma(resultPoint));
+		$("#hBuyPoint").val($("#buyPoint").text().replace(/,/gi, ""));
+		$("#goodsCode").val($("#goodsCode0").val());
+		$("#goodsName").val($("#goodsName0").val());
+
 	}
 	
-	function chgGoods(n){
+	function chgGoods(n,idx){
 		$("#buyPoint").text(displayComma(n));
 		var point = "${point}";
 		var resultPoint = point-n;
 		$("#resultPoint").text(displayComma(resultPoint));
-
+		$("#hBuyPoint").val($("#buyPoint").text().replace(/,/gi, ""));
+		$("#goodsCode").val($("#goodsCode"+idx).val());
+		$("#goodsName").val($("#goodsName"+idx).val());
+	
 	}
 	
 	var dupCheck = false;
@@ -292,11 +307,28 @@
 			$("#recommender").focus();
 			return;
 		}
-		if($("#newPass").val() == ""){
+		if($("#sponsor").val() == ""){
 			alert("후원인을 입력 해주세요.");
-			$("#newPass").focus();
+			$("#sponsor").focus();
 			return;
 		}
+		
+		if($("#zipcode2").val() == ""){
+			alert("배송지정보를 입력 해주세요.");
+			$("#zipcode2").focus();
+			return;
+		}
+		if($("#addr21").val() == ""){
+			alert("배송지정보를 입력 해주세요.");
+			$("#addr21").focus();
+			return;
+		}
+		if($("#addr22").val() == ""){
+			alert("배송지 상세주소를 입력 해주세요.");
+			$("#addr22").focus();
+			return;
+		}
+		
 
 		var params = $('#memberForm').serialize(); //폼값세팅.
 		$.ajax({
