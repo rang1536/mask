@@ -23,79 +23,22 @@ public class User {
 	private String moddate;
 	private String modid;
 	private String oriPass;
-<<<<<<< HEAD
 	
 	//조직도용 변수
-=======
 	private String expiredate;
 	
 	private String goodsCode;
 	private String goodsName;
 	private String buyPoint;
 	
->>>>>>> branch 'master' of https://github.com/rang1536/mask.git
+
 	private List<User> userList;
 	private String agentNm;
 	private int treeLevel;
-<<<<<<< HEAD
+
 	private String parentId; //후원
 	private String reParentId; //추천
 	private String treeNo;
-=======
->>>>>>> branch 'master' of https://github.com/rang1536/mask.git
-	
-<<<<<<< HEAD
-	
-	public String getReParentId() {
-		return reParentId;
-	}
-
-	public void setReParentId(String reParentId) {
-		this.reParentId = reParentId;
-	}
-
-	public String getTreeNo() {
-		return treeNo;
-	}
-
-	public void setTreeNo(String treeNo) {
-		this.treeNo = treeNo;
-	}
-
-	public String getParentId() {
-		return parentId;
-	}
-
-	public void setParentId(String parentId) {
-		this.parentId = parentId;
-	}
-
-	public int getTreeLevel() {
-		return treeLevel;
-	}
-
-	public void setTreeLevel(int treeLevel) {
-		this.treeLevel = treeLevel;
-	}
-
-	public String getAgentNm() {
-		return agentNm;
-	}
-
-	public void setAgentNm(String agentNm) {
-		this.agentNm = agentNm;
-	}
-
-	public List<User> getUserList() {
-		return userList;
-	}
-
-	public void setUserList(List<User> userList) {
-		this.userList = userList;
-	}
-
-=======
->>>>>>> branch 'master' of https://github.com/rang1536/mask.git
 	public String getId() {
 		return id;
 	}
@@ -258,7 +201,24 @@ public class User {
 	public void setTreeLevel(int treeLevel) {
 		this.treeLevel = treeLevel;
 	}
-	
+	public String getParentId() {
+		return parentId;
+	}
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
+	}
+	public String getReParentId() {
+		return reParentId;
+	}
+	public void setReParentId(String reParentId) {
+		this.reParentId = reParentId;
+	}
+	public String getTreeNo() {
+		return treeNo;
+	}
+	public void setTreeNo(String treeNo) {
+		this.treeNo = treeNo;
+	}
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", pass=" + pass + ", name=" + name + ", phone=" + phone + ", zipcode=" + zipcode
@@ -266,14 +226,12 @@ public class User {
 				+ ", deliveryZipcode=" + deliveryZipcode + ", deliveryAddr1=" + deliveryAddr1 + ", deliveryAddr2="
 				+ deliveryAddr2 + ", recommender=" + recommender + ", sponsor=" + sponsor + ", agent=" + agent
 				+ ", regdate=" + regdate + ", regid=" + regid + ", moddate=" + moddate + ", modid=" + modid
-<<<<<<< HEAD
-				+ ", oriPass=" + oriPass + ", userList=" + userList + ", agentNm=" + agentNm + ", treeLevel="
-				+ treeLevel + ", parentId=" + parentId + ", reParentId=" + reParentId + ", treeNo=" + treeNo + "]";
-=======
 				+ ", oriPass=" + oriPass + ", expiredate=" + expiredate + ", goodsCode=" + goodsCode + ", goodsName="
 				+ goodsName + ", buyPoint=" + buyPoint + ", userList=" + userList + ", agentNm=" + agentNm
-				+ ", treeLevel=" + treeLevel + "]";
->>>>>>> branch 'master' of https://github.com/rang1536/mask.git
+				+ ", treeLevel=" + treeLevel + ", parentId=" + parentId + ", reParentId=" + reParentId + ", treeNo="
+				+ treeNo + "]";
 	}
+
+	
 	
 }

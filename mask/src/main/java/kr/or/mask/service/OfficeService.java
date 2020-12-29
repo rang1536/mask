@@ -1,9 +1,7 @@
 package kr.or.mask.service;
 
-<<<<<<< HEAD
-=======
+
 import java.io.File;
->>>>>>> branch 'master' of https://github.com/rang1536/mask.git
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
