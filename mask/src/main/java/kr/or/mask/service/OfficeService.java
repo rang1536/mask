@@ -1,10 +1,13 @@
 package kr.or.mask.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.or.mask.dao.MaskDao;
 import kr.or.mask.dao.OfficeDao;
 import kr.or.mask.domain.Agent;
 import kr.or.mask.domain.Goods;
@@ -16,6 +19,9 @@ public class OfficeService {
 	
 	@Autowired
 	private OfficeDao officeDao;
+	
+	@Autowired
+	private MaskDao mDao;
 	
 	//유저조회
 	public User getUser(String userId){
@@ -57,8 +63,19 @@ public class OfficeService {
 	}
 	
 	//유저검색
-	public List<User> selectMember(String searchWord){
-		return officeDao.selectMember(searchWord);
+	public Map<String, Object> selectMember(String searchWord){
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		List<User> userList = officeDao.selectMember(searchWord);
+		if(userList.size() == 1){
+			map.put("result", "succ");
+			userList.get(0).setAgentNm(mDao.getUpAgentNm(userList.get(0).getAgent()).getName());
+			map.put("user", userList.get(0));
+		}else {
+			map.put("result", "fail");
+		}
+		
+		return map;
 	}
 	
 	//대리점목록

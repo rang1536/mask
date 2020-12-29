@@ -196,28 +196,6 @@ $(function(){
 	}
 	
 	function setTreeDataFirst(list){
-		var html = '';
-		html += '<tr>';
-		
-		for( var i=0; i < list.length; i++){
-			html += '<td>';
-			html += list.id+'<br/>';
-			html += list.name+'<br/>';
-			html += '대리점<br/>';
-			html += list.regdate.substring(0, 10)+'<br/>';
-			html += list.agentNm+'<br/>';
-			html += '</td>';
-		}
-		html += '</tr>';
-		
-		html += '<tr>';
-		for( var i=0; i < list.length; i++){
-			html += setTreeDataUnderLoop(list[i].userList);		
-		}
-		html += '</tr>';
-		
-		
-		return html;
 		
 	}
 	

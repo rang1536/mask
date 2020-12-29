@@ -23,11 +23,40 @@ public class User {
 	private String moddate;
 	private String modid;
 	private String oriPass;
+	
+	//조직도용 변수
 	private List<User> userList;
 	private String agentNm;
 	private int treeLevel;
-
+	private String parentId; //후원
+	private String reParentId; //추천
+	private String treeNo;
 	
+	
+	public String getReParentId() {
+		return reParentId;
+	}
+
+	public void setReParentId(String reParentId) {
+		this.reParentId = reParentId;
+	}
+
+	public String getTreeNo() {
+		return treeNo;
+	}
+
+	public void setTreeNo(String treeNo) {
+		this.treeNo = treeNo;
+	}
+
+	public String getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
+	}
+
 	public int getTreeLevel() {
 		return treeLevel;
 	}
@@ -220,7 +249,7 @@ public class User {
 				+ deliveryAddr2 + ", recommender=" + recommender + ", sponsor=" + sponsor + ", agent=" + agent
 				+ ", regdate=" + regdate + ", regid=" + regid + ", moddate=" + moddate + ", modid=" + modid
 				+ ", oriPass=" + oriPass + ", userList=" + userList + ", agentNm=" + agentNm + ", treeLevel="
-				+ treeLevel + "]";
+				+ treeLevel + ", parentId=" + parentId + ", reParentId=" + reParentId + ", treeNo=" + treeNo + "]";
 	}
 
 	

@@ -30,6 +30,10 @@
 	<select id="selectMember" parameterType="String" resultType="kr.or.mask.domain.User">
 		SELECT ID , NAME 
 		     , DATE_FORMAT(REGDATE,'%Y-%m-%d') AS REGDATE
+		     , PHONE
+		     , ZIPCODE , ADDR1 , ADDR2 , POINT
+		     , DELIVERY_ZIPCODE , DELIVERY_ADDR1 , DELIVERY_ADDR2
+		     , RECOMMENDER , SPONSOR , AGENT, GRADE
 		  FROM MEMBER
 		 WHERE ID LIKE CONCAT('%', LOWER(#{searchWord}), '%')
 		    OR NAME LIKE CONCAT('%', LOWER(#{searchWord}), '%')

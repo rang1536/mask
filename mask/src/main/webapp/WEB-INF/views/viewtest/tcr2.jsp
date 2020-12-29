@@ -105,7 +105,7 @@
 				var children = [];
 				
 				$.ajax({
-					url : 'getSponsorTree',
+					url : 'getRecommenderTree',
 					type : 'post',
 					dataType: 'json',
 					async : false,
@@ -668,7 +668,7 @@
 							{
 								addParam = "&is_up=Y";
 							} */
-							document.location.href = "sponChart?baseIdSponsor="+d.d_uid+"&sponsorMaxLoop="+maxLoop;							
+							document.location.href = "recommChart?baseIdSponsor="+d.d_uid+"&sponsorMaxLoop="+maxLoop;							
 						}
 
 						

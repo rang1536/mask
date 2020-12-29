@@ -31,18 +31,23 @@
 	                            </div>
 	                            <div class="form-group row">
 	                                <div class="col-sm-6">
-	                                    <input type="text" class="form-control" disabled="disabled" id="id" value="사용자 ID : ${user.id }">
+	                                    <input type="text" class="form-control" readonly id="id" value="사용자 ID : ${user.id }">
 	                                </div>
 	                                <div class="col-sm-6">
-	                                    <input type="text" class="form-control" disabled="disabled" value="가입일 : ${user.regdate }">
+	                                    <input type="text" class="form-control" readonly id="regDate" value="가입일 : ${user.regdate }">
 	                                </div>
 	                            </div>
 	                            <div class="form-group row">
 	                                <div class="col-sm-6">
-	                                    <input type="text" class="form-control" disabled="disabled" value="추천인 ID : ${user.recommender }">
+	                                    <input type="text" class="form-control" readonly id="recommender" value="추천인 ID : ${user.recommender }">
 	                                </div>
 	                                <div class="col-sm-6">
-	                                    <input type="text" class="form-control" disabled="disabled" value="가입센터 : ${user.sponsor }">
+	                                    <input type="text" class="form-control" readonly id="sponsor" value="후원인 ID : ${user.sponsor }">
+	                                </div>
+	                           </div>
+	                           <div class="form-group row">
+	                                <div class="col-sm-6">
+	                                    <input type="text" class="form-control" readonly id="agentNm" value="가입센터 : ${user.agentNm }">
 	                                </div>
 	                            </div>
 	                        </div>
@@ -196,7 +201,7 @@
 			}
 		})
 	});
-
+	
 	$("#btnSearch").click(function(){
 
 		if($("#searchId").val() == ""){
@@ -205,18 +210,31 @@
 			return false;
 		}
 		
+		//console.log('id : '+$("#searchId").val());
 		var params = {'id' : $("#searchId").val()}
 		$.ajax({
 			url : 'searchMem',
 			data : params,
 			dataType : 'json',
 			type : 'post',
-			success:function(data){
-				alert(data.message);
-				if(data.result == 'success'){
+			success:function(data){			
+				if(data.result == 'succ'){
+					alert(id+' 님 정보가 조회되었습니다. 회원정보수정은 <회원등록>메뉴를 이용해주세요');
+					
+					var user = data.user;
+					
+					//pass 초기화
 					$("#oriPass").val("");
 					$("#newPass").val("");
 					$("#conPass").val("");
+					
+					//기본 필드값 변경.
+					$('#id').val('사용자 ID : '+user.id);
+					$('#regDate').val('가입일 : '+user.regdate);
+					$('#recommender').val('추천인  : '+user.recommender);
+					$('#sponsor').val('후원인 : '+user.sponsor);
+					$('#agentNm').val('가입센터 : '+user.agentNm)
+					
 				}
 			}
 		})

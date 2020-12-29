@@ -171,12 +171,10 @@
 					alert(id+' 님 반갑습니다.');
 					
 					if($('#authSaveChk').is(':Checked')){
-						localStorage.setItem('loginId',id);
-						localStorage.setItem('loginPass',pass);
+						localStorage.setItem('loginId',id);						
 					}
 					
-					sessionStorage.setItem('loginId',id);
-					sessionStorage.setItem('loginPass',pass);
+					sessionStorage.setItem('loginId',id);					
 					sessionStorage.setItem('loginChk','login');
 					
 					location.href = 'business';

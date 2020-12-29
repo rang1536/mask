@@ -36,9 +36,9 @@ public class MaskRestController {
 	//후원조직도
 	@RequestMapping(value="/getSponsorTree",  method = RequestMethod.POST)
 	public Map<String, Object> getSponsorTreeCtrl(String id, int maxLoop){
-		//System.out.println("id : "+id+", pass : "+pass);
+		System.out.println("id : "+id+", maxLoop : "+maxLoop);
 		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("user", mServ.getSponsorTree(id, maxLoop));
+		result.put("user", mServ.getSponsorList(id, maxLoop));
 		
 		return result;
 	}
@@ -46,9 +46,9 @@ public class MaskRestController {
 	//추천조직도
 	@RequestMapping(value="/getRecommenderTree",  method = RequestMethod.POST)
 	public Map<String, Object> getRecommenderTreeCtrl(String id, int maxLoop){
-		//System.out.println("id : "+id+", pass : "+pass);
+		System.out.println("id : "+id+", maxLoop : "+maxLoop);
 		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("user", mServ.getRecommenderTree(id, maxLoop));
+		result.put("user", mServ.getRecommList(id, maxLoop));
 		
 		return result;
 	}

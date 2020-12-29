@@ -120,13 +120,11 @@ public class OfficeRestController {
 	}
 	
 	@RequestMapping(value="/searchMem", method= {RequestMethod.POST})
-	public Map<String, Object> selectMember(@RequestParam(value="searchWord") String searchWord){
-
-		List<User> list = officeService.selectMember(searchWord);
-
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("list", list);
-		return map;
+	public Map<String, Object> selectMember(@RequestParam(value="id") String searchWord){
+		
+		//System.out.println("searchWord : "+ searchWord);
+	
+		return officeService.selectMember(searchWord);
 	}
 	
 	@RequestMapping(value="/searchAgent", method= {RequestMethod.POST})

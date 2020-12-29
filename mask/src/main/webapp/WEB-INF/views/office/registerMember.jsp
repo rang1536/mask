@@ -349,6 +349,45 @@
 		$('#agentPop').modal();
 	});
 	
+	
+	
+	$("#btnSearch").click(function(){
+
+		if($("#searchId").val() == ""){
+			alert("검색 아이디(이름)을 입력 해주세요.");
+			$("#searchId").focus();
+			return false;
+		}
+		
+		//console.log('id : '+$("#searchId").val());
+		var params = {'id' : $("#searchId").val()}
+		$.ajax({
+			url : 'searchMem',
+			data : params,
+			dataType : 'json',
+			type : 'post',
+			success:function(data){			
+				if(data.result == 'succ'){
+					alert(id+' 님 정보가 조회되었습니다.');
+					
+					var user = data.user;
+					
+					//pass 초기화
+					$("#oriPass").val("");
+					$("#newPass").val("");
+					$("#conPass").val("");
+					
+					//기본 필드값 변경.
+					$('#id').val('사용자 ID : '+user.id);
+					$('#regDate').val('가입일 : '+user.regdate);
+					$('#recommender').val('추천인  : '+user.recommender);
+					$('#sponsor').val('후원인 : '+user.sponsor);
+					$('#agentNm').val('가입센터 : '+user.agentNm)
+					
+				}
+			}
+		})
+	});
 </script>
 <c:import url="./frameSet/footer.jsp"></c:import>
 <c:import url="./popup/recommender.jsp"></c:import>

@@ -69,7 +69,7 @@
 						<div class="tab-pane active" id="home7" role="tabpanel">
 							<p class="m-0">
 								<form name="sponForm" id="sponForm" method="post">
-									<input type="number" id="sponsorMaxLoop" name="sponsorMaxLoop" min="0" placeholder="검색레벨"/>
+									<input type="number" id="sponsorMaxLoop" name="sponsorMaxLoop" min="0" placeholder="검색레벨" value="5"/>
 									<input type="email" id="baseIdSponsor" name="baseIdSponsor" placeholder="기준 ID" value=""/>
 									<button type="button" id="sponsorSearchBtn">조회</button>
 								</form>
@@ -162,5 +162,5 @@
                                         
 
 </body>
- <c:import url="./frameSet/zoom.jsp"></c:import> 
+<%--  <c:import url="./frameSet/zoom.jsp"></c:import>  --%>
 </html>
