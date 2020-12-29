@@ -140,7 +140,7 @@
 				'beginIdx' : $("#beginIdx").val(),
 				'searchRows' : $("#searchRows").val()
 		};
-		console.log(params);
+
 		$.ajax({
 			url : 'selectHistory',
 			data : params,

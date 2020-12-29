@@ -1,6 +1,7 @@
 package kr.or.mask.controller;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -15,8 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import kr.or.mask.domain.Charge;
 import kr.or.mask.domain.Goods;
+import kr.or.mask.domain.Inquiry;
 import kr.or.mask.domain.PointHistory;
+import kr.or.mask.domain.Purchase;
 import kr.or.mask.domain.User;
 import kr.or.mask.service.OfficeService;
 
@@ -54,16 +58,23 @@ public class OfficeController {
 	}
 	
 	@RequestMapping(value = "/purchase", method = RequestMethod.GET)
-	public String purchase(Locale locale, Model model) {
+	public String purchase(@ModelAttribute(value="id")String id , Model model) {
 		logger.info("purchase START");
+
+		List<Purchase> list = officeService.selectPurchaseList(id);
 		
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-		
-		String formattedDate = dateFormat.format(date);
-		
-		model.addAttribute("serverTime", formattedDate );
-		
+		model.addAttribute("list", list);
+
+		Purchase pc = new Purchase();
+		pc.setRegid(id);
+		pc.setStatus("00");
+		model.addAttribute("payedCnt", officeService.getDeliveryTypeCnt(pc));
+		pc.setStatus("03");
+		model.addAttribute("completedCnt", officeService.getDeliveryTypeCnt(pc));
+		pc.setStatus("01");
+		model.addAttribute("readyCnt", officeService.getDeliveryTypeCnt(pc));
+		pc.setStatus("02");
+		model.addAttribute("ingCnt", officeService.getDeliveryTypeCnt(pc));
 		return "/office/purchase";
 	}
 	
@@ -127,13 +138,30 @@ public class OfficeController {
 	public String pointHistory(@ModelAttribute(value="id")String id , PointHistory pointHistory, Model model) {
 		logger.info("pointHistory START");
 
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		String today = sdf.format(date);
+		
+		String grade = "SE01MASK";
+		String admin = officeService.selectAdmin(grade);
 		User user = officeService.getUser(id);
 		pointHistory.setBeginIdx(0);
 		pointHistory.setSearchRows(1000);
 		if(pointHistory.getSearchToDate() != null){
 			pointHistory.setSearchToDate(Integer.parseInt(pointHistory.getSearchToDate())+1+"");
+		}else {
+			pointHistory.setSearchFromDate(today);
+			pointHistory.setSearchToDate((Integer.parseInt(today)+1)+"");
 		}
 
+		if(id.equals(admin)) {
+			pointHistory.setId(null);
+		}else {
+			pointHistory.setId(id);
+		}
+		
+		System.out.println(pointHistory.getId());
+		
 		List<PointHistory> pointList = officeService.selectPointHistory(pointHistory);
 		model.addAttribute("list" , pointList);
 		model.addAttribute("user", user);
@@ -149,6 +177,51 @@ public class OfficeController {
 
 		model.addAttribute("point", point);
 		return "/office/exchange";
+	}
+
+	@RequestMapping(value = "/pointCharge", method = RequestMethod.GET)
+	public String pointCharge(@ModelAttribute(value="id")String id , Model model) {
+		logger.info("pointCharge START");
+
+		User user = officeService.getUser(id);
+		String point = user.getPoint();
+
+		model.addAttribute("point", point);
+		return "/office/charge";
+	}
+	
+	@RequestMapping(value = "/chargeList", method = RequestMethod.GET)
+	public String chargeList(@ModelAttribute(value="id")String id , Model model) {
+		logger.info("chargeList START");
+		
+		String grade = "SE01MASK";
+		String admin = officeService.selectAdmin(grade);
+		
+		if(admin == null) {
+			return "/office/business";
+		}else {
+			List<Charge> list = officeService.selectChargeList();
+			model.addAttribute("list", list);
+			return "/office/chargeList";
+		}
+	}
+	
+
+	@RequestMapping(value = "/inquiry", method = RequestMethod.GET)
+	public String inquiry(@ModelAttribute(value="id")String id , Model model) {
+		logger.info("inquiry START");
+
+		String grade = "SE01MASK";
+		String admin = officeService.selectAdmin(grade);
+		boolean isAdmin = false;
+		if(id.equals(admin)) {
+			isAdmin = true;
+		}
+		List<Inquiry> list = officeService.selectInquiry(id);
+		model.addAttribute("list", list);
+		model.addAttribute("isAdmin", isAdmin);
+		return "/office/inquiry";
+
 	}
 	
 }

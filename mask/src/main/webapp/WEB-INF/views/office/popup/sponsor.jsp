@@ -63,7 +63,7 @@
 		}
 		
 		$.ajax({
-			url : 'searchMem',
+			url : 'searchSponsor',
 			data : {'searchWord' : $("#searchWord2").val()},
 			dataType : 'json',
 			type : 'post',

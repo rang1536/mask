@@ -97,12 +97,98 @@
 			var rowname = ["d_no","d_uid","D_GRP_CD","D_JICCODEP_NAME","d_jicname","d_date","d_cename","name"];
 			//D_JICCODEP_NAME 와 d_jicname 가 같은 라인이므로 -1을 해줌
 			//var rowCnt = rowname.length-2;			
-			var rowCnt = 6;			
+			var rowCnt = 6;
 			var builddata = function () {
 				var source = [];
 				var children = [];
 				// build hierarchical source.
 	//			for (i = 0; i < data.length; i++) {
+	var data = {"olevel":"2"
+								,"id":"32603"
+								,"d_no":"32603"
+								,"name":"김정애"
+								,"parentid":"32601"
+								,"d_date":"20/11/06"
+								,"d_jicname":"대리점"
+								,"d_cename":"부산한마음센타"
+								,"d_jiccode":"20"							
+								,"pv1":"0"	
+								,"d_uid":"K2780"
+								,"D_GRP_CD":"KR"
+								,"D_JICCODEP_NAME":"M"
+								,"left_result":"0"
+								,"right_result":"0"
+								};
+					var item = data;
+					var parentid = item["parentid"];
+
+					var id = item["id"];
+
+
+					if (children[parentid]) {
+						var item2 = {parentid: parentid, item: item };
+
+						for(var k in rowname){
+							item2[rowname[k]] = item[rowname[k]];
+						}
+
+						if (!children[parentid].children) {
+							children[parentid].children = [];
+						}
+						children[parentid].children[children[parentid].children.length] = item2;
+						children[id] = item2;
+					}
+					else {
+						children[id] = {parentid: parentid, item: item };
+						for(var k in rowname){
+							children[id][rowname[k]] = item[rowname[k]];
+
+						}
+						source[id] = children[id];
+					}
+					var data = {"olevel":"3"
+						,"id":"40482"
+						,"d_no":"40482"
+						,"name":"김갑용"
+						,"parentid":"32603"
+						,"d_date":"20/11/28"
+						,"d_jicname":"대리점"
+						,"d_cename":"부산한마음센타"
+						,"d_jiccode":"20"
+						,"pv1":"0"
+						,"d_uid":"K8000-2"
+						,"D_GRP_CD":""
+						,"D_JICCODEP_NAME":"M"
+						,"left_result":"0"
+						,"right_result":"0"
+						};
+			var item = data;
+			var parentid = item["parentid"];
+
+			var id = item["id"];
+
+
+			if (children[parentid]) {
+				var item2 = {parentid: parentid, item: item };
+
+				for(var k in rowname){
+					item2[rowname[k]] = item[rowname[k]];
+				}
+
+				if (!children[parentid].children) {
+					children[parentid].children = [];
+				}
+				children[parentid].children[children[parentid].children.length] = item2;
+				children[id] = item2;
+			}
+			else {
+				children[id] = {parentid: parentid, item: item };
+				for(var k in rowname){
+					children[id][rowname[k]] = item[rowname[k]];
+
+				}
+				source[id] = children[id];
+			}
 
 			
 				//rowname 를 추가하였으면 아래 부분에도 변수명과 데이터를 세팅
@@ -151,56 +237,14 @@
 					}
 			
 				//rowname 를 추가하였으면 아래 부분에도 변수명과 데이터를 세팅
-					var data = {"olevel":"2"
-								,"id":"32603"
-								,"d_no":"32603"
-								,"name":"김정애"
-								,"parentid":"32601"
-								,"d_date":"20/11/06"
-								,"d_jicname":"대리점"
-								,"d_cename":"부산한마음센타"
-								,"d_jiccode":"20"							
-								,"pv1":"0"	
-								,"d_uid":"K2780"
-								,"D_GRP_CD":"KR"
-								,"D_JICCODEP_NAME":"M"
-								,"left_result":"0"
-								,"right_result":"0"
-								};
-					var item = data;
-					var parentid = item["parentid"];
-
-					var id = item["id"];
-
-
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
+				
 			
 				//rowname 를 추가하였으면 아래 부분에도 변수명과 데이터를 세팅
 					var data = {"olevel":"3"
 								,"id":"32776"
 								,"d_no":"32776"
 								,"name":"김외순"
-								,"parentid":"32603"
+								,"parentid":"32601"
 								,"d_date":"20/11/07"
 								,"d_jicname":"대리점"
 								,"d_cename":"부산한마음센타"
@@ -284,7 +328,8 @@
 						}
 						source[id] = children[id];
 					}
-			
+
+
 				//rowname 를 추가하였으면 아래 부분에도 변수명과 데이터를 세팅
 					var data = {"olevel":"5"
 								,"id":"34339"
@@ -342,10 +387,7 @@
 								,"d_jiccode":"20"							
 								,"pv1":"0"	
 								,"d_uid":"H5759"
-								,"D_GRP_CD":"KR"
-								,"D_JICCODEP_NAME":"M"
-								,"left_result":"0"
-								,"right_result":"0"
+
 								};
 					var item = data;
 					var parentid = item["parentid"];
@@ -421,951 +463,7 @@
 					}
 			
 				//rowname 를 추가하였으면 아래 부분에도 변수명과 데이터를 세팅
-					var data = {"olevel":"3"
-								,"id":"40482"
-								,"d_no":"40482"
-								,"name":"김갑용"
-								,"parentid":"32603"
-								,"d_date":"20/11/28"
-								,"d_jicname":"대리점"
-								,"d_cename":"부산한마음센타"
-								,"d_jiccode":"20"							
-								,"pv1":"0"	
-								,"d_uid":"K8000-2"
-								,"D_GRP_CD":""
-								,"D_JICCODEP_NAME":"M"
-								,"left_result":"0"
-								,"right_result":"0"
-								};
-					var item = data;
-					var parentid = item["parentid"];
 
-					var id = item["id"];
-
-
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
-			
-				//rowname 를 추가하였으면 아래 부분에도 변수명과 데이터를 세팅
-					var data = {"olevel":"2"
-								,"id":"32625"
-								,"d_no":"32625"
-								,"name":"김갑용"
-								,"parentid":"32601"
-								,"d_date":"20/11/07"
-								,"d_jicname":"대리점"
-								,"d_cename":"1000K센타"
-								,"d_jiccode":"20"							
-								,"pv1":"0"	
-								,"d_uid":"Kk8000"
-								,"D_GRP_CD":"KR"
-								,"D_JICCODEP_NAME":"M"
-								,"left_result":"0"
-								,"right_result":"0"
-								};
-					var item = data;
-					var parentid = item["parentid"];
-
-					var id = item["id"];
-
-
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
-			
-				//rowname 를 추가하였으면 아래 부분에도 변수명과 데이터를 세팅
-					var data = {"olevel":"3"
-								,"id":"35689"
-								,"d_no":"35689"
-								,"name":"최행진"
-								,"parentid":"32625"
-								,"d_date":"20/11/17"
-								,"d_jicname":"대리점"
-								,"d_cename":"부산한마음센타"
-								,"d_jiccode":"20"							
-								,"pv1":"0"	
-								,"d_uid":"C5024"
-								,"D_GRP_CD":"KR"
-								,"D_JICCODEP_NAME":"M"
-								,"left_result":"0"
-								,"right_result":"0"
-								};
-					var item = data;
-					var parentid = item["parentid"];
-
-					var id = item["id"];
-
-
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
-			
-				//rowname 를 추가하였으면 아래 부분에도 변수명과 데이터를 세팅
-					var data = {"olevel":"4"
-								,"id":"35690"
-								,"d_no":"35690"
-								,"name":"이민호"
-								,"parentid":"35689"
-								,"d_date":"20/11/17"
-								,"d_jicname":"대리점"
-								,"d_cename":"부산한마음센타"
-								,"d_jiccode":"20"							
-								,"pv1":"0"	
-								,"d_uid":"L5611"
-								,"D_GRP_CD":"KR"
-								,"D_JICCODEP_NAME":"M"
-								,"left_result":"0"
-								,"right_result":"0"
-								};
-					var item = data;
-					var parentid = item["parentid"];
-
-					var id = item["id"];
-
-
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
-			
-				//rowname 를 추가하였으면 아래 부분에도 변수명과 데이터를 세팅
-					var data = {"olevel":"5"
-								,"id":"36847"
-								,"d_no":"36847"
-								,"name":"김갑용"
-								,"parentid":"35690"
-								,"d_date":"20/11/19"
-								,"d_jicname":"대리점"
-								,"d_cename":"경기평택쎈타"
-								,"d_jiccode":"20"							
-								,"pv1":"0"	
-								,"d_uid":"K0017"
-								,"D_GRP_CD":"KR"
-								,"D_JICCODEP_NAME":"M"
-								,"left_result":"0"
-								,"right_result":"0"
-								};
-					var item = data;
-					var parentid = item["parentid"];
-
-					var id = item["id"];
-
-
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
-			
-				//rowname 를 추가하였으면 아래 부분에도 변수명과 데이터를 세팅
-					var data = {"olevel":"6"
-								,"id":"36852"
-								,"d_no":"36852"
-								,"name":"김갑용"
-								,"parentid":"36847"
-								,"d_date":"20/11/19"
-								,"d_jicname":"대리점"
-								,"d_cename":"경기평택쎈타"
-								,"d_jiccode":"20"							
-								,"pv1":"0"	
-								,"d_uid":"K0018"
-								,"D_GRP_CD":"KR"
-								,"D_JICCODEP_NAME":"M"
-								,"left_result":"0"
-								,"right_result":"0"
-								};
-					var item = data;
-					var parentid = item["parentid"];
-
-					var id = item["id"];
-
-
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
-			
-				//rowname 를 추가하였으면 아래 부분에도 변수명과 데이터를 세팅
-					var data = {"olevel":"6"
-								,"id":"36853"
-								,"d_no":"36853"
-								,"name":"김갑용"
-								,"parentid":"36847"
-								,"d_date":"20/11/19"
-								,"d_jicname":"대리점"
-								,"d_cename":"경기평택쎈타"
-								,"d_jiccode":"20"							
-								,"pv1":"0"	
-								,"d_uid":"K0019"
-								,"D_GRP_CD":"KR"
-								,"D_JICCODEP_NAME":"M"
-								,"left_result":"0"
-								,"right_result":"0"
-								};
-					var item = data;
-					var parentid = item["parentid"];
-
-					var id = item["id"];
-
-
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
-			
-				//rowname 를 추가하였으면 아래 부분에도 변수명과 데이터를 세팅
-					var data = {"olevel":"5"
-								,"id":"40213"
-								,"d_no":"40213"
-								,"name":"이원미1"
-								,"parentid":"35690"
-								,"d_date":"20/11/27"
-								,"d_jicname":"대리점"
-								,"d_cename":"선릉센타"
-								,"d_jiccode":"20"							
-								,"pv1":"0"	
-								,"d_uid":"K0055"
-								,"D_GRP_CD":"KR"
-								,"D_JICCODEP_NAME":"M"
-								,"left_result":"0"
-								,"right_result":"0"
-								};
-					var item = data;
-					var parentid = item["parentid"];
-
-					var id = item["id"];
-
-
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
-			
-				//rowname 를 추가하였으면 아래 부분에도 변수명과 데이터를 세팅
-					var data = {"olevel":"6"
-								,"id":"40217"
-								,"d_no":"40217"
-								,"name":"이원미2"
-								,"parentid":"40213"
-								,"d_date":"20/11/27"
-								,"d_jicname":"대리점"
-								,"d_cename":"선릉센타"
-								,"d_jiccode":"20"							
-								,"pv1":"0"	
-								,"d_uid":"K0056"
-								,"D_GRP_CD":"KR"
-								,"D_JICCODEP_NAME":"M"
-								,"left_result":"0"
-								,"right_result":"0"
-								};
-					var item = data;
-					var parentid = item["parentid"];
-
-					var id = item["id"];
-
-
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
-			
-				//rowname 를 추가하였으면 아래 부분에도 변수명과 데이터를 세팅
-					var data = {"olevel":"6"
-								,"id":"40222"
-								,"d_no":"40222"
-								,"name":"이원미3"
-								,"parentid":"40213"
-								,"d_date":"20/11/27"
-								,"d_jicname":"대리점"
-								,"d_cename":"선릉센타"
-								,"d_jiccode":"20"							
-								,"pv1":"0"	
-								,"d_uid":"K0057"
-								,"D_GRP_CD":"KR"
-								,"D_JICCODEP_NAME":"M"
-								,"left_result":"0"
-								,"right_result":"0"
-								};
-					var item = data;
-					var parentid = item["parentid"];
-
-					var id = item["id"];
-
-
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
-			
-				//rowname 를 추가하였으면 아래 부분에도 변수명과 데이터를 세팅
-					var data = {"olevel":"4"
-								,"id":"35691"
-								,"d_no":"35691"
-								,"name":"백수민"
-								,"parentid":"35689"
-								,"d_date":"20/11/17"
-								,"d_jicname":"대리점"
-								,"d_cename":"부산한마음센타"
-								,"d_jiccode":"20"							
-								,"pv1":"0"	
-								,"d_uid":"K9000"
-								,"D_GRP_CD":"KR"
-								,"D_JICCODEP_NAME":"M"
-								,"left_result":"0"
-								,"right_result":"0"
-								};
-					var item = data;
-					var parentid = item["parentid"];
-
-					var id = item["id"];
-
-
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
-			
-				//rowname 를 추가하였으면 아래 부분에도 변수명과 데이터를 세팅
-					var data = {"olevel":"5"
-								,"id":"35693"
-								,"d_no":"35693"
-								,"name":"유세헌"
-								,"parentid":"35691"
-								,"d_date":"20/11/17"
-								,"d_jicname":"대리점"
-								,"d_cename":"부산한마음센타"
-								,"d_jiccode":"20"							
-								,"pv1":"0"	
-								,"d_uid":"K9001"
-								,"D_GRP_CD":"KR"
-								,"D_JICCODEP_NAME":"M"
-								,"left_result":"0"
-								,"right_result":"0"
-								};
-					var item = data;
-					var parentid = item["parentid"];
-
-					var id = item["id"];
-
-
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
-			
-				//rowname 를 추가하였으면 아래 부분에도 변수명과 데이터를 세팅
-					var data = {"olevel":"6"
-								,"id":"37082"
-								,"d_no":"37082"
-								,"name":"김갑용"
-								,"parentid":"35693"
-								,"d_date":"20/11/20"
-								,"d_jicname":"대리점"
-								,"d_cename":"경기평택쎈타"
-								,"d_jiccode":"20"							
-								,"pv1":"0"	
-								,"d_uid":"K0025"
-								,"D_GRP_CD":"KR"
-								,"D_JICCODEP_NAME":"M"
-								,"left_result":"0"
-								,"right_result":"0"
-								};
-					var item = data;
-					var parentid = item["parentid"];
-
-					var id = item["id"];
-
-
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
-			
-				//rowname 를 추가하였으면 아래 부분에도 변수명과 데이터를 세팅
-					var data = {"olevel":"5"
-								,"id":"35924"
-								,"d_no":"35924"
-								,"name":"고현연3"
-								,"parentid":"35691"
-								,"d_date":"20/11/17"
-								,"d_jicname":"대리점"
-								,"d_cename":"부산한마음센타"
-								,"d_jiccode":"20"							
-								,"pv1":"0"	
-								,"d_uid":"KKK1004"
-								,"D_GRP_CD":"KR"
-								,"D_JICCODEP_NAME":"M"
-								,"left_result":"0"
-								,"right_result":"0"
-								};
-					var item = data;
-					var parentid = item["parentid"];
-
-					var id = item["id"];
-
-
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
-			
-				//rowname 를 추가하였으면 아래 부분에도 변수명과 데이터를 세팅
-					var data = {"olevel":"6"
-								,"id":"36858"
-								,"d_no":"36858"
-								,"name":"김갑용"
-								,"parentid":"35924"
-								,"d_date":"20/11/19"
-								,"d_jicname":"대리점"
-								,"d_cename":"경기평택쎈타"
-								,"d_jiccode":"20"							
-								,"pv1":"0"	
-								,"d_uid":"K0020"
-								,"D_GRP_CD":"KR"
-								,"D_JICCODEP_NAME":"M"
-								,"left_result":"0"
-								,"right_result":"0"
-								};
-					var item = data;
-					var parentid = item["parentid"];
-
-					var id = item["id"];
-
-
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
-			
-				//rowname 를 추가하였으면 아래 부분에도 변수명과 데이터를 세팅
-					var data = {"olevel":"3"
-								,"id":"35911"
-								,"d_no":"35911"
-								,"name":"안현정1"
-								,"parentid":"32625"
-								,"d_date":"20/11/17"
-								,"d_jicname":"대리점"
-								,"d_cename":"부산한마음센타"
-								,"d_jiccode":"20"							
-								,"pv1":"0"	
-								,"d_uid":"A3400"
-								,"D_GRP_CD":"KR"
-								,"D_JICCODEP_NAME":"M"
-								,"left_result":"0"
-								,"right_result":"0"
-								};
-					var item = data;
-					var parentid = item["parentid"];
-
-					var id = item["id"];
-
-
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
-			
-				//rowname 를 추가하였으면 아래 부분에도 변수명과 데이터를 세팅
-					var data = {"olevel":"4"
-								,"id":"35912"
-								,"d_no":"35912"
-								,"name":"안현정2"
-								,"parentid":"35911"
-								,"d_date":"20/11/17"
-								,"d_jicname":"대리점"
-								,"d_cename":"부산한마음센타"
-								,"d_jiccode":"20"							
-								,"pv1":"0"	
-								,"d_uid":"AA3400"
-								,"D_GRP_CD":"KR"
-								,"D_JICCODEP_NAME":"M"
-								,"left_result":"0"
-								,"right_result":"0"
-								};
-					var item = data;
-					var parentid = item["parentid"];
-
-					var id = item["id"];
-
-
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
-			
-				//rowname 를 추가하였으면 아래 부분에도 변수명과 데이터를 세팅
-					var data = {"olevel":"5"
-								,"id":"35921"
-								,"d_no":"35921"
-								,"name":"고현연1"
-								,"parentid":"35912"
-								,"d_date":"20/11/17"
-								,"d_jicname":"대리점"
-								,"d_cename":"부산한마음센타"
-								,"d_jiccode":"20"							
-								,"pv1":"0"	
-								,"d_uid":"K1004"
-								,"D_GRP_CD":"KR"
-								,"D_JICCODEP_NAME":"M"
-								,"left_result":"0"
-								,"right_result":"0"
-								};
-					var item = data;
-					var parentid = item["parentid"];
-
-					var id = item["id"];
-
-
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
-			
-				//rowname 를 추가하였으면 아래 부분에도 변수명과 데이터를 세팅
-					var data = {"olevel":"6"
-								,"id":"38433"
-								,"d_no":"38433"
-								,"name":"이성자"
-								,"parentid":"35921"
-								,"d_date":"20/11/24"
-								,"d_jicname":"대리점"
-								,"d_cename":"경기평택쎈타"
-								,"d_jiccode":"20"							
-								,"pv1":"0"	
-								,"d_uid":"K0031"
-								,"D_GRP_CD":"KR"
-								,"D_JICCODEP_NAME":"M"
-								,"left_result":"0"
-								,"right_result":"0"
-								};
-					var item = data;
-					var parentid = item["parentid"];
-
-					var id = item["id"];
-
-
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
-			
-				//rowname 를 추가하였으면 아래 부분에도 변수명과 데이터를 세팅
-					var data = {"olevel":"5"
-								,"id":"35922"
-								,"d_no":"35922"
-								,"name":"고현연2"
-								,"parentid":"35912"
-								,"d_date":"20/11/17"
-								,"d_jicname":"대리점"
-								,"d_cename":"부산한마음센타"
-								,"d_jiccode":"20"							
-								,"pv1":"0"	
-								,"d_uid":"KK1004"
-								,"D_GRP_CD":"KR"
-								,"D_JICCODEP_NAME":"M"
-								,"left_result":"0"
-								,"right_result":"0"
-								};
-					var item = data;
-					var parentid = item["parentid"];
-
-					var id = item["id"];
-
-
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
-			
-				//rowname 를 추가하였으면 아래 부분에도 변수명과 데이터를 세팅
-					var data = {"olevel":"4"
-								,"id":"35913"
-								,"d_no":"35913"
-								,"name":"안현정3"
-								,"parentid":"35911"
-								,"d_date":"20/11/17"
-								,"d_jicname":"대리점"
-								,"d_cename":"부산한마음센타"
-								,"d_jiccode":"20"							
-								,"pv1":"0"	
-								,"d_uid":"AAA3400"
-								,"D_GRP_CD":"KR"
-								,"D_JICCODEP_NAME":"M"
-								,"left_result":"0"
-								,"right_result":"0"
-								};
-					var item = data;
-					var parentid = item["parentid"];
-
-					var id = item["id"];
-
-
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
-			
-	//			}
 				return source;
 			}
 

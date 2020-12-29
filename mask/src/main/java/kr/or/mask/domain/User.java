@@ -23,193 +23,169 @@ public class User {
 	private String moddate;
 	private String modid;
 	private String oriPass;
+	
+	private String goodsCode;
+	private String goodsName;
+	private String buyPoint;
+	
 	private List<User> userList;
 	private String agentNm;
 	private int treeLevel;
-
-	
-	public int getTreeLevel() {
-		return treeLevel;
-	}
-
-	public void setTreeLevel(int treeLevel) {
-		this.treeLevel = treeLevel;
-	}
-
-	public String getAgentNm() {
-		return agentNm;
-	}
-
-	public void setAgentNm(String agentNm) {
-		this.agentNm = agentNm;
-	}
-
-	public List<User> getUserList() {
-		return userList;
-	}
-
-	public void setUserList(List<User> userList) {
-		this.userList = userList;
-	}
-
 	public String getId() {
 		return id;
 	}
-
 	public void setId(String id) {
 		this.id = id;
 	}
-
 	public String getPass() {
 		return pass;
 	}
-
 	public void setPass(String pass) {
 		this.pass = pass;
 	}
-
 	public String getName() {
 		return name;
 	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
 	public String getPhone() {
 		return phone;
 	}
-
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-
 	public String getZipcode() {
 		return zipcode;
 	}
-
 	public void setZipcode(String zipcode) {
 		this.zipcode = zipcode;
 	}
-
 	public String getAddr1() {
 		return addr1;
 	}
-
 	public void setAddr1(String addr1) {
 		this.addr1 = addr1;
 	}
-
 	public String getAddr2() {
 		return addr2;
 	}
-
 	public void setAddr2(String addr2) {
 		this.addr2 = addr2;
 	}
-
 	public String getPoint() {
 		return point;
 	}
-
 	public void setPoint(String point) {
 		this.point = point;
 	}
-
 	public String getGrade() {
 		return grade;
 	}
-
 	public void setGrade(String grade) {
 		this.grade = grade;
 	}
-
 	public String getDeliveryZipcode() {
 		return deliveryZipcode;
 	}
-
 	public void setDeliveryZipcode(String deliveryZipcode) {
 		this.deliveryZipcode = deliveryZipcode;
 	}
-
 	public String getDeliveryAddr1() {
 		return deliveryAddr1;
 	}
-
 	public void setDeliveryAddr1(String deliveryAddr1) {
 		this.deliveryAddr1 = deliveryAddr1;
 	}
-
 	public String getDeliveryAddr2() {
 		return deliveryAddr2;
 	}
-
 	public void setDeliveryAddr2(String deliveryAddr2) {
 		this.deliveryAddr2 = deliveryAddr2;
 	}
-
 	public String getRecommender() {
 		return recommender;
 	}
-
 	public void setRecommender(String recommender) {
 		this.recommender = recommender;
 	}
-
 	public String getSponsor() {
 		return sponsor;
 	}
-
 	public void setSponsor(String sponsor) {
 		this.sponsor = sponsor;
 	}
-
 	public String getAgent() {
 		return agent;
 	}
-
 	public void setAgent(String agent) {
 		this.agent = agent;
 	}
-
 	public String getRegdate() {
 		return regdate;
 	}
-
 	public void setRegdate(String regdate) {
 		this.regdate = regdate;
 	}
-
 	public String getRegid() {
 		return regid;
 	}
-
 	public void setRegid(String regid) {
 		this.regid = regid;
 	}
-
 	public String getModdate() {
 		return moddate;
 	}
-
 	public void setModdate(String moddate) {
 		this.moddate = moddate;
 	}
-
 	public String getModid() {
 		return modid;
 	}
-
 	public void setModid(String modid) {
 		this.modid = modid;
 	}
-
 	public String getOriPass() {
 		return oriPass;
 	}
-
 	public void setOriPass(String oriPass) {
 		this.oriPass = oriPass;
+	}
+	public String getGoodsCode() {
+		return goodsCode;
+	}
+	public void setGoodsCode(String goodsCode) {
+		this.goodsCode = goodsCode;
+	}
+	public String getGoodsName() {
+		return goodsName;
+	}
+	public void setGoodsName(String goodsName) {
+		this.goodsName = goodsName;
+	}
+	public String getBuyPoint() {
+		return buyPoint;
+	}
+	public void setBuyPoint(String buyPoint) {
+		this.buyPoint = buyPoint;
+	}
+	public List<User> getUserList() {
+		return userList;
+	}
+	public void setUserList(List<User> userList) {
+		this.userList = userList;
+	}
+	public String getAgentNm() {
+		return agentNm;
+	}
+	public void setAgentNm(String agentNm) {
+		this.agentNm = agentNm;
+	}
+	public int getTreeLevel() {
+		return treeLevel;
+	}
+	public void setTreeLevel(int treeLevel) {
+		this.treeLevel = treeLevel;
 	}
 
 	@Override
@@ -219,10 +195,8 @@ public class User {
 				+ ", deliveryZipcode=" + deliveryZipcode + ", deliveryAddr1=" + deliveryAddr1 + ", deliveryAddr2="
 				+ deliveryAddr2 + ", recommender=" + recommender + ", sponsor=" + sponsor + ", agent=" + agent
 				+ ", regdate=" + regdate + ", regid=" + regid + ", moddate=" + moddate + ", modid=" + modid
-				+ ", oriPass=" + oriPass + ", userList=" + userList + ", agentNm=" + agentNm + ", treeLevel="
-				+ treeLevel + "]";
+				+ ", oriPass=" + oriPass + ", goodsCode=" + goodsCode + ", goodsName=" + goodsName + ", buyPoint="
+				+ buyPoint + ", userList=" + userList + ", agentNm=" + agentNm + ", treeLevel=" + treeLevel + "]";
 	}
 
-	
-	
 }
