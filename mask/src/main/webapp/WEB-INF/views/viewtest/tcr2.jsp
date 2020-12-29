@@ -668,7 +668,7 @@
 							{
 								addParam = "&is_up=Y";
 							} */
-							document.location.href = "recommChart?baseIdSponsor="+d.d_uid+"&sponsorMaxLoop="+maxLoop;							
+							document.location.href = "recommChart?baseIdRecommender="+d.d_uid+"&recommenderMaxLoop="+maxLoop;							
 						}
 
 						

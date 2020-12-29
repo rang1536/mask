@@ -80,6 +80,12 @@
 			</list>
 		</property>
 	</bean>
-
-
+	
+	<!-- 트랜잭션 처리 -->
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
 </beans>

@@ -64,22 +64,30 @@
 		
 		$.ajax({
 			url : 'searchMem',
-			data : {'searchWord' : $("#searchWord").val()},
+			data : {'id' : $("#searchWord").val()},
 			dataType : 'json',
 			type : 'post',
 			success:function(data){
 
 				var html = "";
-				$.each(data.list, function(i, value){
-
-					html += "<tr>";
-					//html += "	<td><a href='#' onclick='choose(\""+value.id+"\"")'>"+value.id+"</a></td>";
-					html += "	<td><a href='#' onclick='choose(\""+value.id+"\""+",\""+value.name+"\")'>"+value.id+"</a></td>";
-					html += "	<td>"+value.name+"</td>";
-					html += "	<td>"+value.regdate+"</td>";
-					html += "</tr>";
-				});
 				
+				if(data.list.length > 0){
+					$.each(data.list, function(i, value){
+
+						html += "<tr>";
+						//html += "	<td><a href='#' onclick='choose(\""+value.id+"\"")'>"+value.id+"</a></td>";
+						html += "	<td><a href='#' onclick='choose(\""+value.id+"\""+",\""+value.name+"\")'>"+value.id+"</a></td>";
+						html += "	<td>"+value.name+"</td>";
+						html += "	<td>"+value.regdate+"</td>";
+						html += "</tr>";
+					});
+				}else{
+					html += "<tr>";
+					html += "	<td colspan='3' style='color:red;'>조회된 목록이 없습니다.</td>";
+					html += "</tr>";
+				}
+				
+				$("#userList").empty();
 				$("#userList").html(html);
 			}
 		});

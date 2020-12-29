@@ -14,12 +14,14 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import kr.or.mask.domain.Agent;
 import kr.or.mask.domain.Charge;
+import kr.or.mask.domain.DayClosing;
 import kr.or.mask.domain.Exchanges;
 import kr.or.mask.domain.Goods;
 import kr.or.mask.domain.Inquiry;
 import kr.or.mask.domain.Notice;
 import kr.or.mask.domain.PointHistory;
 import kr.or.mask.domain.Purchase;
+import kr.or.mask.domain.RoleHistory;
 import kr.or.mask.domain.User;
 
 @Repository
@@ -79,6 +81,9 @@ public class OfficeDao {
 			user.setGrade("1");
 			sql.insert("office.registerMember", user);
 			
+			//윤. 마감테이블에 가입회원 등록
+			sql.insert("office.setDayClosing", user);
+			
 			//포인트 이력 테이블 등록
 			PointHistory ph = new PointHistory();
 			ph.setId(user.getId());
@@ -127,6 +132,7 @@ public class OfficeDao {
 			pc.setRegid(id);
 			insertPurchase(pc);
 			
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 			transactionManager.rollback(status);
@@ -135,6 +141,16 @@ public class OfficeDao {
 
 		transactionManager.commit(status);
 		return 1;
+	}
+	
+	//후원, 추천롤업대상 조회
+	public User getSponAndRecommTarget(String id){
+		return sql.selectOne("office.getSponAndRecommTarget", id);
+	}
+	
+	//후원, 추천롤업대상 포인트 히스토리 입력
+	public int setSponAndRecommRoleHistory(RoleHistory roleHistory) {
+		return sql.insert("office.setSponAndRecommRoleHistory", roleHistory);
 	}
 	
 	//주문등록
@@ -479,5 +495,30 @@ public class OfficeDao {
 		String type = "2";
 		return sql.selectList("office.selectNoticeList", type);
 	}
+	
+	//================================================ 일마감
+	
+	// 하위 후원인 카운트 조회
+	public int getUnderSponCnt(String id) {
+		return sql.selectOne("office.getUnderSponCnt", id);
+	}
+	
+	// 일마감 자료 반영
+	public int modDayClosing(DayClosing dayClosing) {
+		return sql.update("office.modDayClosing", dayClosing);
+	}
+	
+	//일마감초기화(추천인만 지급)
+	public int resetRecommDayClosing(String id) {
+		return sql.update("office.resetRecommDayClosing", id);
+	}
+	
+	//일마감초기화(후원, 추천인 지급)
+	public int resetSponRecommDayClosing(String id) {
+		return sql.update("office.resetSponRecommDayClosing", id);
+	}
+	
+	
+	
 	
 }

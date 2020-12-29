@@ -135,7 +135,7 @@ public class OfficeRestController {
 	@RequestMapping(value="/searchMem", method= {RequestMethod.POST})
 	public Map<String, Object> selectMember(@RequestParam(value="id") String searchWord){
 		
-		//System.out.println("searchWord : "+ searchWord);
+		System.out.println("searchWord : "+ searchWord);
 	
 		return officeService.selectMember(searchWord);
 	}

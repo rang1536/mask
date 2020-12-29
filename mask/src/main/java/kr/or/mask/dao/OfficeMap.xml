@@ -244,6 +244,7 @@
 		 ORDER BY REGDATE DESC
 	</select>
 	
+	<!-- 2020.12.29. 회원가입시 트리연계 value(TREENO, PARENTID, REPARENTID) 세팅 -->
 	<insert id="registerMember" parameterType="kr.or.mask.domain.User">
 		INSERT
 		  INTO MEMBER
@@ -252,12 +253,16 @@
 		       , DELIVERY_ZIPCODE , DELIVERY_ADDR1 , DELIVERY_ADDR2
 		       , RECOMMENDER , SPONSOR , AGENT, GRADE
 		       , REGDATE , REGID , EXPIREDATE
+		       , TREENO, PARENTID, REPARENTID
 		       )
 		VALUES ( LOWER(#{id}) , #{pass} , #{name} , #{phone}
 		       , #{zipcode} , #{addr1} , #{addr2} , 0
 		       , #{deliveryZipcode} , #{deliveryAddr1} , #{deliveryAddr2}
 		       , #{recommender} , #{sponsor} , #{agent} , #{grade}
 		       , NOW() , #{regid} , DATE_SUB(DATE_ADD(NOW(), INTERVAL 1 MONTH) , INTERVAL 1 DAY)
+		       , (SELECT MAX(TREENO)+1 FROM MEMBER)
+		       , (SELECT TREENO FROM MEMBER WHERE ID = #{sponsor})
+		       , (SELECT TREENO FROM MEMBER WHERE ID = #{recommender})
 		       )
 	</insert>
 		
@@ -374,4 +379,69 @@
 		     , MODDATE = NOW()
 		 WHERE CODE = #{code}
 	</update>
+	
+	<!-- 후원, 추천롤업대상 조회  -->
+	<select id="getSponAndRecommTarget" parameterType="String" resultType="kr.or.mask.domain.User">
+		SELECT *
+		  FROM MEMBER
+		 WHERE ID = #{id}
+	</select>
+	
+	<!-- 후원, 추천롤업 50, 100p 인서트  -->
+	<insert id="setSponAndRecommRoleHistory" parameterType="kr.or.mask.domain.RoleHistory">
+		INSERT INTO (
+			FROMID, TOID, TYPE, REGDATE, AMT, STATUS
+			)
+		VALUE(
+			#{fromId}, #{toId}, #{type}, NOW(), #{amt}, #{status}
+			)
+	</insert>
+	
+	<!-- 일마감 테이블에 회원 입력 -->
+	<insert id="setDayClosing" parameterType="kr.or.mask.domain.DayClosing">
+		INSERT INTO DAYCLOSING(
+			USERID, REGDATE, LEFTCNT, RIGHTCNT, RECOMMCNT, STATE, MODDATE
+			)
+		VALUES(
+			#{id}, NOW(), 0, 0, 0, 1, NOW()
+			)
+	</insert>
+	
+	<!-- 하위후원인 카운팅 -->
+	<select id="getUnderSponCnt" parameterType="String" resultType="int">
+		SELECT COUNT(*)
+		  FROM MEMBER
+		 WHERE SPONSOR = #{id}
+	</select>
+	
+	<!-- 일마감 자료 반영 -->
+	<update id="modDayClosing" parameterType="kr.or.mask.domain.DayClosing">
+		UPDATE DAYCLOSING
+		   SET LEFTCNT = LEFTCNT + #{leftCnt}
+		   	  ,RIGHTCNT = RIGHTCNT + #{rightCnt}
+		   	  ,RECOMMCNT = RECOMMCNT + #{recommCnt}
+		   	  ,MODDATE = NOW()
+		 WHERE USERID = #{userId}
+	</update>
+	
+	<!-- 일마감 초기화(추천인지급) -->
+	<update id="resetRecommDayClosing" parameterType="String">
+		UPDATE DAYCLOSING
+		   SET RECOMMCNT = 0
+		   	  ,STATE = 2
+		 WHERE USERID = #{userId}
+	</update>
+	
+	<!-- 일마감 초기화(후원,추천지급) -->
+	<update id="resetSponRecommDayClosing" parameterType="String">
+		UPDATE DAYCLOSING
+		   SET LEFTCNT = 0
+		      ,RIGHTCNT = 0
+		      ,RECOMMCNT = 0
+		      ,STATE = 1
+		 WHERE USERID = #{userId}
+	</update>
+	
+	
+	
 </mapper>
