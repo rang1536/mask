@@ -99,16 +99,12 @@
 			var rowname = ["d_no","d_uid","D_GRP_CD","D_JICCODEP_NAME","d_jicname","d_date","d_cename","name"];
 			//D_JICCODEP_NAME ì™€ d_jicname ê°€ ê°™ì€ ë¼ì¸ì´ë¯€ë¡œ -1ì„ í•´ì¤Œ
 			//var rowCnt = rowname.length-2;			
-<<<<<<< HEAD
-			var rowCnt = 6;			
-			var builddata = function (){
-=======
+
 			var rowCnt = 6;
 			var builddata = function () {
->>>>>>> branch 'master' of https://github.com/rang1536/mask.git
+
 				var source = [];
 				var children = [];
-<<<<<<< HEAD
 				
 				$.ajax({
 					url : 'getSponsorTree',
@@ -130,107 +126,17 @@
 							
 							var item = data;
 							var parentid = item["parentid"];
-=======
-				// build hierarchical source.
-	//			for (i = 0; i < data.length; i++) {
-	var data = {"olevel":"2"
-								,"id":"32603"
-								,"d_no":"32603"
-								,"name":"±èÁ¤¾Ö"
-								,"parentid":"32601"
-								,"d_date":"20/11/06"
-								,"d_jicname":"´ë¸®Á¡"
-								,"d_cename":"ºÎ»êÇÑ¸¶À½¼¾Å¸"
-								,"d_jiccode":"20"							
-								,"pv1":"0"	
-								,"d_uid":"K2780"
-								,"D_GRP_CD":"KR"
-								,"D_JICCODEP_NAME":"M"
-								,"left_result":"0"
-								,"right_result":"0"
-								};
-					var item = data;
-					var parentid = item["parentid"];
-
-					var id = item["id"];
-
-
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
-					var data = {"olevel":"3"
-						,"id":"40482"
-						,"d_no":"40482"
-						,"name":"±è°©¿ë"
-						,"parentid":"32603"
-						,"d_date":"20/11/28"
-						,"d_jicname":"´ë¸®Á¡"
-						,"d_cename":"ºÎ»êÇÑ¸¶À½¼¾Å¸"
-						,"d_jiccode":"20"
-						,"pv1":"0"
-						,"d_uid":"K8000-2"
-						,"D_GRP_CD":""
-						,"D_JICCODEP_NAME":"M"
-						,"left_result":"0"
-						,"right_result":"0"
-						};
-			var item = data;
-			var parentid = item["parentid"];
-
-			var id = item["id"];
-
-
-			if (children[parentid]) {
-				var item2 = {parentid: parentid, item: item };
-
-				for(var k in rowname){
-					item2[rowname[k]] = item[rowname[k]];
-				}
-
-				if (!children[parentid].children) {
-					children[parentid].children = [];
-				}
-				children[parentid].children[children[parentid].children.length] = item2;
-				children[id] = item2;
-			}
-			else {
-				children[id] = {parentid: parentid, item: item };
-				for(var k in rowname){
-					children[id][rowname[k]] = item[rowname[k]];
-
-				}
-				source[id] = children[id];
-			}
->>>>>>> branch 'master' of https://github.com/rang1536/mask.git
 
 							var id = item["id"];
-							
-							//console.log('children[parentid : '+children[parentid])
+		
+		
 							if (children[parentid]) {
 								var item2 = {parentid: parentid, item: item };
-
+		
 								for(var k in rowname){
 									item2[rowname[k]] = item[rowname[k]];
 								}
-
+		
 								if (!children[parentid].children) {
 									children[parentid].children = [];
 								}
@@ -241,270 +147,16 @@
 								children[id] = {parentid: parentid, item: item };
 								for(var k in rowname){
 									children[id][rowname[k]] = item[rowname[k]];
-
-<<<<<<< HEAD
+		
 								}
 								source[id] = children[id];
 							}
-							console.log(source);
-						} 
+						}
 		
 					} //success end
 				}) //ajax end
 				
 				console.log(source);
-=======
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
-			
-				//rowname ¸¦ Ãß°¡ÇÏ¿´À¸¸é ¾Æ·¡ ºÎºĞ¿¡µµ º¯¼ö¸í°ú µ¥ÀÌÅÍ¸¦ ¼¼ÆÃ
-				
-			
-				//rowname ¸¦ Ãß°¡ÇÏ¿´À¸¸é ¾Æ·¡ ºÎºĞ¿¡µµ º¯¼ö¸í°ú µ¥ÀÌÅÍ¸¦ ¼¼ÆÃ
-					var data = {"olevel":"3"
-								,"id":"32776"
-								,"d_no":"32776"
-								,"name":"±è¿Ü¼ø"
-								,"parentid":"32601"
-								,"d_date":"20/11/07"
-								,"d_jicname":"´ë¸®Á¡"
-								,"d_cename":"ºÎ»êÇÑ¸¶À½¼¾Å¸"
-								,"d_jiccode":"20"							
-								,"pv1":"0"	
-								,"d_uid":"K9802"
-								,"D_GRP_CD":"KR"
-								,"D_JICCODEP_NAME":"M"
-								,"left_result":"0"
-								,"right_result":"0"
-								};
-					var item = data;
-					var parentid = item["parentid"];
-
-					var id = item["id"];
-
-
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
-			
-				//rowname ¸¦ Ãß°¡ÇÏ¿´À¸¸é ¾Æ·¡ ºÎºĞ¿¡µµ º¯¼ö¸í°ú µ¥ÀÌÅÍ¸¦ ¼¼ÆÃ
-					var data = {"olevel":"4"
-								,"id":"32779"
-								,"d_no":"32779"
-								,"name":"ÀÌ±İ·Ê"
-								,"parentid":"32776"
-								,"d_date":"20/11/07"
-								,"d_jicname":"´ë¸®Á¡"
-								,"d_cename":"ºÎ»êÇÑ¸¶À½¼¾Å¸"
-								,"d_jiccode":"20"							
-								,"pv1":"0"	
-								,"d_uid":"L4699"
-								,"D_GRP_CD":"KR"
-								,"D_JICCODEP_NAME":"M"
-								,"left_result":"0"
-								,"right_result":"0"
-								};
-					var item = data;
-					var parentid = item["parentid"];
-
-					var id = item["id"];
-
-
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
-
-
-				//rowname ¸¦ Ãß°¡ÇÏ¿´À¸¸é ¾Æ·¡ ºÎºĞ¿¡µµ º¯¼ö¸í°ú µ¥ÀÌÅÍ¸¦ ¼¼ÆÃ
-					var data = {"olevel":"5"
-								,"id":"34339"
-								,"d_no":"34339"
-								,"name":"±è±â¿í"
-								,"parentid":"32779"
-								,"d_date":"20/11/13"
-								,"d_jicname":"´ë¸®Á¡"
-								,"d_cename":"ºÎ»êÇÑ¸¶À½¼¾Å¸"
-								,"d_jiccode":"20"							
-								,"pv1":"0"	
-								,"d_uid":"K2135"
-								,"D_GRP_CD":"KR"
-								,"D_JICCODEP_NAME":"M"
-								,"left_result":"0"
-								,"right_result":"0"
-								};
-					var item = data;
-					var parentid = item["parentid"];
-
-					var id = item["id"];
-
-
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
-			
-				//rowname ¸¦ Ãß°¡ÇÏ¿´À¸¸é ¾Æ·¡ ºÎºĞ¿¡µµ º¯¼ö¸í°ú µ¥ÀÌÅÍ¸¦ ¼¼ÆÃ
-					var data = {"olevel":"6"
-								,"id":"34846"
-								,"d_no":"34846"
-								,"name":"ÇÑÇı¸²"
-								,"parentid":"34339"
-								,"d_date":"20/11/14"
-								,"d_jicname":"´ë¸®Á¡"
-								,"d_cename":"ºÎ»êÇÑ¸¶À½¼¾Å¸"
-								,"d_jiccode":"20"							
-								,"pv1":"0"	
-								,"d_uid":"H5759"
-
-								};
-					var item = data;
-					var parentid = item["parentid"];
-
-					var id = item["id"];
-
-
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
-			
-				//rowname ¸¦ Ãß°¡ÇÏ¿´À¸¸é ¾Æ·¡ ºÎºĞ¿¡µµ º¯¼ö¸í°ú µ¥ÀÌÅÍ¸¦ ¼¼ÆÃ
-					var data = {"olevel":"4"
-								,"id":"32978"
-								,"d_no":"32978"
-								,"name":"ÃÖ³«±â"
-								,"parentid":"32776"
-								,"d_date":"20/11/08"
-								,"d_jicname":"´ë¸®Á¡"
-								,"d_cename":"ºÎ»êÇÑ¸¶À½¼¾Å¸"
-								,"d_jiccode":"20"							
-								,"pv1":"0"	
-								,"d_uid":"C9802"
-								,"D_GRP_CD":"KR"
-								,"D_JICCODEP_NAME":"M"
-								,"left_result":"0"
-								,"right_result":"0"
-								};
-					var item = data;
-					var parentid = item["parentid"];
-
-					var id = item["id"];
-
-
-					if (children[parentid]) {
-						var item2 = {parentid: parentid, item: item };
-
-						for(var k in rowname){
-							item2[rowname[k]] = item[rowname[k]];
-						}
-
-						if (!children[parentid].children) {
-							children[parentid].children = [];
-						}
-						children[parentid].children[children[parentid].children.length] = item2;
-						children[id] = item2;
-					}
-					else {
-						children[id] = {parentid: parentid, item: item };
-						for(var k in rowname){
-							children[id][rowname[k]] = item[rowname[k]];
-
-						}
-						source[id] = children[id];
-					}
-			
-				//rowname ¸¦ Ãß°¡ÇÏ¿´À¸¸é ¾Æ·¡ ºÎºĞ¿¡µµ º¯¼ö¸í°ú µ¥ÀÌÅÍ¸¦ ¼¼ÆÃ
-
->>>>>>> branch 'master' of https://github.com/rang1536/mask.git
 				return source;
 			} 
 			
