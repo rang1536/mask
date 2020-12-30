@@ -104,6 +104,7 @@
 		   AND CLOSING_CHK = 2
 	</select>
 	
+
 	<!-- 일정산 정산자 조회 -->
 	<select id="getSponBonusUserList" resultType="kr.or.mask.domain.DayClosing">
 		SELECT USERID, LEFTCNT, RIGHTCNT, STATE

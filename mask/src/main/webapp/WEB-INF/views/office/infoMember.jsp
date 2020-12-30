@@ -16,12 +16,13 @@
             <div class="page-wrapper">
                 <!-- Page-body start -->
                 <div class="page-body">
+                	<form id="memberForm" onSubmit="return false;">
                     <!-- 회원중요정보 start -->
                     <div class="card">
                         <div class="card-header">
                             <h4>회원중요정보</h4><span style="text-align:right;color:red;padding-right:20px">변경불가 항목입니다.</span>
                     		<div class="card-block">
-	                            <div class="form-group row">
+	                            <div class="form-group row" style="display:none" id="adminDiv">
 	                                <div class="col-sm-5">
 	                                    <input type="text" class="form-control form-control-success" placeholder="사용자 ID : " id="searchId" name="searchId">
 	                                </div>
@@ -31,30 +32,31 @@
 	                            </div>
 	                            <div class="form-group row">
 	                                <div class="col-sm-6">
-	                                    <input type="text" class="form-control" readonly id="id" value="사용자 ID : ${user.id }">
+	                                    <input type="text" class="form-control" disabled="disabled" id="id" value="사용자 ID : ${user.id }">
+	                                    <input type="hidden" id="formId" name="id">
 	                                </div>
 	                                <div class="col-sm-6">
-	                                    <input type="text" class="form-control" readonly id="regDate" value="가입일 : ${user.regdate }">
+	                                    <input type="text" class="form-control" disabled="disabled" id="regDate" value="가입일 : ${user.regdate }">
 	                                </div>
 	                            </div>
 	                            <div class="form-group row">
 	                                <div class="col-sm-6">
-	                                    <input type="text" class="form-control" readonly id="recommender" value="추천인 ID : ${user.recommender }">
+	                                    <input type="text" class="form-control" disabled="disabled" id="recommender" value="추천인 ID : ${user.recommender }">
 	                                </div>
 	                                <div class="col-sm-6">
-	                                    <input type="text" class="form-control" readonly id="sponsor" value="후원인 ID : ${user.sponsor }">
+	                                    <input type="text" class="form-control" disabled="disabled" id="sponsor" value="후원인 ID : ${user.sponsor }" name="sponsor">
 	                                </div>
 	                           </div>
 	                           <div class="form-group row">
 	                                <div class="col-sm-6">
-	                                    <input type="text" class="form-control" readonly id="agentNm" value="가입센터 : ${user.agentNm }">
+	                                    <input type="text" class="form-control" disabled="disabled" id="agentNm" value="가입센터 : ${user.agentNm }">
 	                                </div>
 	                            </div>
 	                        </div>
 	                    </div>
                     </div>
                     <!-- 회원중요정보 end -->
-					<form id="memberForm" onSubmit="return false;">
+					
                     <!-- 회원기타정보 start -->
                     <div class="card">
                         <div class="card-header">
@@ -136,6 +138,15 @@
         </div>
         <!-- Main-body end -->
 <script>
+	$(document).ready(function(){
+		console.log(loginUserId);
+		var loginUserId = localStorage.getItem('loginId');
+		if(loginUserId == "se01admin") {
+			$("#adminDiv").show();
+		}
+		
+	});
+	
 	function searchAddr(){
 		new daum.Postcode({
 			oncomplete: function(data){
@@ -185,7 +196,10 @@
 			return false;			
 		}
 		
+		$("#formId").val($("#searchId").val());
+		
 		var params = $('#memberForm').serialize(); //폼값세팅.
+		console.log(params);
 		$.ajax({
 			url : 'updMem',
 			data : params,
@@ -209,7 +223,7 @@
 			$("#searchId").focus();
 			return false;
 		}
-		
+
 		//console.log('id : '+$("#searchId").val());
 		var params = {'id' : $("#searchId").val()}
 		$.ajax({
@@ -219,10 +233,9 @@
 			type : 'post',
 			success:function(data){			
 				if(data.result == 'succ'){
-					alert(id+' 님 정보가 조회되었습니다. 회원정보수정은 <회원등록>메뉴를 이용해주세요');
-					
-					var user = data.user;
-					
+					alert('정보가 조회되었습니다.');
+					var user = data.list[0];
+					console.log(user);
 					//pass 초기화
 					$("#oriPass").val("");
 					$("#newPass").val("");
@@ -233,8 +246,37 @@
 					$('#regDate').val('가입일 : '+user.regdate);
 					$('#recommender').val('추천인  : '+user.recommender);
 					$('#sponsor').val('후원인 : '+user.sponsor);
-					$('#agentNm').val('가입센터 : '+user.agentNm)
+					$('#agentNm').val('가입센터 : '+user.agent);
 					
+					if(user.name == ""){
+						$("#name").val("");
+						$("#name").attr("placeHolder","이름 : ");
+					}else{
+						$("#name").val(user.name);	
+					}
+
+					if(user.phone == ""){
+						$("#phone").val("");
+						$("#phone").attr("placeHolder","전화번호 : ");
+					}else{
+						$("#phone").val(user.phone);	
+					}
+
+					$("#zipcode").val(user.zipcode);
+					$("#addr1").val(user.addr1);
+					$("#addr2").val(user.addr2);
+					
+					var date = new Date();
+					var today = date.getFullYear()+""+(date.getMonth()+1)+""+date.getDate();
+					var joinDate = user.regdate.replace(/-/gi,"").substring(0,8);
+					
+					if(today == joinDate){
+						$("#sponsor").val(user.sponsor);
+						$("#sponsor").prop("disabled",false);
+					}
+					
+				}else {
+					alert("정확한 아이디를 입력하셔야 합니다.(다중검색불가)");
 				}
 			}
 		})

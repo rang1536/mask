@@ -55,8 +55,8 @@
 		     , PHONE
 		     , ZIPCODE , ADDR1 , ADDR2 , POINT
 		     , DELIVERY_ZIPCODE , DELIVERY_ADDR1 , DELIVERY_ADDR2
-		     , RECOMMENDER , SPONSOR , AGENT, GRADE
-		  FROM MEMBER
+		     , RECOMMENDER , SPONSOR , CONCAT(AGENT,(SELECT NAME FROM AGENT A WHERE A.CODE = B.AGENT)) AGENT, GRADE
+		  FROM MEMBER B
 		 WHERE ID LIKE CONCAT('%', LOWER(#{searchWord}), '%')
 		    OR NAME LIKE CONCAT('%', LOWER(#{searchWord}), '%')
 	</select>
@@ -318,12 +318,28 @@
 	
 	<update id="updateMember" parameterType="kr.or.mask.domain.User">
 		UPDATE MEMBER
-		   SET NAME = #{name}
+		   SET 
+		<if test="sponsor != null and sponsor != ''">
+		       SPONSOR = #{sponsor}
+		</if>
+		<if test="name != null and name != ''">
+		     , NAME = #{name}
+		</if>
+		<if test="phone != null and phone != ''">
 		     , PHONE = #{phone}
+		</if>
+		<if test="pass != null and pass != ''">
 		     , PASS = #{pass}
+		</if>
+		<if test="zipcode != null and zipcode != ''">
 		     , ZIPCODE = #{zipcode}
+		</if>
+		<if test="addr1 != null and addr1 != ''">
 		     , ADDR1 = #{addr1}
+		</if>
+		<if test="addr2 != null and addr2 != ''">
 		     , ADDR2 = #{addr2}
+		</if>
 		     , MODID = #{modid}
 		     , MODDATE = NOW()
 		 WHERE ID = #{id}

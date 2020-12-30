@@ -85,6 +85,7 @@ public class MaskDao {
 	public int chkSponBonusYn(Map<String, Object> params) {
 		return sql.selectOne("mask.chkSponBonusYn", params);
 	}
+
 	
 	//포인트 히스토리 생성(후원보너스용)
 	public int setPointHisForSponBonus(PointHistory ph) {
@@ -111,5 +112,5 @@ public class MaskDao {
 		return sql.insert("mask.updatePointSponBonus", user);
 	}
 	
-	
+
 }

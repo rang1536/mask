@@ -381,7 +381,7 @@ public class MaskService {
 			//1. 하위후원인 조회
 			List<User> underList = getUnderTreeSponsorServ(userList.get(i).getId());
 			
-			//2. 카운팅
+			//2. 카운팅	
 			// 최초 카운팅은 최상위의 바로 아래 트리이므로 리스트의 첫번째는 leftCnt++, 두번째는 rightCnt++ 
 			if(underList.size() >= 1) {
 				param = new HashMap<String, Object>();
@@ -423,12 +423,15 @@ public class MaskService {
 			dc.setState("1");
 			//포인트는 정산하고 타입별로 업데이트 해야함.
 			
+
 			System.out.println(i+" 번째 일마감데이터 확인"+dc);
 			mDao.setDayClosingTargetUser(dc);		
+
 		}
 		
 	}
 	
+
 	//트리 좌 혹은 우측 카운팅 루프
 	public int getSponCntLoop(int cnt, User user ) {
 		Map<String, Object> map = new HashMap<String, Object>(); //leftCnt, rightCnt 리턴용
@@ -460,6 +463,7 @@ public class MaskService {
 		}	
 		System.out.println("마지막 후원인~!!");
 		return cnt;
+
 	}
 	
 	//포인트히스토리 입력
