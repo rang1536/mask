@@ -18,6 +18,17 @@ public class PointHistory {
 	private String searchType;
 	private String searchValue;
 	
+	//일마감용 컬럼
+	private int closingChk;
+	
+	
+	
+	public int getClosingChk() {
+		return closingChk;
+	}
+	public void setClosingChk(int closingChk) {
+		this.closingChk = closingChk;
+	}
 	public String getNo() {
 		return no;
 	}
@@ -107,7 +118,8 @@ public class PointHistory {
 		return "PointHistory [no=" + no + ", id=" + id + ", type=" + type + ", point=" + point + ", message=" + message
 				+ ", fromId=" + fromId + ", toId=" + toId + ", regdate=" + regdate + ", searchFromDate="
 				+ searchFromDate + ", searchToDate=" + searchToDate + ", beginIdx=" + beginIdx + ", searchRows="
-				+ searchRows + ", searchType=" + searchType + ", searchValue=" + searchValue + "]";
+				+ searchRows + ", searchType=" + searchType + ", searchValue=" + searchValue + ", closingChk="
+				+ closingChk + "]";
 	}
-
+	
 }
