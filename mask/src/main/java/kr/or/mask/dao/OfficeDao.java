@@ -1,6 +1,7 @@
 package kr.or.mask.dao;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -38,6 +39,11 @@ public class OfficeDao {
 		return sql.selectOne("office.getUser", id);
 	}
 
+	//유저정보
+	public Agent getAgent(String code){
+		return sql.selectOne("office.getAgent", code);
+	}
+	
 	//후원인목록
 	public List<User> selectSponList(String id){
 		return sql.selectList("office.selectSponList", id);
@@ -83,7 +89,7 @@ public class OfficeDao {
 			
 			//윤. 마감테이블에 가입회원 등록
 			sql.insert("office.setDayClosing", user);
-			
+
 			//포인트 이력 테이블 등록
 			PointHistory ph = new PointHistory();
 			ph.setId(user.getId());
@@ -133,6 +139,50 @@ public class OfficeDao {
 			insertPurchase(pc);
 			
 			
+			//센터 포인트 지급
+			Agent agent = getAgent(user.getAgent()); // 가입센터조회
+			List<User> upCenList = new ArrayList<User>();
+			User user2 = getUser(agent.getOwner()); //가입된 센터의 소유자(대리점) 정보 조회
+			upCenList.add(user2); //1대(가입시 선택한) 센터
+			String recommId = user2.getRecommender();
+			int i = 0;
+
+			while(true) {
+				User upUser = getSponAndRecommTarget(recommId);
+				if(upUser == null) { // 상위 추천인이 없으면 루프종료
+					break;
+				}else {
+					recommId = upUser.getRecommender();
+				}
+				
+				if(upUser.getAgentYn().equals("Y")) { // 상위 추천인이 센터라면 리스트에 애드한 후 카운트 업
+					upCenList.add(upUser);
+					i++;
+				}
+				if(i == 2) { // 상위 추천인 2명 구하면 루프 종료
+					break;
+				}
+			}
+			
+			for(i=0; i<upCenList.size();i++) {
+				String point = "";
+				if(i == 0) point = "4000";
+				else point = "500";
+				
+				ph = new PointHistory();
+				ph.setId("BATCH");
+				ph.setType("10");
+				ph.setPoint(point);
+				ph.setMessage("센터회원가입롤업 "+(i+1)+"대");
+				ph.setFromId(user.getId());
+				ph.setToId(upCenList.get(i).getId());
+				registerPoint(ph);
+				
+				User us = new User();
+				us.setId(upCenList.get(i).getId());
+				us.setPoint(point);
+				updatePoint(us);
+			}
 		} catch (Exception e) {
 			// TODO: handle exception
 			transactionManager.rollback(status);
@@ -171,13 +221,11 @@ public class OfficeDao {
 			String msg = "";
 			if(purchase.getType().equals("04")) {
 				msg = "회원가입";
-				purchase.setType("01");
 			}else if(purchase.getType().equals("05")) {
 				msg = "재구매";
-				purchase.setType("02");
+				
 			}else if(purchase.getType().equals("06")) {
 				msg = "소비자구매";
-				purchase.setType("03");
 			}
 			
 			//포인트 이력 테이블 등록
@@ -197,7 +245,7 @@ public class OfficeDao {
 			updatePoint(mUser);
 			
 			//재구매를 진행한 유저는 대리점 만료일 한달 연장
-			if(purchase.getType().equals("05")) {
+			if(purchase.getType().equals("05") || purchase.getType().equals("06")) {
 				updateExpire(mUser);
 			}
 			
@@ -205,6 +253,37 @@ public class OfficeDao {
 			mUser.setPoint(purchase.getPoint());
 			mUser.setId(admin);
 			updatePoint(mUser);
+			
+			//소비자구매 시 소매마진(소비자구매가-회원가)을 payback 해줌
+			if(purchase.getType().equals("06")) {
+				Goods sGoods = new Goods();
+				sGoods.setGoodsCode(purchase.getGoodsCode());
+				Goods cGoods = getGoods(sGoods);
+				
+			    String mPrice = cGoods.getRePrice();
+			    String cPrice = cGoods.getCustomerPrice();
+			     
+			    int payBack = Integer.parseInt(cPrice) - Integer.parseInt(mPrice);
+			    String payBackString = payBack+"";
+			    
+				//포인트 이력 테이블 등록
+				ph = new PointHistory();
+				ph.setId(id);
+				ph.setType("09");
+				ph.setMessage("소매마진");
+				ph.setPoint(payBackString);
+				ph.setFromId(admin);
+				ph.setToId(id);
+				registerPoint(ph);
+				
+				mUser.setPoint("-"+payBackString);
+				mUser.setId(admin);
+				updatePoint(mUser);
+				
+				mUser.setPoint(payBackString);
+				mUser.setId(id);
+				updatePoint(mUser);
+			}
 			
 			//주문코드 생성
 			Date today = new Date();
@@ -224,6 +303,75 @@ public class OfficeDao {
 			purchase.setStatus("01");
 			purchase.setRegid(id);
 			insertPurchase(purchase);
+			
+			//재구매 롤업
+			// 1. 후원롤업대상 조회(20대 - 50p)
+			List<User> upSponList = new ArrayList<User>();
+			User user = getUser(id);
+			upSponList.add(user); //본인포함 20대
+			String sponId = user.getSponsor(); // 가입자의 후원인 아이디 확인
+			for(int i=0; i<19; i++) { //본인포함이므로
+				User upUser = getSponAndRecommTarget(sponId);
+				
+				if(upUser != null) { 
+					upSponList.add(upUser);
+					sponId = upUser.getSponsor(); //조회된 상위 대 후원인의 후원인아이디를 세팅
+				}else {
+					break; //상위 후원인이 없으면 루프 종료
+				}
+				
+			}
+			
+			// 2. 추천롤업대상 조회(30대 - 100p)
+			List<User> upRecommList = new ArrayList<User>(); 
+			upRecommList.add(user); //본인포함 30대
+			String recommId = user.getRecommender(); // 가입자의 추천인 아이디 확인
+			for(int i=0; i<28; i++) {
+				User upUser = getSponAndRecommTarget(recommId); 
+				
+				if(upUser != null) {
+					upRecommList.add(upUser);
+					recommId = upUser.getRecommender(); //조회된 상위 대 추천인의 추천인아이디를 세팅
+				}else {
+					break;
+				}
+				
+			}
+			
+			// 3. 후원추천롤업 저장
+			// 3.1 후원
+			for(int i=0; i<upSponList.size();i++) {
+				ph = new PointHistory();
+				ph.setId("BATCH");
+				ph.setType("08");
+				ph.setPoint("50"); // 후원 50 point
+				ph.setMessage(msg+" 후원롤업 "+(i+1)+"대"); // 후원 50 point
+				ph.setFromId(user.getId());
+				ph.setToId(upSponList.get(i).getId());
+				registerPoint(ph);
+				
+				User us = new User();
+				us.setId(upSponList.get(i).getId());
+				us.setPoint("50");
+				updatePoint(us);
+			}
+			
+			// 3.2 추천
+			for(int i=0; i<upRecommList.size();i++) {
+				ph = new PointHistory();
+				ph.setId("BATCH");
+				ph.setType("07");
+				ph.setPoint("100"); // 추천 100 point
+				ph.setMessage(msg+" 추천롤업 "+(i+1)+"대"); // 후원 50 point
+				ph.setFromId(user.getId());
+				ph.setToId(upSponList.get(i).getId());
+				registerPoint(ph);
+				
+				User us = new User();
+				us.setId(upSponList.get(i).getId());
+				us.setPoint("100");
+				updatePoint(us);
+			}
 			
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -285,6 +433,15 @@ public class OfficeDao {
 		return 1;
 	}
 	
+	public String rollUpSponsor(String id) {
+		 String parent = sql.selectOne("office.rollUpSponsor",id);
+		 return parent;
+	}
+	
+	public String rollUpRecommender(String id) {
+		 String parent = sql.selectOne("office.rollUpRecommender",id);
+		 return parent;
+	}
 	//출금처리
 	public int trans(PointHistory pointHistory) {
 		
@@ -413,22 +570,38 @@ public class OfficeDao {
 		return sql.insert("office.updateMember", user);
 	}
 	
+	//센터승급
+	public int gradeUpMember(User user){
+		return sql.update("office.gradeUpMember", user);
+	}
+	
 	//포인트수정
 	public int updatePoint(User user){
 		return sql.insert("office.updatePoint", user);
 	}
 	
+	//포인트수정
+	public int registerAgent(Agent agent){
+		return sql.insert("office.registerAgent", agent);
+	}
+		
 	//회원리스트
 	public List<User> selectMember(String searchWord){
 		return sql.selectList("office.selectMember", searchWord);
 	}
 	
-	//대리점리스트
+	//센터리스트
 	public List<Agent> selectAgent(String searchWord){
 		return sql.selectList("office.selectAgent", searchWord);
 	}
 
-	//대리점리스트
+	//센터승인대기 대리점 리스트
+	public List<Agent> selectStandByAgent(){
+		return sql.selectList("office.selectStandByAgent");
+	}
+
+	
+	//후원인리스트
 	public List<Agent> selectSponsor(String searchWord){
 		return sql.selectList("office.selectSponsor", searchWord);
 	}
@@ -441,6 +614,11 @@ public class OfficeDao {
 	//상품리스트
 	public List<Goods> selectGoods(Goods goods){
 		return sql.selectList("office.selectGoods", goods);
+	}
+	
+	//상품리스트
+	public Goods getGoods(Goods goods){
+		return sql.selectOne("office.getGoods", goods);
 	}
 	
 	//포인트내역

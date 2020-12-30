@@ -77,17 +77,17 @@
 	                            </div>
 	                            <div class="form-group row">
 	                                <div class="col-sm-6">
-	                                    <input type="text" class="form-control" placeholder="우편번호" id="zipcode2" readonly="readonly" name="deliveryZipcode">
+	                                    <input type="text" class="form-control" placeholder="우편번호" id="zipcode2" readonly="readonly" name="deliveryZipcode" value="${user.deliveryZipcode }">
 	                                </div>
 	                            </div>
 	                            <div class="form-group row">
 	                                <div class="col-sm-10">
-	                                    <input type="text" class="form-control" placeholder="우편번호상주소" id="addr21" readonly="readonly" name="deliveryAddr1">
+	                                    <input type="text" class="form-control" placeholder="우편번호상주소" id="addr21" readonly="readonly" name="deliveryAddr1" value="${user.deliveryAddr1 }">
 	                                </div>
 	                            </div>
 	                            <div class="form-group row">
 	                                <div class="col-sm-10">
-	                                    <input type="text" class="form-control" placeholder="주소세부내용" id="addr22" name="deliveryAddr2">
+	                                    <input type="text" class="form-control" placeholder="주소세부내용" id="addr22" name="deliveryAddr2" value="${user.deliveryAddr2 }">
 	                                </div>
 	                            </div>
 	                            <div class="form-group row">

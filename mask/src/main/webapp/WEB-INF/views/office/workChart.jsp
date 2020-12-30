@@ -49,7 +49,7 @@
 		<div class="card-block tab-icon">
 			<!-- Row start -->
 			<div class="row">
-				<div class="col-lg-12 col-xl-6">
+				<div class="col-lg-12 col-xl-12">
 				<!-- <h6 class="sub-title">Tab With Icon</h6>  -->
 					<!-- <div class="sub-title">Tab With Icon</div> -->
 					<!-- Nav tabs -->

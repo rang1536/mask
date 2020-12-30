@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import kr.or.mask.domain.Agent;
 import kr.or.mask.domain.Charge;
 import kr.or.mask.domain.Goods;
 import kr.or.mask.domain.Inquiry;
@@ -128,6 +129,8 @@ public class OfficeController {
 		model.addAttribute("list",goodsList);
 		model.addAttribute("point", point);
 		
+		model.addAttribute("user",user);
+		
 		return "/office/rePurchase";
 	}
 
@@ -142,6 +145,8 @@ public class OfficeController {
 		
 		model.addAttribute("list",goodsList);
 		model.addAttribute("point", point);
+		
+		model.addAttribute("user",user);
 		
 		return "/office/customer";
 	}
@@ -244,5 +249,17 @@ public class OfficeController {
 		return "/office/inquiry";
 
 	}
-	
+
+	@RequestMapping(value = "/agentList", method = RequestMethod.GET)
+	public String agent(@ModelAttribute(value="id")String id , Model model) {
+		logger.info("agent START");
+
+		List<Agent> agentList = officeService.selectAgent("");
+		List<Agent> standByList = officeService.selectStandByAgent();
+		model.addAttribute("agentList", agentList);
+		model.addAttribute("standByList", standByList);
+		return "/office/agent";
+
+	}
+
 }

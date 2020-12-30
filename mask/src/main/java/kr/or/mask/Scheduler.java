@@ -18,7 +18,7 @@ public class Scheduler {
 	public void dayClosing() {
 		Date date = new Date();
 		
-		System.out.println(date+" 일마감 스케줄러 시작~!!");
+		//System.out.println(date+" 일마감 스케줄러 시작~!!");
 		
 		//재구매정산
 		

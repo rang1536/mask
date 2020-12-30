@@ -409,4 +409,23 @@ public class OfficeRestController {
 		return map;
 	}
 	
+	@RequestMapping(value="/registerAgent", method= {RequestMethod.POST,RequestMethod.GET})
+	public Map<String, Object> registerAgent(@ModelAttribute(value="id") String id, Agent agent){
+		Map<String, Object> map = new HashMap<String, Object>();
+		agent.setRegid(id);
+		agent.setModid(id);
+		int cnt = officeService.registerAgent(agent);
+		
+		if(cnt > 0){
+			map.put("result", "success");
+			map.put("message", "등록이 완료되었습니다.");
+		}else {
+			map.put("result", "error");
+			map.put("message", "등록에 실패하였습니다.");
+		}
+
+		return map;
+	}
+	
 }
+

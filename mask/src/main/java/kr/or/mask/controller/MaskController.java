@@ -1,6 +1,11 @@
 package kr.or.mask.controller;
 
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,8 +49,18 @@ public class MaskController {
 	//마이오피스 - 로그인페이지 연결
 	@RequestMapping(value="/officeLogin",  method = RequestMethod.GET)
 	public String officeLoginCtrl(){
-		//System.out.println(order);
-		return "main/officeLogin";
+		
+		//Date date = new Date();
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("HHmmss");
+		String now = sdf.format(date);
+		int nt = Integer.parseInt(now);
+		if(nt < 3000) {
+			return "office/checkup";
+		}else {
+			return "main/officeLogin";	
+		}
+		
 	}
 	
 	//쇼핑몰

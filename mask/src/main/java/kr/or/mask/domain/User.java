@@ -23,6 +23,7 @@ public class User {
 	private String moddate;
 	private String modid;
 	private String oriPass;
+	private String agentYn;
 	
 	//조직도용 변수
 	private String expiredate;
@@ -159,6 +160,12 @@ public class User {
 	public void setOriPass(String oriPass) {
 		this.oriPass = oriPass;
 	}
+	public String getAgentYn() {
+		return agentYn;
+	}
+	public void setAgentYn(String agentYn) {
+		this.agentYn = agentYn;
+	}
 	public String getExpiredate() {
 		return expiredate;
 	}
@@ -226,12 +233,10 @@ public class User {
 				+ ", deliveryZipcode=" + deliveryZipcode + ", deliveryAddr1=" + deliveryAddr1 + ", deliveryAddr2="
 				+ deliveryAddr2 + ", recommender=" + recommender + ", sponsor=" + sponsor + ", agent=" + agent
 				+ ", regdate=" + regdate + ", regid=" + regid + ", moddate=" + moddate + ", modid=" + modid
-				+ ", oriPass=" + oriPass + ", expiredate=" + expiredate + ", goodsCode=" + goodsCode + ", goodsName="
-				+ goodsName + ", buyPoint=" + buyPoint + ", userList=" + userList + ", agentNm=" + agentNm
-				+ ", treeLevel=" + treeLevel + ", parentId=" + parentId + ", reParentId=" + reParentId + ", treeNo="
-				+ treeNo + "]";
+				+ ", oriPass=" + oriPass + ", agentYn=" + agentYn + ", expiredate=" + expiredate + ", goodsCode="
+				+ goodsCode + ", goodsName=" + goodsName + ", buyPoint=" + buyPoint + ", userList=" + userList
+				+ ", agentNm=" + agentNm + ", treeLevel=" + treeLevel + ", parentId=" + parentId + ", reParentId="
+				+ reParentId + ", treeNo=" + treeNo + "]";
 	}
-
-	
 	
 }

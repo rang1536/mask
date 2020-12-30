@@ -326,6 +326,13 @@
                                         <span class="pcoded-mcaret"></span>
                                     </a>
                                 </li>
+                                <li class=" " id="menu14" style="display:none">
+                                    <a href="#" onClick="selectMenu(14)">
+                                        <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">대리점관리</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </nav>
@@ -362,6 +369,8 @@
 				$("#menu12").addClass("active");
 			}else if(path.indexOf("chargeList") != -1){
 				$("#menu13").addClass("active");
+			}else if(path.indexOf("agentList") != -1){
+				$("#menu14").addClass("active");
 			}
 			
 			$("#userId").text(localStorage.getItem('loginId'));
@@ -369,6 +378,7 @@
 			
 			if(localStorage.getItem('loginId') == 'se01admin'){
 				$("#menu13").show();
+				$("#menu14").show();
 			}
 			
 			if(localStorage.getItem('loginId') == null){
@@ -402,8 +412,10 @@
 				location.href = "inquiry";
 			}else if(menu == 12){
 				location.href = "goods";
-			}else if(menu == 12){
+			}else if(menu == 13){
 				location.href = "chargeList";
+			}else if(menu == 14){
+				location.href = "agentList";
 			}
 		}
 		

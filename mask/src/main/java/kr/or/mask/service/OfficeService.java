@@ -219,11 +219,16 @@ public class OfficeService {
 		return officeDao.searchPurchase(purchase);
 	}
 	
-	//대리점목록
+	//센터목록
 	public List<Agent> selectAgent(String searchWord){
 		return officeDao.selectAgent(searchWord);
 	}
 
+	//센터승인대기 대리점 목록
+	public List<Agent> selectStandByAgent(){
+		return officeDao.selectStandByAgent();
+	}
+		
 	//후원인목록
 	public List<Agent> selectSponsor(String searchWord){
 		return officeDao.selectSponsor(searchWord);
@@ -292,6 +297,19 @@ public class OfficeService {
 	//문의사항 답변등록
 	public int registerAnswer(Inquiry inquiry){
 		return officeDao.registerAnswer(inquiry);
+	}
+	
+	//센터등록
+	@Transactional(rollbackFor =Exception.class)
+	public int registerAgent(Agent agent){
+		int a = officeDao.registerAgent(agent);
+		User user = new User();
+		user.setId(agent.getOwner());
+		user.setAgentYn("Y");
+		user.setModid(agent.getModid());
+		int b = officeDao.gradeUpMember(user);
+		
+		return a+b;
 	}
 	
 	//구매내역

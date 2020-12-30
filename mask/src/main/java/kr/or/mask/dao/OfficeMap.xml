@@ -104,9 +104,24 @@
 		 </if>
 	</select>
 	
+	<select id="getGoods" parameterType="kr.or.mask.domain.Goods" resultType="kr.or.mask.domain.Goods">
+		SELECT GOODS_CODE
+		     , GOODS_NAME
+		     , NEW_PRICE
+		     , RE_PRICE
+		     , CUSTOMER_PRICE
+		     , NEW_PRICE_YN
+		     , DATE_FORMAT(REGDATE,'%Y-%m-%d %H:%i:%s') REGDATE
+		     , REGID
+		  FROM GOODS
+		 WHERE GOODS_CODE = #{goodsCode}
+	</select>
+	
 	<select id="selectPointHistory" parameterType="kr.or.mask.domain.PointHistory" resultType="kr.or.mask.domain.PointHistory">
 		SELECT ID
 		     , CASE WHEN TYPE = '01' THEN CONCAT('+',POINT)
+		            WHEN TYPE = '07' THEN CONCAT('+',POINT)
+		            WHEN TYPE = '08' THEN CONCAT('+',POINT)
 		       ELSE 
 				      CASE WHEN TYPE = '03' THEN
 						     CASE WHEN TO_ID = 'test01' THEN CONCAT('+',POINT)
@@ -132,11 +147,29 @@
 	</select>
 	
 	<select id="selectAgent" parameterType="String" resultType="kr.or.mask.domain.Agent">
-		SELECT CODE , NAME 
+		SELECT CODE , NAME , OWNER , REGID
 		     , DATE_FORMAT(REGDATE,'%Y-%m-%d') AS REGDATE
 		  FROM AGENT
 		 WHERE CODE LIKE CONCAT('%', LOWER(#{searchWord}), '%')
 		    OR NAME LIKE CONCAT('%', LOWER(#{searchWord}), '%')
+	</select>
+
+	<select id="getAgent" parameterType="String" resultType="kr.or.mask.domain.Agent">
+		SELECT CODE , NAME , OWNER , REGID
+		     , DATE_FORMAT(REGDATE,'%Y-%m-%d') AS REGDATE
+		  FROM AGENT
+		 WHERE CODE = #{code}
+	</select>
+		
+	<select id="selectStandByAgent" parameterType="String" resultType="kr.or.mask.domain.Agent">
+		SELECT RECOMMENDER AS OWNER
+		     , CNT RECOM_CNT
+		  FROM (SELECT RECOMMENDER , COUNT(*) CNT
+		          FROM MEMBER
+		         WHERE AGENT_YN = 'N'
+		         GROUP BY RECOMMENDER
+		       ) A
+		 WHERE CNT > 8
 	</select>
 	
 	<select id="selectChargeList" resultType="kr.or.mask.domain.Charge">
@@ -260,9 +293,9 @@
 		       , #{deliveryZipcode} , #{deliveryAddr1} , #{deliveryAddr2}
 		       , #{recommender} , #{sponsor} , #{agent} , #{grade}
 		       , NOW() , #{regid} , DATE_SUB(DATE_ADD(NOW(), INTERVAL 1 MONTH) , INTERVAL 1 DAY)
-		       , (SELECT MAX(TREENO)+1 FROM MEMBER)
-		       , (SELECT TREENO FROM MEMBER WHERE ID = #{sponsor})
-		       , (SELECT TREENO FROM MEMBER WHERE ID = #{recommender})
+		       , (SELECT MAX(TREENO)+1 FROM MEMBER A)
+		       , (SELECT TREENO FROM MEMBER B WHERE ID = #{sponsor})
+		       , (SELECT TREENO FROM MEMBER C WHERE ID = #{recommender})
 		       )
 	</insert>
 		
@@ -340,8 +373,8 @@
 	<insert id="insertPurchase" parameterType="kr.or.mask.domain.Purchase">
 		INSERT
 		  INTO PURCHASE
-		       (CODE, GOODS_CODE, GOODS_NAME, POINT, STATUS, DELIVERY_ZIPCODE, DELIVERY_ADDR1, DELIVERY_ADDR2, REGDATE, REGID, RECEIVE_NAME, RECEIVE_PHONE)
-		VALUES (#{code}, #{goodsCode}, #{goodsName}, #{point}, #{status}, #{deliveryZipcode}, #{deliveryAddr1}, #{deliveryAddr2}, NOW(), #{regid}, #{receiveName}, #{receivePhone})
+		       (CODE, GOODS_CODE, GOODS_NAME, POINT, STATUS, DELIVERY_ZIPCODE, DELIVERY_ADDR1, DELIVERY_ADDR2, REGDATE, REGID, RECEIVE_NAME, RECEIVE_PHONE, TYPE)
+		VALUES (#{code}, #{goodsCode}, #{goodsName}, #{point}, #{status}, #{deliveryZipcode}, #{deliveryAddr1}, #{deliveryAddr2}, NOW(), #{regid}, #{receiveName}, #{receivePhone},#{type})
 	</insert>
 
 	<insert id="insertExchanges" parameterType="kr.or.mask.domain.Exchanges">
@@ -442,6 +475,19 @@
 		 WHERE USERID = #{userId}
 	</update>
 	
+	<insert id="registerAgent" parameterType="kr.or.mask.domain.Agent">
+		    INSERT
+		      INTO AGENT
+		           (CODE, NAME, OWNER, REGID, REGDATE)
+		    VALUES (#{code}, #{name}, #{owner}, #{regid}, NOW())
+	</insert>
 	
+	<update id="gradeUpMember" parameterType="kr.or.mask.domain.User">		    
+		    UPDATE MEMBER
+		       SET AGENT_YN = 'Y'
+		         , MODID = #{modid}
+		         , MODDATE = NOW()
+		     WHERE ID = #{id}
+	</update>
 	
 </mapper>
