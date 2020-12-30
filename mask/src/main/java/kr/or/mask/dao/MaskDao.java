@@ -96,7 +96,20 @@ public class MaskDao {
 		return sql.insert("mask.modPointHisForSponBonus", ph);
 	}
 	
+	//일마감조회
+	public List<DayClosing> getSponBonusUserList(){
+		return sql.selectList("mask.getSponBonusUserList");
+	}
 	
+	//미지급포인트 히스토리 삭제
+	public int delPointHisSponBouns() {
+		return sql.delete("mask.delPointHisSponBouns");
+	}
+	
+	//포인트수정
+	public int updatePointSponBonus(User user){
+		return sql.insert("mask.updatePointSponBonus", user);
+	}
 	
 	
 }

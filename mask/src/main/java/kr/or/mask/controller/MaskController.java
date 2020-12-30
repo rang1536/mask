@@ -49,6 +49,7 @@ public class MaskController {
 	//마이오피스 - 로그인페이지 연결
 	@RequestMapping(value="/officeLogin",  method = RequestMethod.GET)
 	public String officeLoginCtrl(){
+		//mServ.dayClosingStart();
 		
 		//Date date = new Date();
 		Date date = new Date();

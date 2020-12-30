@@ -90,7 +90,7 @@
 		INSERT INTO DAYCLOSING(
 			USERID, REGDATE, LEFTCNT, RIGHTCNT, STATE, MODDATE)
 		VALUES(
-			#{id}, NOW(), #{leftCnt}, #{rightCnt}, #{state}, NOW()
+			#{userId}, NOW(), #{leftCnt}, #{rightCnt}, #{state}, NOW()
 			)
 	</insert>
 	
@@ -101,7 +101,18 @@
 		 WHERE FROM_ID = #{fromId}
 		   AND TO_ID = #{toId}
 		   AND TYPE = '09'
+		   AND CLOSING_CHK = 2
 	</select>
+	
+	<!-- 일정산 정산자 조회 -->
+	<select id="getSponBonusUserList" resultType="kr.or.mask.domain.DayClosing">
+		SELECT USERID, LEFTCNT, RIGHTCNT, STATE
+		  FROM DAYCLOSING
+		 WHERE STATE = '1'
+		   AND LEFTCNT >= 1
+		   AND RIGHTCNT >= 1 
+	</select>
+	
 	
 	<!-- 포인트 히스토리 생성(후원보너스용) -->
 	<insert id="setPointHisForSponBonus" parameterType="kr.or.mask.domain.PointHistory">
@@ -109,7 +120,7 @@
 			ID, TYPE, POINT, MESSAGE, FROM_ID, TO_ID, REGDATE, CLOSING_CHK
 			)
 		VALUES(
-			#{id}, #{type}, 0, '후원보너스 Batch', #{fromId}, #{toId}, NOW(), 1
+			'BATCH', #{type}, 0, '후원보너스', #{fromId}, #{toId}, NOW(), 1
 			)
 	</insert>
 	
@@ -118,9 +129,27 @@
 		UPDATE POINT_HISTORY
 		   SET  POINT = #{point}
 		   	  , CLOSING_CHK = #{closingChk}
-		 WHERE NO = #{no}
+		 WHERE TO_ID = #{toId}
+		   AND TYPE = '09'
+		   AND CLOSING_CHK = 1
 	</update>
-
+	
+	<!-- 포인트 반영 -->
+	<update id="updatePointSponBonus" parameterType="kr.or.mask.domain.User">
+		UPDATE MEMBER
+		   SET POINT = POINT + #{point}
+		     , MODID = 'BATCH'
+		     , MODDATE = NOW()
+		 WHERE ID = #{id}
+	</update>
+	
+	<!-- 미지급 후원포인트 히스토리 삭제 -->
+	<delete id="delPointHisSponBouns">
+		DELETE 
+		  FROM POINT_HISTORY 
+		 WHERE CLOSING_CHK = 1
+		   AND TYPE = '09'
+	</delete>
 
 
 

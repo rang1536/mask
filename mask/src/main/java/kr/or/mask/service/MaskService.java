@@ -9,8 +9,10 @@ import java.util.Queue;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.or.mask.dao.MaskDao;
+import kr.or.mask.dao.OfficeDao;
 import kr.or.mask.domain.Agent;
 import kr.or.mask.domain.ChartUser;
 import kr.or.mask.domain.DayClosing;
@@ -22,6 +24,9 @@ import kr.or.mask.domain.User;
 public class MaskService {
 	@Autowired
 	private MaskDao mDao;
+	
+	@Autowired
+	private OfficeDao oDao;
 	
 	public Map<String, Object> loginServ(String id, String pass){
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -296,24 +301,83 @@ public class MaskService {
 		return mDao.setDayClosingTargetUser(dc);
 	}
 	
+	//일정산 
+	@Transactional(rollbackFor =Exception.class)
+	public Map<String, Object> dayClosingStart(){
+		Map<String, Object> map = new HashMap<String, Object>();
+		dayClosingMainServ(); //일마감 메인호출
+		
+		//마감 카운트 조회해서 정산대상자 포인트 지급 (좌,우 1 이상인 대상조회)
+		List<DayClosing> cList = mDao.getSponBonusUserList();  
+		
+		//포인트 지급 및 히스토리반영
+		if(cList.size() > 0) { 
+			for(int i=0; i<cList.size(); i++) {
+				int left = cList.get(i).getLeftCnt();
+				int right = cList.get(i).getRightCnt();
+				
+				String point = getBonusPoint(left, right);
+				
+				//대상유저에게 포인트 지급
+				User mUser = new User();
+				mUser.setPoint(point);
+				mUser.setId(cList.get(i).getUserId()); 
+				
+				mDao.updatePointSponBonus(mUser); 
+				
+				//포인트 히스토리 반영(미지급->지급)
+				PointHistory ph = new PointHistory();
+				ph.setPoint(point);
+				ph.setClosingChk(2); //지급
+				ph.setToId(cList.get(i).getUserId());
+				
+				mDao.modPointHisForSponBonus(ph);
+			}
+		}
+		
+		//지급된 포인트 히스토리 제외 후원보너스 관련 히스토리 전체 삭제
+		mDao.delPointHisSponBouns();
+		
+		map.put("result", "success");
+		return map;
+	}
+	
+	//포인트 계산
+	public String getBonusPoint(int left, int right) {
+		String bonusPoint = "30000"; //1:1
+		
+		if(left >= 3 && right >= 3) {
+			bonusPoint = "50000";
+		}else if(left >= 5 && right >= 5) {
+			bonusPoint = "70000";
+		}else if(left >= 7 && right >= 7) {
+			bonusPoint = "100000";
+		}else if(left >= 10 && right >= 10) {
+			bonusPoint = "200000";
+		}else if(left >= 20 && right >= 20) {
+			bonusPoint = "300000";
+		}
+				
+		return bonusPoint;
+	}
 	
 	//일정산 main
-	public Map<String, Object> dayClosingStartServ(){
-		//전날 기록땜에 리셋하고 시작하든,, 마지막을 저장하든 해야 할듯
+	@Transactional(rollbackFor =Exception.class)
+	public void dayClosingMainServ(){
 		
 		//변수세팅
-		List<DayClosing> dcList = new ArrayList<DayClosing>();
 		DayClosing dc;
 		int leftCnt = 0;
 		int rightCnt = 0;
-		List<User> sponList;
 		Map<String, Object> param;
-		Map<String, Object> returnCntMap = new HashMap<String, Object>();
 		
 		List<User> userList = getAllUserServ(); //전체회원조회
 		
 		//회원별 일마감 자료 생성 (후원보너스)
 		for(int i=0; i<userList.size(); i++) { //전체회원 루프
+			leftCnt = 0;
+			rightCnt = 0;
+			
 			//1. 하위후원인 조회
 			List<User> underList = getUnderTreeSponsorServ(userList.get(i).getId());
 			
@@ -326,9 +390,12 @@ public class MaskService {
 			    
 				if(mDao.chkSponBonusYn(param) == 0) { //후원보너스 지급이력이 없을때 ++
 					leftCnt++;
-					//leftCnt 루프시작~
-					leftCnt += getSponCntLoop(leftCnt, underList.get(0));
 					
+					//포인트 히스토리입력
+					setPointHisForSponBonus(underList.get(0).getId(), userList.get(i).getId());
+					
+					//leftCnt 루프시작~
+					leftCnt = getSponCntLoop(leftCnt, underList.get(0));				
 				}	
 				
 				if(underList.size() == 2){
@@ -338,23 +405,28 @@ public class MaskService {
 					
 					if(mDao.chkSponBonusYn(param) == 0) { //후원보너스 지급이력이 없을때 ++
 						rightCnt++;
+						
+						//포인트 히스토리입력 (String fromId, String toId)
+						setPointHisForSponBonus(underList.get(1).getId(), userList.get(i).getId());
+						
 						//rightCnt 루프시작~
-						rightCnt += getSponCntLoop(rightCnt, underList.get(1));
+						rightCnt = getSponCntLoop(rightCnt, underList.get(1));
 					}	
 				}	
 			}	
 			
-			// 후원인 카운팅이 끝났으면 일마감 데이터 생성
+			// 3. 후원인 카운팅이 끝났으면 일마감 데이터 생성
 			dc = new DayClosing();
 			dc.setUserId(userList.get(i).getId());
 			dc.setLeftCnt(leftCnt);
 			dc.setRightCnt(rightCnt);
 			dc.setState("1");
-			//여기부터 하면 됨. 트랜잭션이랑 데이터 수정(최종)
-			mDao.setDayClosingTargetUser(dc);
+			//포인트는 정산하고 타입별로 업데이트 해야함.
 			
+			System.out.println(i+" 번째 일마감데이터 확인"+dc);
+			mDao.setDayClosingTargetUser(dc);		
 		}
-		return null;
+		
 	}
 	
 	//트리 좌 혹은 우측 카운팅 루프
@@ -372,7 +444,7 @@ public class MaskService {
 		    
 			if(mDao.chkSponBonusYn(param) == 0) { //후원보너스 지급이력이 없을때 ++
 				cnt++;
-				cnt += getSponCntLoop(cnt, underList.get(0));
+				cnt = getSponCntLoop(cnt, underList.get(0));
 			}	
 			
 			if(underList.size() == 2){
@@ -382,7 +454,7 @@ public class MaskService {
 				
 				if(mDao.chkSponBonusYn(param) == 0) { //후원보너스 지급이력이 없을때 ++
 					cnt++;
-					cnt += getSponCntLoop(cnt, underList.get(1));
+					cnt = getSponCntLoop(cnt, underList.get(1));
 				}	
 			}
 		}	
@@ -391,7 +463,12 @@ public class MaskService {
 	}
 	
 	//포인트히스토리 입력
-	public int setPointHisForSponBonus(PointHistory ph) {
+	public int setPointHisForSponBonus(String fromId, String toId) {
+		PointHistory ph = new PointHistory();
+		ph.setType("09");
+		ph.setFromId(fromId);
+		ph.setToId(toId);
+		
 		return mDao.setPointHisForSponBonus(ph);
 	}
 }

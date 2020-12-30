@@ -18,7 +18,7 @@ public class Scheduler {
 	@Autowired
 	private MaskService mServ;
 	
-	@Scheduled(cron="1 * * * * *")
+	@Scheduled(cron="1 0 0 * * *")
 	public void dayClosing() {
 		Date date = new Date();
 		
@@ -28,8 +28,7 @@ public class Scheduler {
 		 * 후원보너스 정산 
 		 * */
 		
-		//========= 1. 일마감 베이스 생성
-		//전체회원조회 
+		//mServ.dayClosingStart();
 		
 		
 		
