@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import kr.or.mask.domain.Agent;
+import kr.or.mask.domain.DayClosing;
 import kr.or.mask.domain.Notice;
 import kr.or.mask.domain.User;
 
@@ -63,4 +64,24 @@ public class MaskDao {
 		return sql.selectList("mask.getUnderTreeRecommender", id);
 	}
 	
+	
+	
+	/*
+	 * 일마감
+	 * */
+	
+	//전체회원조회
+	public List<User> getAllUser(){
+		return sql.selectList("mask.getAllUser");
+	}
+	
+	//일정산데이터 생성
+	public int setDayClosingTargetUser(DayClosing dc) {
+		return sql.insert("mask.setDayClosingTargetUser", dc);
+	}
+	
+	//상대에게 후원보너스 받았는지 여부 확인
+	public int chkSponBonusYn(Map<String, Object> params) {
+		return sql.selectOne("mask.chkSponBonusYn", params);
+	}
 }

@@ -40,6 +40,16 @@ public class User {
 	private String parentId; //후원
 	private String reParentId; //추천
 	private String treeNo;
+	
+	private String sponGiveYn;
+	
+	
+	public String getSponGiveYn() {
+		return sponGiveYn;
+	}
+	public void setSponGiveYn(String sponGiveYn) {
+		this.sponGiveYn = sponGiveYn;
+	}
 	public String getId() {
 		return id;
 	}
@@ -236,7 +246,9 @@ public class User {
 				+ ", oriPass=" + oriPass + ", agentYn=" + agentYn + ", expiredate=" + expiredate + ", goodsCode="
 				+ goodsCode + ", goodsName=" + goodsName + ", buyPoint=" + buyPoint + ", userList=" + userList
 				+ ", agentNm=" + agentNm + ", treeLevel=" + treeLevel + ", parentId=" + parentId + ", reParentId="
-				+ reParentId + ", treeNo=" + treeNo + "]";
+				+ reParentId + ", treeNo=" + treeNo + ", sponGiveYn=" + sponGiveYn + "]";
 	}
+	
+	
 	
 }
