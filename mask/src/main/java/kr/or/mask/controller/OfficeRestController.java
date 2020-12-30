@@ -110,8 +110,11 @@ public class OfficeRestController {
 	
 	@RequestMapping(value="/updMem", method= {RequestMethod.POST})
 	public Map<String, Object> updateMember(@ModelAttribute(value="id") String id , User user){
+		if(user.getId() == null) {
+			user.setId(id);			
+		}
 		user.setModid(id);
-		user.setId(id);
+		System.out.println(user.toString());
 		int cnt = officeService.getPass(user);
 		Map<String, Object> map = new HashMap<String, Object>();
 		

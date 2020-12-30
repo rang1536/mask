@@ -16,6 +16,7 @@
             <div class="page-wrapper">
                 <!-- Page-body start -->
                 <div class="page-body">
+                	<form id="memberForm" onSubmit="return false;">
                     <!-- 회원중요정보 start -->
                     <div class="card">
                         <div class="card-header">
@@ -31,30 +32,31 @@
 	                            </div>
 	                            <div class="form-group row">
 	                                <div class="col-sm-6">
-	                                    <input type="text" class="form-control" readonly id="id" value="사용자 ID : ${user.id }">
+	                                    <input type="text" class="form-control" disabled="disabled" id="id" value="사용자 ID : ${user.id }">
+	                                    <input type="hidden" id="formId" name="id">
 	                                </div>
 	                                <div class="col-sm-6">
-	                                    <input type="text" class="form-control" readonly id="regDate" value="가입일 : ${user.regdate }">
+	                                    <input type="text" class="form-control" disabled="disabled" id="regDate" value="가입일 : ${user.regdate }">
 	                                </div>
 	                            </div>
 	                            <div class="form-group row">
 	                                <div class="col-sm-6">
-	                                    <input type="text" class="form-control" readonly id="recommender" value="추천인 ID : ${user.recommender }">
+	                                    <input type="text" class="form-control" disabled="disabled" id="recommender" value="추천인 ID : ${user.recommender }">
 	                                </div>
 	                                <div class="col-sm-6">
-	                                    <input type="text" class="form-control" readonly id="sponsor" value="후원인 ID : ${user.sponsor }">
+	                                    <input type="text" class="form-control" disabled="disabled" id="sponsor" value="후원인 ID : ${user.sponsor }" name="sponsor">
 	                                </div>
 	                           </div>
 	                           <div class="form-group row">
 	                                <div class="col-sm-6">
-	                                    <input type="text" class="form-control" readonly id="agentNm" value="가입센터 : ${user.agentNm }">
+	                                    <input type="text" class="form-control" disabled="disabled" id="agentNm" value="가입센터 : ${user.agentNm }">
 	                                </div>
 	                            </div>
 	                        </div>
 	                    </div>
                     </div>
                     <!-- 회원중요정보 end -->
-					<form id="memberForm" onSubmit="return false;">
+					
                     <!-- 회원기타정보 start -->
                     <div class="card">
                         <div class="card-header">
@@ -142,6 +144,7 @@
 		if(loginUserId == "se01admin") {
 			$("#adminDiv").show();
 		}
+		
 	});
 	
 	function searchAddr(){
@@ -193,7 +196,10 @@
 			return false;			
 		}
 		
+		$("#formId").val($("#searchId").val());
+		
 		var params = $('#memberForm').serialize(); //폼값세팅.
+		console.log(params);
 		$.ajax({
 			url : 'updMem',
 			data : params,
@@ -217,7 +223,7 @@
 			$("#searchId").focus();
 			return false;
 		}
-		
+
 		//console.log('id : '+$("#searchId").val());
 		var params = {'id' : $("#searchId").val()}
 		$.ajax({
@@ -260,8 +266,17 @@
 					$("#addr1").val(user.addr1);
 					$("#addr2").val(user.addr2);
 					
+					var date = new Date();
+					var today = date.getFullYear()+""+(date.getMonth()+1)+""+date.getDate();
+					var joinDate = user.regdate.replace(/-/gi,"").substring(0,8);
+					
+					if(today == joinDate){
+						$("#sponsor").val(user.sponsor);
+						$("#sponsor").prop("disabled",false);
+					}
+					
 				}else {
-					alert("정확한 아이디를 입력하셔야 합니다.\n다중검색불가");
+					alert("정확한 아이디를 입력하셔야 합니다.(다중검색불가)");
 				}
 			}
 		})

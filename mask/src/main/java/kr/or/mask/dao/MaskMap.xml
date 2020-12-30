@@ -34,7 +34,7 @@
 			SELECT ID, PASS, NAME, PHONE, ZIPCODE, ADDR1, ADDR2, POINT
 				   , DELIVERY_ZIPCODE, DELIVERY_ADDR1, DELIVERY_ADDR2
 				   , RECOMMENDER, SPONSOR, AGENT, GRADE
-				   , REGDATE, REGID, MODDATE, MODID, TREENO, PARENTID
+				   , REGDATE, REGID, MODDATE, MODID, TREENO, PARENTID, SPON_GIVE_YN
 			  FROM MEMBER
 			 WHERE ID= #{id}
 		</select>
@@ -54,7 +54,7 @@
 		SELECT ID, PASS, NAME, PHONE, ZIPCODE, ADDR1, ADDR2, POINT
 			   , DELIVERY_ZIPCODE, DELIVERY_ADDR1, DELIVERY_ADDR2
 			   , RECOMMENDER, SPONSOR, AGENT, GRADE
-			   , REGDATE, REGID, MODDATE, MODID, TREENO, PARENTID
+			   , REGDATE, REGID, MODDATE, MODID, TREENO, PARENTID, SPON_GIVE_YN
 		  FROM MEMBER
 		 WHERE SPONSOR = #{id} 
 		 ORDER BY REGDATE
@@ -73,4 +73,36 @@
 		 WHERE RECOMMENDER = #{id}
 	</select>
 	
+<!-- ========================================================== -->
+<!-- 						일 정 산 								-->
+<!-- ========================================================== -->
+
+	<!-- 전체회원 조회 -->
+	<select id="getAllUser" resultType="kr.or.mask.domain.User">
+		SELECT ID, NAME, PHONE, RECOMMENDER, SPONSOR, AGENT, GRADE
+			   , REGDATE, REGID, MODDATE, MODID, TREENO, PARENTID
+			   , REPARENTID, SPON_GIVE_YN
+		  FROM MEMBER
+	</select>
+	
+	<!-- 일정산데이터 생성 -->
+	<insert id="setDayClosingTargetUser" parameterType="kr.or.mask.domain.DayClosing">
+		INSERT INTO DAYCLOSING(
+			USERID, REGDATE, LEFTCNT, RIGHTCNT, STATE, MODDATE)
+		VALUES(
+			#{id}, NOW(), #{leftCnt}, #{rightCnt}, #{state}, NOW()
+			)
+	</insert>
+	
+	<!-- 상대에게 후원보너스 받았는지 여부 체크 -->
+	<select id="chkSponBonusYn" parameterType="Map" resultType="int">
+		SELECT COUNT(*)
+		  FROM POINT_HISTORY
+		 WHERE FROM_ID = #{fromId}
+		   AND TO_ID = #{toId}
+		   AND TYPE = '09'
+	</select>
+	
+
+
 </mapper>
