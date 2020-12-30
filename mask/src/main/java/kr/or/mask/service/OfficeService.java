@@ -203,13 +203,11 @@ public class OfficeService {
 		
 		map.put("list", userList);
 		
-		/*if(userList.size() == 1){
+		if(userList.size() == 1){
 			map.put("result", "succ");
-			userList.get(0).setAgentNm(mDao.getUpAgentNm(userList.get(0).getAgent()).getName());
-			map.put("user", userList.get(0));
 		}else {
 			map.put("result", "fail");
-		}*/
+		}
 		
 		return map;
 	}

@@ -21,7 +21,7 @@
                         <div class="card-header">
                             <h4>회원중요정보</h4><span style="text-align:right;color:red;padding-right:20px">변경불가 항목입니다.</span>
                     		<div class="card-block">
-	                            <div class="form-group row">
+	                            <div class="form-group row" style="display:none" id="adminDiv">
 	                                <div class="col-sm-5">
 	                                    <input type="text" class="form-control form-control-success" placeholder="사용자 ID : " id="searchId" name="searchId">
 	                                </div>
@@ -136,6 +136,14 @@
         </div>
         <!-- Main-body end -->
 <script>
+	$(document).ready(function(){
+		console.log(loginUserId);
+		var loginUserId = localStorage.getItem('loginId');
+		if(loginUserId == "se01admin") {
+			$("#adminDiv").show();
+		}
+	});
+	
 	function searchAddr(){
 		new daum.Postcode({
 			oncomplete: function(data){
@@ -219,10 +227,9 @@
 			type : 'post',
 			success:function(data){			
 				if(data.result == 'succ'){
-					alert(id+' 님 정보가 조회되었습니다. 회원정보수정은 <회원등록>메뉴를 이용해주세요');
-					
-					var user = data.user;
-					
+					alert('정보가 조회되었습니다.');
+					var user = data.list[0];
+					console.log(user);
 					//pass 초기화
 					$("#oriPass").val("");
 					$("#newPass").val("");
@@ -233,8 +240,28 @@
 					$('#regDate').val('가입일 : '+user.regdate);
 					$('#recommender').val('추천인  : '+user.recommender);
 					$('#sponsor').val('후원인 : '+user.sponsor);
-					$('#agentNm').val('가입센터 : '+user.agentNm)
+					$('#agentNm').val('가입센터 : '+user.agent);
 					
+					if(user.name == ""){
+						$("#name").val("");
+						$("#name").attr("placeHolder","이름 : ");
+					}else{
+						$("#name").val(user.name);	
+					}
+
+					if(user.phone == ""){
+						$("#phone").val("");
+						$("#phone").attr("placeHolder","전화번호 : ");
+					}else{
+						$("#phone").val(user.phone);	
+					}
+
+					$("#zipcode").val(user.zipcode);
+					$("#addr1").val(user.addr1);
+					$("#addr2").val(user.addr2);
+					
+				}else {
+					alert("정확한 아이디를 입력하셔야 합니다.\n다중검색불가");
 				}
 			}
 		})
