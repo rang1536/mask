@@ -15,6 +15,7 @@ import kr.or.mask.domain.Agent;
 import kr.or.mask.domain.ChartUser;
 import kr.or.mask.domain.DayClosing;
 import kr.or.mask.domain.Notice;
+import kr.or.mask.domain.PointHistory;
 import kr.or.mask.domain.User;
 
 @Service
@@ -317,6 +318,7 @@ public class MaskService {
 			List<User> underList = getUnderTreeSponsorServ(userList.get(i).getId());
 			
 			//2. 카운팅
+			// 최초 카운팅은 최상위의 바로 아래 트리이므로 리스트의 첫번째는 leftCnt++, 두번째는 rightCnt++ 
 			if(underList.size() >= 1) {
 				param = new HashMap<String, Object>();
 				param.put("fromId", underList.get(0).getId());
@@ -324,6 +326,9 @@ public class MaskService {
 			    
 				if(mDao.chkSponBonusYn(param) == 0) { //후원보너스 지급이력이 없을때 ++
 					leftCnt++;
+					//leftCnt 루프시작~
+					leftCnt += getSponCntLoop(leftCnt, underList.get(0));
+					
 				}	
 				
 				if(underList.size() == 2){
@@ -333,23 +338,29 @@ public class MaskService {
 					
 					if(mDao.chkSponBonusYn(param) == 0) { //후원보너스 지급이력이 없을때 ++
 						rightCnt++;
+						//rightCnt 루프시작~
+						rightCnt += getSponCntLoop(rightCnt, underList.get(1));
 					}	
-				}
-				
-				//루프시작
-				for(int j=0; j<underList.size(); j++) {
-					returnCntMap = getSponCntLoop(leftCnt, rightCnt, underList.get(j));
-				}
+				}	
 			}	
+			
+			// 후원인 카운팅이 끝났으면 일마감 데이터 생성
+			dc = new DayClosing();
+			dc.setUserId(userList.get(i).getId());
+			dc.setLeftCnt(leftCnt);
+			dc.setRightCnt(rightCnt);
+			dc.setState("1");
+			//여기부터 하면 됨. 트랜잭션이랑 데이터 수정(최종)
+			mDao.setDayClosingTargetUser(dc);
+			
 		}
 		return null;
 	}
 	
-	public Map<String, Object> getSponCntLoop(int leftCnt, int rightCnt
-			, User user ) {
+	//트리 좌 혹은 우측 카운팅 루프
+	public int getSponCntLoop(int cnt, User user ) {
 		Map<String, Object> map = new HashMap<String, Object>(); //leftCnt, rightCnt 리턴용
 		Map<String, Object> param;
-		Map<String, Object> returnCntMap = new HashMap<String, Object>();
 		
 		List<User> underList = getUnderTreeSponsorServ(user.getId());
 		
@@ -360,7 +371,8 @@ public class MaskService {
 			param.put("toId", user.getId());
 		    
 			if(mDao.chkSponBonusYn(param) == 0) { //후원보너스 지급이력이 없을때 ++
-				leftCnt++;
+				cnt++;
+				cnt += getSponCntLoop(cnt, underList.get(0));
 			}	
 			
 			if(underList.size() == 2){
@@ -369,23 +381,19 @@ public class MaskService {
 				param.put("toId", user.getId());
 				
 				if(mDao.chkSponBonusYn(param) == 0) { //후원보너스 지급이력이 없을때 ++
-					rightCnt++;
+					cnt++;
+					cnt += getSponCntLoop(cnt, underList.get(1));
 				}	
 			}
-			
-			//루프시작
-			for(int j=0; j<underList.size(); j++) {
-				returnCntMap = getSponCntLoop(leftCnt, rightCnt, underList.get(j));
-				leftCnt += Integer.parseInt(returnCntMap.get("leftCnt").toString());
-				rightCnt += Integer.parseInt(returnCntMap.get("rightCnt").toString());
-			}
 		}	
-		returnCntMap.put("leftCnt", leftCnt);
-		returnCntMap.put("rightCnt", rightCnt);
-		
-		return returnCntMap;
+		System.out.println("마지막 후원인~!!");
+		return cnt;
 	}
 	
+	//포인트히스토리 입력
+	public int setPointHisForSponBonus(PointHistory ph) {
+		return mDao.setPointHisForSponBonus(ph);
+	}
 }
 
 

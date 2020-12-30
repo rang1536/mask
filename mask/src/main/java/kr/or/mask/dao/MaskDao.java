@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import kr.or.mask.domain.Agent;
 import kr.or.mask.domain.DayClosing;
 import kr.or.mask.domain.Notice;
+import kr.or.mask.domain.PointHistory;
 import kr.or.mask.domain.User;
 
 @Repository
@@ -84,4 +85,18 @@ public class MaskDao {
 	public int chkSponBonusYn(Map<String, Object> params) {
 		return sql.selectOne("mask.chkSponBonusYn", params);
 	}
+	
+	//포인트 히스토리 생성(후원보너스용)
+	public int setPointHisForSponBonus(PointHistory ph) {
+		return sql.insert("mask.setPointHisForSponBonus", ph);
+	}
+	
+	//포인트 히스토리 수정(지급으로 수정)
+	public int modPointHisForSponBonus(PointHistory ph) {
+		return sql.insert("mask.modPointHisForSponBonus", ph);
+	}
+	
+	
+	
+	
 }
