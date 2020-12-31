@@ -176,10 +176,8 @@ public class OfficeRestController {
 		pointHistory.setBeginIdx(0);
 		pointHistory.setSearchRows(1000);
 		if(pointHistory.getSearchToDate() != null){
-			pointHistory.setSearchToDate(Integer.parseInt(pointHistory.getSearchToDate())+1+"");
 		}else {
 			pointHistory.setSearchFromDate(today);
-			pointHistory.setSearchToDate((Integer.parseInt(today)+1)+"");
 		}
 		
 		if(id.equals(admin)) {
@@ -367,10 +365,8 @@ public class OfficeRestController {
 		String admin = officeService.selectAdmin(grade);
 
 		if(purchase.getSearchToDate() != null){
-			purchase.setSearchToDate(Integer.parseInt(purchase.getSearchToDate())+1+"");
 		}else {
 			purchase.setSearchFromDate(today);
-			purchase.setSearchToDate((Integer.parseInt(today)+1)+"");
 		}
 		
 		if(id.equals(admin)) {
@@ -380,7 +376,7 @@ public class OfficeRestController {
 		}
 
 		List<Purchase> list = officeService.searchPurchase(purchase);
-		System.out.println(purchase.toString());
+
 		Map<String, Object> map = new HashMap<String, Object>();
 		if(purchase.getStatus().equals("00")){
 			map.put("payedCnt", officeService.getDeliveryTypeCnt(purchase));

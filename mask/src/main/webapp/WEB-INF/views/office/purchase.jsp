@@ -68,7 +68,7 @@
 	                            		<input type="text" id="sDate"> - <input type="text" id="eDate">
 	                            	</div>
 	                            </div>
-	                            <div class="form-group row" style="margin-left:0">
+	                            <div class="form-group row" style="margin-left:0;display:none;" id="searchDiv">
 	                                <div class="col-sm-2.5">
 	                                	<select id="searchType" name="searchType">
 	                                		<option value="id">아이디</option>
@@ -157,6 +157,11 @@
 		var date = new Date();
 		$("#sDate").val(getFormatDate(date,"-"));
 		$("#eDate").val(getFormatDate(date,"-"));
+		var adminYn = localStorage.getItem("adminYn");
+		if(adminYn == 'Y'){
+			$("#searchDiv").show();	
+		}
+
 	});
 	
 	function searchAddr(){

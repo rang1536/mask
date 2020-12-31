@@ -81,7 +81,7 @@ public class OfficeController {
 
 		Purchase purchase = new Purchase();
 		purchase.setSearchFromDate(today);
-		purchase.setSearchToDate((Integer.parseInt(today)+1)+"");
+		purchase.setSearchToDate(today);
 		purchase.setRegid(id);
 		
 		List<Purchase> list = officeService.searchPurchase(purchase);

@@ -137,7 +137,7 @@
 		  FROM POINT_HISTORY
 		 WHERE 1 = 1
 		<if test="searchFromDate != null">
-		   AND REGDATE BETWEEN #{searchFromDate} AND #{searchToDate} 
+		   AND REGDATE BETWEEN #{searchFromDate} AND DATE_ADD(#{searchToDate}, INTERVAL 1 DAY)  
 		</if>
 		<if test="id != null">
 		   AND (FROM_ID = #{id} OR TO_ID = #{id})
@@ -222,7 +222,7 @@
 		<if test = "searchType == 'code' and (searchValue != '' and searchValue != null)">
 		   AND CODE LIKE CONCAT('%' , #{searchValue} , '%')
 		</if>
-		   AND REGDATE BETWEEN #{searchFromDate} AND #{searchToDate}
+		   AND REGDATE BETWEEN #{searchFromDate} AND DATE_ADD(#{searchToDate} , INTERVAL 1 DAY)
 		<if test = "status != 00">
 		   AND STATUS = #{status}
 		</if>
@@ -258,7 +258,7 @@
 		<if test = "searchType == 'code' and (searchValue != '' and searchValue != null)">
 		   AND CODE LIKE CONCAT('%' , #{searchValue} , '%')
 		</if>
-		   AND REGDATE BETWEEN #{searchFromDate} AND #{searchToDate}
+		   AND REGDATE BETWEEN #{searchFromDate} AND DATE_ADD(#{searchToDate},INTERVAL 1 DAY)
 		<if test = "status != 00">
 		   AND STATUS = #{status}
 		</if>

@@ -223,7 +223,6 @@ public class OfficeDao {
 				msg = "회원가입";
 			}else if(purchase.getType().equals("05")) {
 				msg = "재구매";
-				
 			}else if(purchase.getType().equals("06")) {
 				msg = "소비자구매";
 			}
