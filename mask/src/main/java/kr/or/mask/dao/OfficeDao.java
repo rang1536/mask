@@ -88,7 +88,7 @@ public class OfficeDao {
 			sql.insert("office.registerMember", user);
 			
 			//윤. 마감테이블에 가입회원 등록
-			sql.insert("office.setDayClosing", user);
+			//sql.insert("office.setDayClosing", user);
 
 			//포인트 이력 테이블 등록
 			PointHistory ph = new PointHistory();
@@ -107,6 +107,7 @@ public class OfficeDao {
 			updatePoint(mUser);
 			
 			//차감된 유저의 포인트를 관리자에게 부여
+			mUser = new User();
 			mUser.setPoint(user.getBuyPoint());
 			mUser.setId(admin);
 			updatePoint(mUser);
